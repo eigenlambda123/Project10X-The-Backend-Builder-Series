@@ -14,9 +14,9 @@ The goal is to learn by building complete, real-world systems rather than isolat
 
 ## Projects Included
 
-1. URL Shortener API  
+1. Personal Blogging Platform API 
 2. Expense Tracker API  
-3. Personal Blogging Platform API  
+3. URL Shortener API  
 4. Fitness Workout Tracker  
 5. Web Scraper CLI Tool  
 6. Movie Reservation System  
