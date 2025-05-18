@@ -77,4 +77,3 @@ class Post(models.Model):
     # This will be used when we print the object
     def __str__(self):
         return self.title
-
