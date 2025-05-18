@@ -1,7 +1,8 @@
 from django.db import models
 from django.utils.text import slugify
+from django.contrib.auth.models import User
 
-# Create Category model
+
 class Category(models.Model):
     """
     Category model to categorize blog posts.
@@ -22,6 +23,7 @@ class Category(models.Model):
         return self.name
 
 
+
 class Tag(models.Model):
     """
     Tag model to tag blog posts.
@@ -38,3 +40,35 @@ class Tag(models.Model):
     # String representation of the model
     def __str__(self):
         return self.name
+    
+
+
+class Post(models.Model):
+    """
+    Post model to represent a blog post.
+    """
+    title = models.CharField(max_length=200) # Field for post title
+    slug = models.SlugField(max_length=200, unique=True, blank=True) # Slug field for URL-friendly representation
+    content = models.TextField() # Field for post content
+    html_content = models.TextField(blank=True) # Field for HTML content
+    created_at = models.DateTimeField(auto_now_add=True) # Field for post creation date
+    updated_at = models.DateTimeField(auto_now=True) # Field for post update date
+
+    """
+    ForeignKey relations
+    """
+    author = models.ForeignKey(User, on_delete=models.CASCADE) # Foreign key to User model
+    category = models.ForeignKey(Category, on_delete=models.CASCADE) # Foreign key to Category model
+    tags = models.ManyToManyField(Tag, blank=True) # Many-to-many relation to Tag model
+
+    def save(self, *args, **kwargs):  
+        if not self.slug:
+            # Use slugify to create a URL-friendly slug from the title
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
+    
+    # String representation of the model
+    # This will be used when we print the object
+    def __str__(self):
+        return self.title
+
