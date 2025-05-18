@@ -65,6 +65,13 @@ class Post(models.Model):
         if not self.slug:
             # Use slugify to create a URL-friendly slug from the title
             self.slug = slugify(self.title)
+        # If html_content is empty, convert content to HTML
+        if not self.html_content:
+            # Use a markdown library to convert content to HTML
+            from markdown import markdown
+            # Convert the content to HTML using the markdown library
+            self.html_content = markdown(self.content)
+        # Call the parent class's save method
         super().save(*args, **kwargs)
     
     # String representation of the model
