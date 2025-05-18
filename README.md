@@ -29,7 +29,7 @@ The goal is to learn by building complete, real-world systems rather than isolat
 
 ## Skills and Technologies
 
-- Python 3.x  
+- Python 3.12  
 - Django Framework  
 - Django REST Framework  
 - JWT Authentication  
