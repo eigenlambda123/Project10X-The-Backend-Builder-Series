@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
 from django.contrib.auth.models import User
+from markdown import markdown
 
 
 class Category(models.Model):
@@ -67,8 +68,6 @@ class Post(models.Model):
             self.slug = slugify(self.title)
         # If html_content is empty, convert content to HTML
         if not self.html_content:
-            # Use a markdown library to convert content to HTML
-            from markdown import markdown
             # Convert the content to HTML using the markdown library
             self.html_content = markdown(self.content)
         # Call the parent class's save method
