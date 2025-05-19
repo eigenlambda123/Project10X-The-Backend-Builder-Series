@@ -16,8 +16,6 @@ class CategoryAdmin(admin.ModelAdmin):
     """
     list_display = ('name', 'slug')
     prepopulated_fields = {'slug': ('name',)}
-    verbose_name = "Category"
-    verbose_name_plural = "Category"
 
 
 @admin.register(Tag)
