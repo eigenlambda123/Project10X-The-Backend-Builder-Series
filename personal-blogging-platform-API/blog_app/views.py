@@ -1,3 +1,15 @@
 from django.shortcuts import render
+from rest_framework import viewsets
+from .models import Post
+from .serializers import PostSerializer
 
-# Create your views here.
+class PostViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet for the Post model.
+    """
+    queryset = Post.objects.all()  # Queryset to retrieve all posts
+    serializer_class = PostSerializer  # Serializer class to use for serialization
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)  # Save the post with the current user as the author
+  
