@@ -8,7 +8,6 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from django_filters.rest_framework import DjangoFilterBackend
 
 
-
 class PostViewSet(viewsets.ModelViewSet):
     """
     ViewSet for the Post model.
