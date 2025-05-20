@@ -1,6 +1,30 @@
 from rest_framework import serializers
 from .models import Category, Tag, Post
 from markdown import markdown
+from django.contrib.auth.models import User
+
+class RegisterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User # User model from Django's auth system
+        fields = ['username', 'email', 'password'] # Fields to be serialized
+        extra_kwargs = {
+            'password': {'write_only': True} # Password should be write-only
+        }
+
+    # Override the create method to handle user creation
+    # and password hashing
+    def create(self, validated_data):
+        """
+        Create a new user with the provided validated data.
+        """
+        # Create a new user instance with the provided username and email
+        user = User(
+            username=validated_data['username'], # Set the username field
+            email=validated_data['email'] # Set the email field
+        )
+        user.set_password(validated_data['password']) # Hash the password
+        user.save() # Save the user instance to the database
+        return user # Return the created user instance
 
 class CategorySerializer(serializers.ModelSerializer):
     """
