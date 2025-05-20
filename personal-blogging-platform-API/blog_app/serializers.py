@@ -27,6 +27,22 @@ class PostSerializer(serializers.ModelSerializer):
     Serializer for the Post model.
     """
 
+    # Use SlugRelatedField to represent the category by its 'name' field.
+    # Allows assigning a category by name when creating/updating a post.
+    category = serializers.SlugRelatedField(
+        queryset=Category.objects.all(),
+        slug_field='name',
+    )
+
+    # Use SlugRelatedField for tags, representing each tag by its 'name'.
+    # Supports multiple tags (many-to-many relationship).
+    tags = serializers.SlugRelatedField(
+        queryset=Tag.objects.all(),
+        slug_field='name',
+        many=True,  # for many-to-many relationship
+    )
+
+
     class Meta:
         model = Post
         fields = ['id', 'title', 'slug', 'content', 'html_content', 'created_at', 'updated_at', 'category', 'tags']
