@@ -1,11 +1,22 @@
 from django.shortcuts import render
 from rest_framework import viewsets
 from .models import Post
-from .serializers import PostSerializer
+from .serializers import PostSerializer, RegisterSerializer
+from django.contrib.auth.models import User
 from .permissions import IsOwnerOrReadOnly 
 from .filters import PostFilter
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.permissions import AllowAny
+
+
+class RegisterViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet for user registration
+    """
+    queryset = User.objects.all()  # Queryset to retrieve all users
+    serializer_class = RegisterSerializer  # Serializer class to use for serialization
+    permission_classes = [AllowAny]  # Permissions for the viewset
 
 
 class PostViewSet(viewsets.ModelViewSet):
