@@ -13,5 +13,5 @@ urlpatterns = [
 
 # Add the registration view to the urlpatterns
 urlpatterns += [
-    path('api/register/', RegisterViewSet.as_view(), name='register'),  # Registration view
+    path('register/', RegisterViewSet.as_view(), name='register'),  # Registration view
 ]
