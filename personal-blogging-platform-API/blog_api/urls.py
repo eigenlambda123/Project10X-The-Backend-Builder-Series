@@ -24,6 +24,6 @@ urlpatterns = [
 ]
 
 urlpatterns += [
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),  # Login view for JWT token
+    path('api/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),  # Login view for JWT token
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),  # JWT token refresh view
 ]
