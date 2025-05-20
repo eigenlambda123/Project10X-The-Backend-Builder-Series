@@ -8,9 +8,10 @@ from .filters import PostFilter
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.permissions import AllowAny
+from rest_framework import generics
 
 
-class RegisterViewSet(viewsets.ModelViewSet):
+class RegisterViewSet(generics.CreateAPIView):
     """
     ViewSet for user registration
     """
