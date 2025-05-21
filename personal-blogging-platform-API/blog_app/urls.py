@@ -8,11 +8,11 @@ router.register(r'posts', PostViewSet, basename='post')
 
 # The API URLs are now determined automatically by the router.
 urlpatterns = [
+    path('posts/<slug:slug>/', PostDetailBySlugView.as_view(), name='post-detail-slug'),  # Post detail view by slug
     path('', include(router.urls)),
 ]
 
 # Add the registration view to the urlpatterns
 urlpatterns += [
     path('register/', RegisterViewSet.as_view(), name='register'),  # Registration view
-    path('posts/<slug:slug>/', PostDetailBySlugView.as_view(), name='post-detail-slug'),  # Post detail view by slug
 ]
