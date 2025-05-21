@@ -33,3 +33,12 @@ class PostViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)  # Save the post with the current user as the author
   
+
+class PostDetailBySlugView(generics.RetrieveUpdateDestroyAPIView):
+    """
+    ViewSet for retrieving, updating, and deleting a post by its slug.
+    """
+    queryset = Post.objects.all()  # Queryset to retrieve all posts
+    serializer = PostSerializer  # Serializer class to use for serialization
+    lookup_field = 'slug'  # Use the slug field for lookups
+    permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]  # Permissions for the viewset
