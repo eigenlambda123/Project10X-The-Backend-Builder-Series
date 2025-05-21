@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import PostViewSet, RegisterViewSet
+from .views import PostViewSet, RegisterViewSet, PostDetailBySlugView
 
 # Create a router and register our viewset with it.
 router = DefaultRouter()
@@ -14,4 +14,5 @@ urlpatterns = [
 # Add the registration view to the urlpatterns
 urlpatterns += [
     path('register/', RegisterViewSet.as_view(), name='register'),  # Registration view
+    path('posts/<slug:slug>/', PostDetailBySlugView.as_view(), name='post-detail-slug'),  # Post detail view by slug
 ]
