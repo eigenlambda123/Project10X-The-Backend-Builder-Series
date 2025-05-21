@@ -39,6 +39,6 @@ class PostDetailBySlugView(generics.RetrieveUpdateDestroyAPIView):
     ViewSet for retrieving, updating, and deleting a post by its slug.
     """
     queryset = Post.objects.all()  # Queryset to retrieve all posts
-    serializer = PostSerializer  # Serializer class to use for serialization
+    serializer_class = PostSerializer  # Serializer class to use for serialization
     lookup_field = 'slug'  # Use the slug field for lookups
     permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]  # Permissions for the viewset
