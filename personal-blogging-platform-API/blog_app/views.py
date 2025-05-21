@@ -29,6 +29,7 @@ class PostViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]  # Permissions for the viewset
     filter_backends = [DjangoFilterBackend]  # Filter backend for filtering posts
     filterset_class = PostFilter # Fields to filter by
+    lookup_field = 'slug'  # Use the slug field for lookups
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)  # Save the post with the current user as the author
@@ -40,5 +41,4 @@ class PostDetailBySlugView(generics.RetrieveUpdateDestroyAPIView):
     """
     queryset = Post.objects.all()  # Queryset to retrieve all posts
     serializer_class = PostSerializer  # Serializer class to use for serialization
-    lookup_field = 'slug'  # Use the slug field for lookups
     permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]  # Permissions for the viewset
