@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets
 from .models import Post
-from .serializers import PostSerializer, RegisterSerializer
+from .serializers import PostSerializer, RegisterSerializer, CategorySerializer, TagSerializer
 from django.contrib.auth.models import User
 from .permissions import IsOwnerOrReadOnly 
 from .filters import PostFilter
@@ -42,3 +42,19 @@ class PostDetailBySlugView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.all()  # Queryset to retrieve all posts
     serializer_class = PostSerializer  # Serializer class to use for serialization
     permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]  # Permissions for the viewset
+
+
+class CategoryViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet for the Category model.
+    """
+    queryset = Post.objects.all()  # Queryset to retrieve all posts
+    serializer_class = CategorySerializer  # Serializer class to use for serialization
+
+
+class TagViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet for the Tag model.
+    """
+    queryset = Post.objects.all()  # Queryset to retrieve all posts
+    serializer_class = TagSerializer  # Serializer class to use for serialization
