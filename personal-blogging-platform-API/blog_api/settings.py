@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-adaref3*f1hqx7+7vk@135s6!95d*3337)bign2==msb8)bns0
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [myblogapi.onrender.com]
+ALLOWED_HOSTS = ['myblogapi.onrender.com']
 
 
 # Application definition
@@ -79,11 +79,12 @@ WSGI_APPLICATION = 'blog_api.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+import dj_database_url
+import os
+
+# Configure database settings using dj_database_url
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
 }
 
 
