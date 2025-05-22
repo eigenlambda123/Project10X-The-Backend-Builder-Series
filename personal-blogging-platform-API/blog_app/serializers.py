@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Category, Tag, Post
-from markdown import markdown
+import markdown
 from django.contrib.auth.models import User
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -65,6 +65,7 @@ class PostSerializer(serializers.ModelSerializer):
         slug_field='name',
         many=True,  # for many-to-many relationship
     )
+    html_content = serializers.SerializerMethodField()  # Custom field for HTML content
 
 
     class Meta:
@@ -77,5 +78,5 @@ class PostSerializer(serializers.ModelSerializer):
         Convert the raw Markdown content of a Post into HTML
         when serializing it in the API response
         """
-        return markdown(obj.content)
+        return markdown.markdown(obj.content)
         
