@@ -40,9 +40,7 @@ local_settings.py
 media/
 staticfiles/
 
-# Migrations (optional, if you prefer to recreate them)
-**/migrations/*.py
-!**/migrations/__init__.py
+
 
 # Test coverage
 htmlcov/
