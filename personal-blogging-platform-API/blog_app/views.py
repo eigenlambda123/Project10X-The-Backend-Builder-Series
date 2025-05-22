@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework import viewsets
-from .models import Post
+from .models import Post, Category, Tag
 from .serializers import PostSerializer, RegisterSerializer, CategorySerializer, TagSerializer
 from django.contrib.auth.models import User
 from .permissions import IsOwnerOrReadOnly 
@@ -48,7 +48,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
     """
     ViewSet for the Category model.
     """
-    queryset = Post.objects.all()  # Queryset to retrieve all posts
+    queryset = Category.objects.all()  # Queryset to retrieve all posts
     serializer_class = CategorySerializer  # Serializer class to use for serialization
 
 
@@ -56,5 +56,5 @@ class TagViewSet(viewsets.ModelViewSet):
     """
     ViewSet for the Tag model.
     """
-    queryset = Post.objects.all()  # Queryset to retrieve all posts
+    queryset = Tag.objects.all()  # Queryset to retrieve all posts
     serializer_class = TagSerializer  # Serializer class to use for serialization
