@@ -24,7 +24,7 @@ class PostViewSet(viewsets.ModelViewSet):
     """
     ViewSet for the Post model.
     """
-    queryset = Post.objects.all()  # Queryset to retrieve all posts
+    queryset = Post.objects.all().order_by('-created_at')  # queryset to retrieve all posts, ordered by creation date
     serializer_class = PostSerializer  # Serializer class to use for serialization
     permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]  # Permissions for the viewset
     filter_backends = [DjangoFilterBackend]  # Filter backend for filtering posts
