@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from djagno.core.management.base import BaseCommand
+from django.core.management.base import BaseCommand
 
 class Command(BaseCommand):
     help = 'Create a superuser with the specified username and password'
