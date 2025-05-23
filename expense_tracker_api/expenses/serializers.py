@@ -12,10 +12,16 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class TransactionsSerializer(serializers.ModelSerializer):
-
     user = serializers.HiddenField(default=serializers.CurrentUserDefault()) # Automatically set the user to the currently authenticated user
     category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all()) # Allow the user to select a category by its primary key
     category_detail = CategorySerializer(source='category', read_only=True) # Nested serializer to include category details
+
+    def __init__ (self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        user = self.context['request'].user # Get the current user from the request context
+        # If the user is authenticated, filter the categories to only those owned by the user
+        if user.is_authenticated:
+            self.fields['category'].queryset = Category.objects.filter(user=user)  # Limit categories to those owned by the current user
 
 
     class Meta:
