@@ -12,7 +12,7 @@ class Category(models.Model):
         ordering = ['name'] # Order categories by name
 
     def __str__(self): # String representation of the category
-        self.name
+        return self.name
 
 
 class Transactions(models.Model):
