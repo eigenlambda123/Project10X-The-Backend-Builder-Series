@@ -27,6 +27,5 @@ class Transactions(models.Model):
     description = models.TextField(blank=True) # Description of the transaction
     type = models.CharField(max_length=7, choices=TRANSACTION_TYPE) # Type of the transaction (income or expense)
     amount = models.DecimalField(max_digits=10, decimal_places=2) # Amount of the transaction
-    description = models.TextField(blank=True) # Description of the transaction
     created_at = models.DateTimeField(auto_now_add=True) # Timestamp when the transaction was created
     updated_at = models.DateTimeField(auto_now=True) # Timestamp when the transaction was last updated
