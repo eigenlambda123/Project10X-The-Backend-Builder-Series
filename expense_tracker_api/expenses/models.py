@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.text import slugify
 
 class Category(models.Model):
     name = models.CharField(max_length=100) # Name of the category
@@ -10,6 +11,14 @@ class Category(models.Model):
     class Meta:
         unique_together = ('name', 'user') # Ensure that the combination of name and user is unique
         ordering = ['name'] # Order categories by name
+
+    # Create a slug from the name before saving
+    def save(self, *args, **kwargs):
+        if not self.slug: # Only create a slug if it doesn't already exist
+            # Use slugify to create a URL-friendly slug from the name
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs) # Call the parent class's save method
+
 
     def __str__(self): # String representation of the category
         return self.name
