@@ -14,7 +14,7 @@ class CategorySerializer(serializers.ModelSerializer):
 class TransactionsSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault()) # Automatically set the user to the currently authenticated user
     category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all()) # Allow the user to select a category by its primary key
-    category_detail = CategorySerializer(source='category', read_only=True) # Nested serializer to include category details
+    # category_detail = CategorySerializer(source='category', read_only=True) # Nested serializer to include category details
 
     def __init__ (self, *args, **kwargs):
         super().__init__(*args, **kwargs)
