@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 
 class CategorySerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault()) # Automatically set the user to the currently authenticated user
+
     class Meta:
         model = Category
         fields = ['id', 'name', 'user', 'slug', 'created_at'] # Fields to be serialized
