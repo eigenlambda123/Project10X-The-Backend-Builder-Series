@@ -12,4 +12,10 @@ class CategoryViewSet(ModelViewSet):
     def get_queryset(self):
         return self.queryset.filter(user=self.request.user) # Filter categories to only those owned by the current user
     
-    
+class TransactionsViewSet(ModelViewSet):
+    queryset = Transactions.objects.all() # Get all transactions
+    serializer_class = TransactionsSerializer # Use the TransactionsSerializer for serialization
+    permission_classes = [IsAuthenticated] # Only authenticated users can access this view
+
+    def get_queryset(self):
+        return self.queryset.filter(user=self.request.user) # Filter transactions to only those owned by the current user
