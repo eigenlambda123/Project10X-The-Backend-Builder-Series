@@ -12,6 +12,12 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class TransactionsSerializer(serializers.ModelSerializer):
+
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault()) # Automatically set the user to the currently authenticated user
+    category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all()) # Allow the user to select a category by its primary key
+    category_detail = CategorySerializer(source='category', read_only=True) # Nested serializer to include category details
+
+
     class Meta:
         model = Transactions
         fields = ['id', 'user', 'category', 'title', 'description', 'type', 'amount', 'created_at', 'updated_at'] # Fields to be serialized
