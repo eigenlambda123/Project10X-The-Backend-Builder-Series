@@ -6,6 +6,9 @@ from . filters import TransactionsFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from django.db.models import Sum, Q
 
 class CategoryViewSet(ModelViewSet):
     queryset = Category.objects.all() # Get all categories
@@ -25,3 +28,18 @@ class TransactionsViewSet(ModelViewSet):
 
     def get_queryset(self):
         return self.queryset.filter(user=self.request.user) # Filter transactions to only those owned by the current user
+    
+# SummaryView to get the total income, expenses, and profit for the authenticated user
+class SummaryView(APIView):
+    permission_classes = [IsAuthenticated] # Only authenticated users can access this view
+
+    def get(self, request):
+        user = request.user
+        Transactions = Transactions.objects.filter(user=user) # Get all transactions for the authenticated user
+
+        # Calculate total income, expenses, and profit
+        total_income = Transactions.filter(type='income').aggregate(Sum('amount'))['amount__sum'] or 0
+        total_expense = Transactions.filter(type='expense').aggregate(Sum('amount'))['amount__sum'] or 0
+        net_balance = total_income - total_expense
+
+        
