@@ -2,6 +2,8 @@ from django.shortcuts import render
 from . serializers import TransactionsSerializer, CategorySerializer
 from . models import Transactions, Category
 from . permissions import IsOwnerOrReadOnly
+from . filters import TransactionsFilter
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
 
@@ -18,6 +20,8 @@ class TransactionsViewSet(ModelViewSet):
     queryset = Transactions.objects.all() # Get all transactions
     serializer_class = TransactionsSerializer # Use the TransactionsSerializer for serialization
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly] # Only authenticated users can access this view
+    filter_backends = [DjangoFilterBackend] # Use DjangoFilterBackend for filtering
+    filterset_fields = TransactionsFilter # Use the TransactionsFilter for filtering
 
     def get_queryset(self):
         return self.queryset.filter(user=self.request.user) # Filter transactions to only those owned by the current user
