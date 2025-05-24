@@ -42,4 +42,9 @@ class SummaryView(APIView):
         total_expense = Transactions.filter(type='expense').aggregate(Sum('amount'))['amount__sum'] or 0
         net_balance = total_income - total_expense
 
-        
+        # Prepare the response data
+        return Response({
+            'total_income': total_income, #
+            'total_expense': total_expense,
+            'net_balance': net_balance
+        })
