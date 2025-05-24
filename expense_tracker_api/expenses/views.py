@@ -8,7 +8,9 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.db.models import Sum, Q
+from rest_framework.decorators import action
+from django.db.models import Sum
+from datetime import datetime
 
 class CategoryViewSet(ModelViewSet):
     queryset = Category.objects.all() # Get all categories
@@ -29,22 +31,22 @@ class TransactionsViewSet(ModelViewSet):
     def get_queryset(self):
         return self.queryset.filter(user=self.request.user) # Filter transactions to only those owned by the current user
     
-# SummaryView to get the total income, expenses, and profit for the authenticated user
-class SummaryView(APIView):
-    permission_classes = [IsAuthenticated] # Only authenticated users can access this view
+    # Summary action to get the total income and expenses for the current user
+    @action(detail=False, methods=['get'], url_path='summary')
+    def summary(self, request): 
+        user = request.user # Get the current user
+        queryset = self.get_queryset() # get the filtered queryset for the current user
 
-    def get(self, request):
-        user = request.user
-        user_transactions = Transactions.objects.filter(user=user) # Get all transactions for the authenticated user
-
-        # Calculate total income, expenses, and profit
-        total_income = user_transactions.filter(type='income').aggregate(Sum('amount'))['amount__sum'] or 0
-        total_expense = user_transactions.filter(type='expense').aggregate(Sum('amount'))['amount__sum'] or 0
+        # Aggregate the total income and expenses for the current user
+        total_income = queryset.filter(type='income').aggregate(Sum('amount'))['amount__sum'] or 0.00 
+        total_expense = queryset.filter(type='expense').aggregate(Sum('amount'))['amount__sum'] or 0.00
         net_balance = total_income - total_expense
 
-        # Prepare the response data
+        # return the summary data
         return Response({
-            'total_income': total_income, #
+            'total_income': total_income,
             'total_expense': total_expense,
-            'net_balance': net_balance
+            'net_balance': net_balance,
         })
+
+    
