@@ -35,11 +35,11 @@ class SummaryView(APIView):
 
     def get(self, request):
         user = request.user
-        Transactions = Transactions.objects.filter(user=user) # Get all transactions for the authenticated user
+        user_transactions = Transactions.objects.filter(user=user) # Get all transactions for the authenticated user
 
         # Calculate total income, expenses, and profit
-        total_income = Transactions.filter(type='income').aggregate(Sum('amount'))['amount__sum'] or 0
-        total_expense = Transactions.filter(type='expense').aggregate(Sum('amount'))['amount__sum'] or 0
+        total_income = user_transactions.filter(type='income').aggregate(Sum('amount'))['amount__sum'] or 0
+        total_expense = user_transactions.filter(type='expense').aggregate(Sum('amount'))['amount__sum'] or 0
         net_balance = total_income - total_expense
 
         # Prepare the response data
