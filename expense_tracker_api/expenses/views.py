@@ -21,7 +21,7 @@ class TransactionsViewSet(ModelViewSet):
     serializer_class = TransactionsSerializer # Use the TransactionsSerializer for serialization
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly] # Only authenticated users can access this view
     filter_backends = [DjangoFilterBackend] # Use DjangoFilterBackend for filtering
-    filterset_fields = TransactionsFilter # Use the TransactionsFilter for filtering
+    filterset_class = TransactionsFilter # Use the TransactionsFilter for filtering
 
     def get_queryset(self):
         return self.queryset.filter(user=self.request.user) # Filter transactions to only those owned by the current user
