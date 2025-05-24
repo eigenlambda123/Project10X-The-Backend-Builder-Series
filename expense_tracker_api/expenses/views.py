@@ -37,6 +37,20 @@ class TransactionsViewSet(ModelViewSet):
         user = request.user # Get the current user
         queryset = self.get_queryset() # get the filtered queryset for the current user
 
+        # Monthly Filter
+        month = request.query_params.get('month') # Get the month from query parameters
+        if month:
+            try:
+                month_date = datetime.strptime(month, "%Y-%m")
+                queryset = queryset.filter(
+                    created_at__year=month_date.year,
+                    created_at__month=month_date.month
+                )
+            except ValueError:
+                return Response({"error": "Invalid month format. Use YYYY-MM."}, status=400)
+
+
+
         # Aggregate the total income and expenses for the current user
         total_income = queryset.filter(type='income').aggregate(Sum('amount'))['amount__sum'] or 0.00 
         total_expense = queryset.filter(type='expense').aggregate(Sum('amount'))['amount__sum'] or 0.00
