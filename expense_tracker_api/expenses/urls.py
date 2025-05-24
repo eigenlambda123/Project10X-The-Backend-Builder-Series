@@ -1,4 +1,3 @@
-from .views import SummaryView
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from . import views
@@ -10,5 +9,4 @@ router.register(r'transactions', views.TransactionsViewSet, basename='transactio
 # The API URLs are now determined automatically by the router.
 urlpatterns = [
     path('', include(router.urls)),  # Include the router's URLs
-    path('summary/', SummaryView.as_view(), name='summary'),  # Add the summary view
 ]
