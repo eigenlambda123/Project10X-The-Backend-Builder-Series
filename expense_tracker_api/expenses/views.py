@@ -77,6 +77,34 @@ class TransactionsViewSet(ModelViewSet):
             'total_expense': total_expense,
             'net_balance': net_balance,
         })
+    
+
+    # Return category-wise total expenses
+    @action(detail=False, methods=['get'], url_path='expense-category-summary')
+    def expense_category_summary(self, request):
+        user = request.user # Get the current user
+        transactions = self.get_queryset().filter(type='expense')  # Get the filtered queryset for the current user
+
+        # return the total amount spent per category
+        return Response(
+            transactions.values('category__name')
+            .annotate(total=Sum('amount'))
+            .order_by('-total')  # Order by category name
+        )
+    
+    # Return category-wise total income
+    @action(detail=False, methods=['get'], url_path='income-category-summary')
+    def income_category_summary(self, request):
+        user = request.user # Get the current user
+        transactions = self.get_queryset().filter(type='income') # Get the filtered queryset for the current user
+        
+        # return the total amount earned per category
+        return Response(
+            transactions.values('category__name')
+            .annotate(total=Sum('amount'))
+            .order_by('-total')  # Order by category name
+        )
+
 
 
     # Action to export transactions to CSV - (endpoint /transactions/export-csv/)
