@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from . serializers import TransactionsSerializer, CategorySerializer
+from . serializers import TransactionsSerializer, CategorySerializer, RegisterSerializer
 from . models import Transactions, Category
 from . permissions import IsOwnerOrReadOnly
 from . filters import TransactionsFilter
@@ -11,6 +11,18 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from django.db.models import Sum
 from datetime import datetime
+from rest_framework import generics
+from rest_framework.permissions import AllowAny 
+from django.contrib.auth.models import User
+
+class RegisterView(generics.CreateAPIView):
+    queryset = User.objects.all()  # Required by DRF to determine the model class; not used to list users
+    serializer_class = RegisterSerializer  # Handles validation and creation of new users
+    permission_classes = [AllowAny]  # Allows access to unauthenticated users (for public registration)
+
+    def perform_create(self, serializer):
+        serializer.save()  # Calls serializer.create() to save the new user instance
+
 
 class CategoryViewSet(ModelViewSet):
     queryset = Category.objects.all() # Get all categories
