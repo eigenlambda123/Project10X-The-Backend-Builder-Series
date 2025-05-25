@@ -10,3 +10,7 @@ router.register(r'transactions', views.TransactionsViewSet, basename='transactio
 urlpatterns = [
     path('', include(router.urls)),  # Include the router's URLs
 ]
+
+urlpatterns += [
+    path('register/', views.RegisterView.as_view(), name='register'),  # Endpoint for user registration
+]
