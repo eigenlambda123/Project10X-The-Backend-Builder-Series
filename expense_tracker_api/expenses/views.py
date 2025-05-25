@@ -3,6 +3,7 @@ from datetime import datetime
 from django.contrib.auth.models import User
 from django.db.models import Sum
 from django_filters.rest_framework import DjangoFilterBackend
+from django.http import HttpResponse
 
 from rest_framework import generics
 from rest_framework.decorators import action
@@ -14,6 +15,8 @@ from .models import Transactions, Category
 from .serializers import TransactionsSerializer, CategorySerializer, RegisterSerializer
 from .permissions import IsOwnerOrReadOnly
 from .filters import TransactionsFilter
+
+import csv
 
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()  # Required by DRF to determine the model class; not used to list users
@@ -75,4 +78,27 @@ class TransactionsViewSet(ModelViewSet):
             'net_balance': net_balance,
         })
 
-    
+
+    # Action to export transactions to CSV
+    @action(detail=False, methods=['get'], url_path='export-csv')
+    def export_csv(self, request):
+        transactions = self.get_queryset()  # Get the filtered queryset for the current user
+        response = HttpResponse(content_type='text/csv') # Create an HTTP response with CSV content type
+        response['Content-Disposition'] = 'attachment; filename="transactions.csv"' # handle file download
+
+        writer = csv.writer(response)
+        writer.writerow(['ID', 'Title', 'Description', 'Type', 'Amount', 'Category', 'Created At'])  # Write the header row
+
+        for transaction in transactions: # Iterate through each transaction
+            # Write each transaction's details to the CSV
+            writer.writerow([ 
+                transaction.id,
+                transaction.title,
+                transaction.description,
+                transaction.type,
+                transaction.amount,
+                transaction.category.name,  # Use the category name for better readability
+                transaction.created_at.strftime('%Y-%m-%d %H:%M:%S')  # Format the created_at field
+            ])
+
+        return response  # Return the CSV response for download
