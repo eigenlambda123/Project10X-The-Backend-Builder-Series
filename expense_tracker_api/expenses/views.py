@@ -79,7 +79,7 @@ class TransactionsViewSet(ModelViewSet):
         })
 
 
-    # Action to export transactions to CSV
+    # Action to export transactions to CSV - (endpoint /transactions/export-csv/)
     @action(detail=False, methods=['get'], url_path='export-csv')
     def export_csv(self, request):
         transactions = self.get_queryset()  # Get the filtered queryset for the current user
