@@ -24,6 +24,3 @@ class TransactionsFilter(django_filters.FilterSet):
         # Allow filtering by category, start_date, and end_date
         fields = ['category', 'start_date', 'end_date']
 
-    # Custom method to filter by description
-    def filter_by_description(self, queryset, name, value):
-        return queryset.filter(description__icontains=value)
