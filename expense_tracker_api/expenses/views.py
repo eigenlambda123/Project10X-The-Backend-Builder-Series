@@ -1,19 +1,19 @@
-from django.shortcuts import render
-from . serializers import TransactionsSerializer, CategorySerializer, RegisterSerializer
-from . models import Transactions, Category
-from . permissions import IsOwnerOrReadOnly
-from . filters import TransactionsFilter
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.viewsets import ModelViewSet
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.decorators import action
-from django.db.models import Sum
 from datetime import datetime
-from rest_framework import generics
-from rest_framework.permissions import AllowAny 
+
 from django.contrib.auth.models import User
+from django.db.models import Sum
+from django_filters.rest_framework import DjangoFilterBackend
+
+from rest_framework import generics
+from rest_framework.decorators import action
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
+
+from .models import Transactions, Category
+from .serializers import TransactionsSerializer, CategorySerializer, RegisterSerializer
+from .permissions import IsOwnerOrReadOnly
+from .filters import TransactionsFilter
 
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()  # Required by DRF to determine the model class; not used to list users
