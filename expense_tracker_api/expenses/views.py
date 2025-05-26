@@ -97,7 +97,7 @@ class TransactionsViewSet(ModelViewSet):
     def income_category_summary(self, request):
         user = request.user # Get the current user
         transactions = self.get_queryset().filter(type='income') # Get the filtered queryset for the current user
-        
+
         # return the total amount earned per category
         return Response(
             transactions.values('category__name')
