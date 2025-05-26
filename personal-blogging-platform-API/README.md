@@ -1,6 +1,6 @@
 # API Endpoints for Project10X Backend — 1st Project (Blog API)
 
-## Base URL Prefix
+## Base URL Prefix  
 All API endpoints are prefixed with `/api/`.
 
 ---
@@ -31,16 +31,16 @@ All API endpoints are prefixed with `/api/`.
   Create a new post (authentication required).
 
 - `GET /api/posts/{slug}/`  
-  Retrieve a single post by its slug.
+  Retrieve a single post by its **slug**.
 
 - `PUT /api/posts/{slug}/`  
-  Update a post by its slug (authentication and ownership required).
+  Update a post by its **slug** (authentication and ownership required).
 
 - `PATCH /api/posts/{slug}/`  
-  Partially update a post by its slug (authentication and ownership required).
+  Partially update a post by its **slug** (authentication and ownership required).
 
 - `DELETE /api/posts/{slug}/`  
-  Delete a post by its slug (authentication and ownership required).
+  Delete a post by its **slug** (authentication and ownership required).
 
 ---
 
