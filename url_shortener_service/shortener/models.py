@@ -30,4 +30,17 @@ class ShortURL(models.Model):
         String representation of the ShortURL model.
         """
         return f"{self.short_code} → {self.original_url}"
+    
+
+class Click(models.Model):
+    short_url = models.ForeignKey(ShortURL, on_delete=models.CASCADE)  # Foreign key to ShortURL model
+    clicked_at = models.DateTimeField(auto_now_add=True)  # Timestamp of when the URL was clicked
+    ip_address = models.CharField(max_length=45)  # Field to store the IP address of the user who clicked the URL
+    user_agent = models.CharField(max_length=255, null=True, blank=True)  # Optional field for user agent information
+
+    def __str__(self):
+        """
+        String representation of the Click model.
+        """
+        return f"Click on {self.short_url.short_code} at {self.clicked_at}"
  
