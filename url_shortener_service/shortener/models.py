@@ -23,4 +23,11 @@ class ShortURL(models.Model):
             while ShortURL.objects.filter(short_code=self.short_code).exists(): # Ensure the generated short code is unique
                 self.short_code = generate_short_code()
         super().save(*args, **kwargs) # save the model instance
+
+
+    def __str__(self):
+        """
+        String representation of the ShortURL model.
+        """
+        return f"{self.short_code} → {self.original_url}"
  
