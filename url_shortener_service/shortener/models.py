@@ -26,9 +26,6 @@ class ShortURL(models.Model):
 
 
     def __str__(self):
-        """
-        String representation of the ShortURL model.
-        """
         return f"{self.short_code} → {self.original_url}"
     
 
@@ -39,8 +36,5 @@ class Click(models.Model):
     user_agent = models.CharField(max_length=255, null=True, blank=True)  # Optional field for user agent information
 
     def __str__(self):
-        """
-        String representation of the Click model.
-        """
-        return f"Click on {self.short_url.short_code} at {self.clicked_at}"
+        return f"Click on {self.short_url.short_code} at {self.timestamp}"
  
