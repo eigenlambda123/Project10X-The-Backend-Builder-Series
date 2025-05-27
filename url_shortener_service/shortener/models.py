@@ -15,4 +15,12 @@ class ShortURL(models.Model):
     created_at = models.DateTimeField(auto_now_add=True) # Field to store the creation timestamp
     expiration_date = models.DateTimeField(null=True, blank=True) # Optional field for URL expiration
     is_active = models.BooleanField(default=True) # Field to indicate if the short URL is active
+
+    def save(self, *args, **kwargs):
+        """Override save method to generate short code if not provided."""
+        if not self.short_code: # If short_code is not set, generate a new one
+            self.short_code = generate_short_code()
+            while ShortURL.objects.filter(short_code=self.short_code).exists(): # Ensure the generated short code is unique
+                self.short_code = generate_short_code()
+        super().save(*args, **kwargs) # save the model instance
  
