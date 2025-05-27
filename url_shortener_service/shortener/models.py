@@ -29,7 +29,7 @@ class ShortURL(models.Model):
         return f"{self.short_code} → {self.original_url}"
     
 
-class Click(models.Model):
+class ClickEvent(models.Model):
     short_url = models.ForeignKey(ShortURL, on_delete=models.CASCADE)  # Foreign key to ShortURL model
     clicked_at = models.DateTimeField(auto_now_add=True)  # Timestamp of when the URL was clicked
     ip_address = models.CharField(max_length=45)  # Field to store the IP address of the user who clicked the URL
