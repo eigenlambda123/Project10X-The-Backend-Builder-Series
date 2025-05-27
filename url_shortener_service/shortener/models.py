@@ -36,5 +36,5 @@ class ClickEvent(models.Model):
     user_agent = models.CharField(max_length=255, null=True, blank=True)  # Optional field for user agent information
 
     def __str__(self):
-        return f"Click on {self.short_url.short_code} at {self.timestamp}"
+        return f"Click on {self.short_url.short_code} at {self.clicked_at}"
  
