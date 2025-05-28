@@ -20,7 +20,7 @@ class ShortURLViewSet(viewsets.ModelViewSet):
     """
     queryset = ShortURL.objects.all()  # retrieve all ShortURL objects
     serializer_class = ShortURLSerializer  # serialization and deserialization of ShortURL objects
-    permission_classes = [permissions.AllowAny, IsOwnerOrReadOnly]  # Allow any user to access this viewset
+    permission_classes = [IsOwnerOrReadOnly] # custom permission to allow only owners to edit their ShortURL objects
     pagination_class = PageNumberPagination
 
     def perform_create(self, serializer):
