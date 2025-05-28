@@ -8,6 +8,7 @@ from django.utils import timezone
 from rest_framework import status
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.pagination import PageNumberPagination
 
 
 
@@ -19,6 +20,7 @@ class ShortURLViewSet(viewsets.ModelViewSet):
     queryset = ShortURL.objects.all()  # retrieve all ShortURL objects
     serializer_class = ShortURLSerializer  # serialization and deserialization of ShortURL objects
     permission_classes = [permissions.AllowAny]  # Allow any user to access this viewset
+    pagination_class = PageNumberPagination
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user if self.request.user.is_authenticated else None)  # Save the user if authenticated, otherwise None
@@ -54,6 +56,7 @@ class ListUserURLsView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]  # Only authenticated users can access this view
     filter_backends = [DjangoFilterBackend] # Enable filtering on the queryset 
     filterset_fields = ['created_at', 'is_active', 'expiration_date'] # Fields that can be filtered in the queryset
+    pagination_class = PageNumberPagination
     
     def get_queryset(self):
         return ShortURL.objects.filter(user=self.request.user)  # Return ShortURL objects created by the authenticated user
