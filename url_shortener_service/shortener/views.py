@@ -1,5 +1,5 @@
 
-from rest_framework import permissions, viewsets
+from rest_framework import permissions, viewsets, generics
 from . models import ShortURL, ClickEvent
 from . serializers import ShortURLSerializer
 from rest_framework.views import APIView
@@ -43,3 +43,15 @@ class RedirectToOriginalView(APIView):
             user_agent=request.META.get('HTTP_USER_AGENT', '')  # Get the user's user agent
         )
         return redirect(url_obj.original_url) # Redirect to the original URL
+    
+
+class ListUserURLsView(generics.ListAPIView):
+    """
+    APIView to list all ShortURL objects created by the authenticated user.
+    """
+    seriazelizer_class = ShortURLSerializer  # Use the ShortURLSerializer for serialization
+    permission_classes = [permissions.IsAuthenticated]  # Only authenticated users can access this view
+    
+    def get_queryset(self):
+        return ShortURL.objects.filter(user=self.request.user)  # Return ShortURL objects created by the authenticated user
+
