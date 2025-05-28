@@ -7,6 +7,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.utils import timezone
 from rest_framework import status
 from rest_framework.response import Response
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 
@@ -51,6 +52,8 @@ class ListUserURLsView(generics.ListAPIView):
     """
     serializer_class = ShortURLSerializer  # Use the ShortURLSerializer for serialization
     permission_classes = [permissions.IsAuthenticated]  # Only authenticated users can access this view
+    filter_backends = [DjangoFilterBackend] # Enable filtering on the queryset 
+    filterset_fields = ['created_at', 'is_active', 'expiration_date'] # Fields that can be filtered in the queryset
     
     def get_queryset(self):
         return ShortURL.objects.filter(user=self.request.user)  # Return ShortURL objects created by the authenticated user
