@@ -10,6 +10,7 @@ from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import PageNumberPagination
 from . permissions import IsOwnerOrReadOnly
+from rest_framework import filters
 
 
 
@@ -55,8 +56,9 @@ class ListUserURLsView(generics.ListAPIView):
     """
     serializer_class = ShortURLSerializer  # Use the ShortURLSerializer for serialization
     permission_classes = [permissions.IsAuthenticated]  # Only authenticated users can access this view
-    filter_backends = [DjangoFilterBackend] # Enable filtering on the queryset 
-    filterset_fields = ['created_at', 'is_active', 'expiration_date'] # Fields that can be filtered in the queryset
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter] # Enable filtering on the queryset 
+    filterset_fields = ['likes', 'clicks', 'expiration_date'] # Fields that can be filtered in the queryset
+    ordering = ['likes'] # Default ordering of the queryset by likes
     pagination_class = PageNumberPagination
     
     def get_queryset(self):
