@@ -49,7 +49,7 @@ class ListUserURLsView(generics.ListAPIView):
     """
     APIView to list all ShortURL objects created by the authenticated user.
     """
-    seriazelizer_class = ShortURLSerializer  # Use the ShortURLSerializer for serialization
+    serializer_class = ShortURLSerializer  # Use the ShortURLSerializer for serialization
     permission_classes = [permissions.IsAuthenticated]  # Only authenticated users can access this view
     
     def get_queryset(self):
