@@ -23,8 +23,8 @@ class ShortURLViewSet(viewsets.ModelViewSet):
     serializer_class = ShortURLSerializer  # serialization and deserialization of ShortURL objects
     permission_classes = [IsOwnerOrReadOnly] # custom permission to allow only owners to edit their ShortURL objects
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter] # Enable filtering on the queryset 
-    filterset_fields = ['likes', 'clicks', 'expiration_date'] # Fields that can be filtered in the queryset
-    ordering = ['likes'] # Default ordering of the queryset by likes
+    filterset_fields = ['clicks', 'expiration_date'] # Fields that can be filtered in the queryset
+    ordering = ['clicks'] # Default ordering of the queryset by clicks
     pagination_class = PageNumberPagination
 
     def perform_create(self, serializer):
@@ -60,8 +60,8 @@ class ListUserURLsView(generics.ListAPIView):
     serializer_class = ShortURLSerializer  # Use the ShortURLSerializer for serialization
     permission_classes = [permissions.IsAuthenticated]  # Only authenticated users can access this view
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter] # Enable filtering on the queryset 
-    filterset_fields = ['likes', 'clicks', 'expiration_date'] # Fields that can be filtered in the queryset
-    ordering = ['likes'] # Default ordering of the queryset by likes
+    filterset_fields = ['clicks', 'expiration_date'] # Fields that can be filtered in the queryset
+    ordering = ['clicks'] # Default ordering of the queryset by clicks
     pagination_class = PageNumberPagination
     
     def get_queryset(self):
