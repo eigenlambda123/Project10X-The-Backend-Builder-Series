@@ -21,7 +21,7 @@ class ShortURLViewSet(viewsets.ModelViewSet):
     """
     queryset = ShortURL.objects.all()  # retrieve all ShortURL objects
     serializer_class = ShortURLSerializer  # serialization and deserialization of ShortURL objects
-    permission_classes = [IsOwnerOrReadOnly] # custom permission to allow only owners to edit their ShortURL objects
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly] # Allow authenticated users to create, update, and delete ShortURL objects, while others can only read them
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter] # Enable filtering on the queryset 
     filterset_fields = ['clicks', 'expiration_date'] # Fields that can be filtered in the queryset
     ordering = ['-clicks'] # Default ordering of the queryset by clicks in descending order
@@ -58,7 +58,7 @@ class ListUserURLsView(generics.ListAPIView):
     APIView to list all ShortURL objects created by the authenticated user.
     """
     serializer_class = ShortURLSerializer  # Use the ShortURLSerializer for serialization
-    permission_classes = [permissions.IsAuthenticated]  # Only authenticated users can access this view
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly] # Only authenticated users can access this view, and only the owner can modify their URLs
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter] # Enable filtering on the queryset 
     filterset_fields = ['clicks', 'expiration_date'] # Fields that can be filtered in the queryset
     ordering = ['-clicks'] # Default ordering of the queryset by clicks in descending order
