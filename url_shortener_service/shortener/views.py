@@ -24,7 +24,7 @@ class ShortURLViewSet(viewsets.ModelViewSet):
     permission_classes = [IsOwnerOrReadOnly] # custom permission to allow only owners to edit their ShortURL objects
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter] # Enable filtering on the queryset 
     filterset_fields = ['clicks', 'expiration_date'] # Fields that can be filtered in the queryset
-    ordering = ['clicks'] # Default ordering of the queryset by clicks
+    ordering = ['-clicks'] # Default ordering of the queryset by clicks in descending order
     pagination_class = PageNumberPagination
 
     def perform_create(self, serializer):
@@ -61,7 +61,7 @@ class ListUserURLsView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]  # Only authenticated users can access this view
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter] # Enable filtering on the queryset 
     filterset_fields = ['clicks', 'expiration_date'] # Fields that can be filtered in the queryset
-    ordering = ['clicks'] # Default ordering of the queryset by clicks
+    ordering = ['-clicks'] # Default ordering of the queryset by clicks in descending order
     pagination_class = PageNumberPagination
     
     def get_queryset(self):
