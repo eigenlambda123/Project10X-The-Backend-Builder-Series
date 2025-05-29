@@ -1,17 +1,134 @@
-/* Change header color */
-.model-shorturl .module h2 {
-    background-color: #4a90e2;
-    color: white;
-    padding: 10px;
+/* Clean background and font */
+body {
+    background-color: #f4f6f8 !important;
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+    color: #2e3440 !important;
+    font-size: 14px !important;
 }
 
-/* Make clickable links bolder */
-.model-shorturl .field-short_code a {
+/* Header with solid consistent blue */
+#header {
+    background-color: #2f436f !important;
+    color: #ffffff !important;
+    font-weight: 600;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* User tools links */
+#user-tools a {
+    color: #c3d0f5 !important;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+#user-tools a:hover {
+    color: #e0e6fb !important;
+}
+
+/* Module headings */
+.module h2 {
+    color: #3b4252 !important;
     font-weight: 700;
-    color: #2c3e50;
+    border-bottom: 2px solid #627aa9;
+    padding-bottom: 0.3em;
+    margin-bottom: 1em;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
-/* Highlight rows on hover */
-#result_list tbody tr:hover {
-    background-color: #f0f8ff;
+/* Boxes around forms and lists without rounding */
+fieldset.module {
+    background: #ffffff;
+    border-radius: 0 !important;
+    box-shadow: 0 3px 6px rgba(47, 67, 111, 0.1);
+    padding: 1.5em 2em;
+    margin-bottom: 2em;
+    border: 1px solid #c4c9d7;
+}
+
+/* Tables style with spacing and sharp edges */
+table#result_list {
+    border-collapse: separate !important;
+    border-spacing: 0 8px !important;
+    width: 100%;
+}
+
+table#result_list th {
+    background-color: #d2daf9 !important;
+    color: #2f436f !important;
+    font-weight: 600;
+    text-align: left;
+    padding: 12px 16px !important;
+    border-radius: 0 !important;
+    border-bottom: 1px solid #a3b1db;
+}
+
+table#result_list td {
+    background: #ffffff !important;
+    padding: 12px 16px !important;
+    vertical-align: middle !important;
+    border-bottom: 1px solid #e0e4f1 !important;
+    border-radius: 0 !important;
+}
+
+table#result_list tr:hover td {
+    background-color: #e6ebfa !important;
+    transition: background-color 0.25s ease;
+}
+
+/* Buttons and links with sharp edges and consistent color */
+button, input[type="submit"], .submit-row a {
+    background-color: #2f436f !important;
+    border: none !important;
+    color: white !important;
+    padding: 10px 20px !important;
+    border-radius: 0 !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    box-shadow: 0 4px 6px rgba(47, 67, 111, 0.35);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    text-decoration: none !important;
+}
+
+button:hover, input[type="submit"]:hover, .submit-row a:hover {
+    background-color: #1f2e53 !important;
+    box-shadow: 0 6px 12px rgba(31, 46, 83, 0.6);
+}
+
+/* Input fields */
+input, select, textarea {
+    border: 1.5px solid #aab4d3 !important;
+    border-radius: 0 !important;
+    padding: 10px !important;
+    font-size: 14px !important;
+    transition: border-color 0.3s ease;
+    background: #fff;
+    color: #2e3440;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: #2f436f !important;
+    outline: none !important;
+    box-shadow: 0 0 6px #2f436faa !important;
+}
+
+/* Pagination */
+.pagination {
+    margin-top: 1.5em;
+}
+
+.pagination a, .pagination span {
+    padding: 8px 14px !important;
+    border-radius: 0 !important;
+    border: 1.5px solid #aab4d3 !important;
+    margin: 0 4px !important;
+    color: #2f436f !important;
+    font-weight: 600 !important;
+    text-decoration: none !important;
+    transition: background-color 0.25s ease, border-color 0.25s ease;
+}
+
+.pagination a:hover {
+    background-color: #2f436f !important;
+    color: white !important;
+    border-color: #1f2e53 !important;
 }
