@@ -6,9 +6,11 @@ class ShortURLAdmin(admin.ModelAdmin):
     list_display = ('short_code', 'original_url', 'clicks', 'created_at', 'is_active', 'expiration_date', 'user')
     search_fields = ('short_code', 'original_url')
     list_filter = ('is_active',)
+    readonly_fields = ('short_code', 'clicks', 'created_at')
+    ordering = ('-created_at',)
 
 @admin.register(ClickEvent)
 class ClickEventAdmin(admin.ModelAdmin):
     list_display = ('short_url', 'clicked_at', 'ip_address')
     search_fields = ('short_url__short_code', 'ip_address')
-
+    ordering = ('-clicked_at',)
