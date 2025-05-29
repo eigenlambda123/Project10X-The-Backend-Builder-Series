@@ -16,7 +16,7 @@ class ShortURLSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ShortURL # Define the model to serialize
-        fields = ['id', 'user', 'original_url', 'short_code','short_link,' 'clicks', 'created_at', 'expiration_date', 'is_active', 'qr_code'] # Specify the fields to include in the serialized output, including qr_code
+        fields = ['id', 'user', 'original_url', 'short_code','short_link', 'clicks', 'created_at', 'expiration_date', 'is_active', 'qr_code'] # Specify the fields to include in the serialized output, including qr_code
 
     def validate_original_url(self, value):
         """
