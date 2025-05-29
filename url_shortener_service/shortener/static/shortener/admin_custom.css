@@ -1,0 +1,17 @@
+/* Change header color */
+.model-shorturl .module h2 {
+    background-color: #4a90e2;
+    color: white;
+    padding: 10px;
+}
+
+/* Make clickable links bolder */
+.model-shorturl .field-short_code a {
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+/* Highlight rows on hover */
+#result_list tbody tr:hover {
+    background-color: #f0f8ff;
+}
