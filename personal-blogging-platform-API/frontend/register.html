@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Register</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <main>
+        <h1>Register</h1>
+        <form id="register-form">
+            <label>
+                Username:<br>
+                <input type="text" id="username" required />
+            </label>
+            <br><br>
+            <label>
+                Password:<br>
+                <input type="password" id="password" required />
+            </label>
+            <br><br>
+            <label>
+                Confirm Password:<br>
+                <input type="password" id="confirm-password" required />
+            </label>
+            <br><br>
+            <button type="submit">Register</button>
+        </form>
+        <p id="error" style="color: red;"></p>
+        <p>
+            Already have an account?
+            <a href="login.html">Login</a>
+        </p>
+    </main>
+    <script src="script/register.js" type="module"></script>
+</body>
+</html>
