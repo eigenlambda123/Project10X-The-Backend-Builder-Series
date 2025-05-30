@@ -2,6 +2,7 @@ from rest_framework.test import APITestCase, APIClient
 from django.contrib.auth.models import User
 from blog_app.models import Post, Category, Tag
 from django.urls import reverse
+from rest_framework import status
 
 class PostTestAPI(APITestCase):
     """
@@ -30,5 +31,19 @@ class PostTestAPI(APITestCase):
         self.create_url = reverse('post-list')  # /api/posts/
         self.detail_url = reverse('post-detail', kwargs={'slug': self.post.slug})  # /api/posts/<slug>/
 
-        
+    
+    def test_create_post(self):
+        """
+        Test creating a new post via the API.
+        """ 
+        # Prepare the data for creating a new post
+        data = {
+            "title": "New Post",
+            "content": "This is a new post content.",
+            "category": self.category.name,
+            "tags": [self.tag.name]
+        }
+        response = self.client.post(self.create_url, data, format='json') # Send a POST request to create a new post
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED) # Check if the response status code is 201 Created
+        self.assertEqual(response.data['title'], "New Post") # Check if the title in the response matches the created post title
 
