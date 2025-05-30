@@ -27,5 +27,8 @@ class PostTestAPI(APITestCase):
         )
         self.post.tags.add(self.tag) # Add the tag to the post
 
+        self.create_url = reverse('post-list')  # /api/posts/
+        self.detail_url = reverse('post-detail', kwargs={'slug': self.post.slug})  # /api/posts/<slug>/
 
+        
 
