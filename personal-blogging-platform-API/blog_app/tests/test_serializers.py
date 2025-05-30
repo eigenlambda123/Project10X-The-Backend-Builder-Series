@@ -41,3 +41,13 @@ class PostSerializerTest(TestCase):
         serializer = PostSerializer(data=invalid_data) # Initialize the serializer with invalid data
         self.assertFalse(serializer.is_valid()) # Check if the serializer is invalid
         self.assertIn('title', serializer.errors) # Ensure the error is related to the title field
+
+
+    def test_title_too_long_fails(self):
+        invalid_data = self.valid_data.copy() # Create a copy of the valid data
+        invalid_data["title"] = "a" * 300  # Create a title that exceeds the maximum length
+        serializer = PostSerializer(data=invalid_data) # Initialize the serializer with invalid data
+        self.assertFalse(serializer.is_valid()) # Check if the serializer is invalid
+        self.assertIn('title', serializer.errors) # Ensure the error is related to the title field
+
+    
