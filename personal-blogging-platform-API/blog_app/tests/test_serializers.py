@@ -51,3 +51,9 @@ class PostSerializerTest(TestCase):
         self.assertIn('title', serializer.errors) # Ensure the error is related to the title field
 
     
+    def test_invalid_tag_name_fields(self):
+        invalid_data = self.valid_data.copy() # Create a copy of the valid data
+        invalid_data["tags"] = ["invalid_tag_name"] # Use an invalid tag name
+        serializer = PostSerializer(data=invalid_data) # Initialize the serializer with invalid data
+        self.assertFalse(serializer.is_valid()) # Check if the serializer is invalid
+        self.assertIn('tags', serializer.errors) # Ensure the error is related to the tags field
