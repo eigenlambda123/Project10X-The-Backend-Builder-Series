@@ -7,7 +7,7 @@ class PostSerializerTest(TestCase):
     """
     Test case for the PostSerializer.
     """
-    
+
     def setUp(self):
         """
         Set up the test environment by creating a user, category, and tag.
@@ -25,3 +25,8 @@ class PostSerializerTest(TestCase):
             "category": self.category.id,
             "tags": [self.tag1.id]
         }
+
+    def test_serializer_with_valid_data(self):
+        serializer = PostSerializer(data=self.valid_data) # Initialize the serializer with valid data
+        self.assertTrue(serializer.is_valid()) #     Check if the serializer is valid
+        self.assertEqual(serializer.validated_data['title'], "Test Post") # Ensure the title is correct
