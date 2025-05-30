@@ -70,7 +70,7 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ['id', 'title', 'slug', 'content', 'html_content', 'created_at', 'updated_at', 'category', 'tags']
+        fields = ['id', 'title', 'slug', 'content', 'html_content', 'created_at', 'updated_at', 'category','authors', 'tags']
         read_only_fields = ['id', 'slug', 'created_at', 'updated_at']
 
     def get_html_content(self, obj):

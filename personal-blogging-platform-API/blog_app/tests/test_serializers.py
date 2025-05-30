@@ -22,11 +22,22 @@ class PostSerializerTest(TestCase):
             "title": "Test Post",
             "content": "This is a test post content.",
             "author": self.user.id,
-            "category": self.category.id,
-            "tags": [self.tag1.id]
+            "category": self.category.name,
+            "tags": [self.tag1.name]
         }
 
     def test_serializer_with_valid_data(self):
         serializer = PostSerializer(data=self.valid_data) # Initialize the serializer with valid data
-        self.assertTrue(serializer.is_valid()) #     Check if the serializer is valid
-        self.assertEqual(serializer.validated_data['title'], "Test Post") # Ensure the title is correct
+        is_valid = serializer.is_valid() # Check if the serializer is valid
+        print("Errors:", serializer.errors)  # Print any validation errors for debugging
+        self.assertTrue(is_valid) # Ensure the serializer is valid
+        self.assertEqual(serializer.validated_data['title'], "Test Post") # Check if the title is correctly validated
+
+
+    
+    def test_missing_title_fails(self):
+        invalid_data = self.valid_data.copy() # Create a copy of the valid data
+        invalid_data.pop('title') # Remove the title to make it invalid
+        serializer = PostSerializer(data=invalid_data) # Initialize the serializer with invalid data
+        self.assertFalse(serializer.is_valid()) # Check if the serializer is invalid
+        self.assertIn('title', serializer.errors) # Ensure the error is related to the title field
