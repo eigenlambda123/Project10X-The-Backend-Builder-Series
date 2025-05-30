@@ -42,3 +42,17 @@ class PostModelTest(TestCase):
         self.assertEqual(post.category.name, "Django") # Ensure the category is associated with the post
         self.assertIn(self.tag, post.tags.all()) # Ensure the tag is associated with the post
 
+
+    def test_post_str_representation(self):
+        """"
+        Test the string representation of the Post model.
+        """
+        # Create a Post instance
+        post = Post.objects.create(
+            title="Another Post",
+            content="Sample content",
+            author=self.user,
+            category=self.category
+        )
+        self.assertEqual(str(post), "Another Post") # Ensure the string representation returns the title
+
