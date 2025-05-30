@@ -46,9 +46,11 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'blog_app',
     'django_filters',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -164,3 +166,13 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
 }
+
+# CORS settings
+CORS_ALLOW_ALL_ORIGINS = True  # For development only!
+# OR, for more security:
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:8000",
+#     "http://127.0.0.1:8000",
+#     "http://localhost:5500",  # If using Live Server or similar
+#     "http://127.0.0.1:5500",
+# ]
