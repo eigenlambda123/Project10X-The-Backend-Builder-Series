@@ -32,6 +32,8 @@ class PostSerializerTest(TestCase):
         print("Errors:", serializer.errors)  # Print any validation errors for debugging
         self.assertTrue(is_valid) # Ensure the serializer is valid
         self.assertEqual(serializer.validated_data['title'], "Test Post") # Check if the title is correctly validated
+        self.assertEqual(serializer.validated_data['content'], "This is a test post content.") # Check if the content is correctly validated
+        self.assertEqual(serializer.validated_data['author'], self.user) # Check if the author is correctly validated
 
 
     
