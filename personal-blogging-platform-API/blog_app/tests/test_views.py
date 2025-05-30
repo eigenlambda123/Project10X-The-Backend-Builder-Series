@@ -41,7 +41,8 @@ class PostTestAPI(APITestCase):
             "title": "New Post",
             "content": "This is a new post content.",
             "category": self.category.name,
-            "tags": [self.tag.name]
+            "tags": [self.tag.name],
+            "author": self.user.id  # Add this line if required
         }
         response = self.client.post(self.create_url, data, format='json') # Send a POST request to create a new post
         self.assertEqual(response.status_code, status.HTTP_201_CREATED) # Check if the response status code is 201 Created
