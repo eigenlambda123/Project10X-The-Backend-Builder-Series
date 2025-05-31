@@ -56,7 +56,7 @@ class PostUnauthenticatedAccessTest(APITestCase):
 
 
 
-class PostPermissionTest:
+class PostPermissionTest(APITestCase):
     """
     Tests that non owner users can read posts
     but cannot update or delete the owners post.
