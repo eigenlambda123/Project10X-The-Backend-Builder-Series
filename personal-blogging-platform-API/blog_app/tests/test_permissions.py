@@ -79,4 +79,16 @@ class PostPermissionTest:
         self.detail_url = reverse('post-detail', kwargs={'slug': self.post.slug}) # /api/posts/<slug>/
 
 
+    def test_non_owner_cannot_update_post(self):
+        self.client.force_authenticate(user=self.other_user) # force authentication for other_user
+
+        data = {
+            "title": "Hacked",
+            "content": "Trying to update",
+            "category": self.category.name,
+            "tags": [self.tag.name],
+            "author": self.owner.id
+        }
+        response = self.client.put(self.detail_url, data, format='json') # try updating the data using other_user
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN) # will check if status is 403 forbidden
 
