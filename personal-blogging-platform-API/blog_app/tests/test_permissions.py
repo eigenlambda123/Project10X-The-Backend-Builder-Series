@@ -69,8 +69,21 @@ class AuthTestCase(APITestCase):
 
         # Use token to access protected route
         self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {token}")  # set Authorization header with Bearer token
-        response = self.client.get(self.protected_url)  # GET request to protected endpoint
+        response = self.client.get(self.protected_url)  # GET request to post-lsit via protected_url
         self.assertEqual(response.status_code, status.HTTP_200_OK)  # assert that access is granted (HTTP 200)
+
+
+    def test_token_refresh(self):
+        login_data = {
+            "username": self.user_data["username"],
+            "password": self.user_data["password"]
+        }
+        login_response = self.client.post(self.login_url, login_data, format='json')  # POST to login endpoint to get tokens
+        refresh_token = login_response.data["refresh"]  # extract refresh token from response
+
+        response = self.client.post(self.refresh_url, {"refresh": refresh_token}, format='json')  # POST to refresh endpoint with refresh token
+        self.assertEqual(response.status_code, status.HTTP_200_OK)  # check if refresh was successful (HTTP 200)
+        self.assertIn("access", response.data)  # check if new access token is in response
 
 
 
