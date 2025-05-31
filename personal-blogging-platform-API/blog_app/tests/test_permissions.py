@@ -58,6 +58,21 @@ class AuthTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED) # check if status code 401 unauthorized
 
 
+    def test_access_with_token(self):
+        # Log in to get token
+        login_data = {
+            "username": self.user_data["username"],    
+            "password": self.user_data["password"]    
+        }
+        login_response = self.client.post(self.login_url, login_data, format='json')  # POST to login endpoint
+        token = login_response.data["access"]  # extract access token from response
+
+        # Use token to access protected route
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {token}")  # set Authorization header with Bearer token
+        response = self.client.get(self.protected_url)  # GET request to protected endpoint
+        self.assertEqual(response.status_code, status.HTTP_200_OK)  # assert that access is granted (HTTP 200)
+
+
 
 
 class PostUnauthenticatedAccessTest(APITestCase):
