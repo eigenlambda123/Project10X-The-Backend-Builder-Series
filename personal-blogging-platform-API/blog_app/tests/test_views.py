@@ -52,3 +52,8 @@ class PostTestAPI(APITestCase):
         response = self.client.get(self.create_url) # get post-list via create_url
         self.assertEqual(response.status_code, status.HTTP_200_OK) # check if the reponse status code is 200 ok 
         self.assertGreaterEqual(len(response.data), 1) # checks that the response from the API contains at least one post in the list
+
+    def test_get_single_post(self):
+        response = self.client.get(self.detail_url) # get post-detail via detail_url
+        self.assertEqual(response.status_code, status.HTTP_200_OK) # check if the reponse status code is 200 ok 
+        self.assertEqual(response.data['slug'], self.post.slug) # ensures that the api returns the correct post for the given slug
