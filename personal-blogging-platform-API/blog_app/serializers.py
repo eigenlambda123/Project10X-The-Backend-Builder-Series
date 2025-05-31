@@ -73,6 +73,10 @@ class PostSerializer(serializers.ModelSerializer):
         fields = ['id', 'title', 'slug', 'content', 'html_content', 'created_at', 'updated_at', 'category','author', 'tags']
         read_only_fields = ['id', 'slug', 'created_at', 'updated_at']
 
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
+
+
     def get_html_content(self, obj):
         """
         Convert the raw Markdown content of a Post into HTML
