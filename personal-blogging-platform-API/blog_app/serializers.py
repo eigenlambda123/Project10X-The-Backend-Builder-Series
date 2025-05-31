@@ -67,15 +67,13 @@ class PostSerializer(serializers.ModelSerializer):
     )
     html_content = serializers.SerializerMethodField()  # Custom field for HTML content
 
+    # Explicitly define author as read-only
+    author = serializers.StringRelatedField(read_only=True)
 
     class Meta:
         model = Post
         fields = ['id', 'title', 'slug', 'content', 'html_content', 'created_at', 'updated_at', 'category','author', 'tags']
         read_only_fields = ['id', 'slug', 'created_at', 'updated_at']
-
-    def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
-
 
     def get_html_content(self, obj):
         """
@@ -84,3 +82,10 @@ class PostSerializer(serializers.ModelSerializer):
         """
         return markdown.markdown(obj.content)
         
+    
+    def create(self, validated_data):
+        """
+        Override create method to set author to the authenticated user.
+        """
+        validated_data['author'] = self.context['request'].user
+        return super().create(validated_data)
