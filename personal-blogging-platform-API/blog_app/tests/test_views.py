@@ -48,3 +48,7 @@ class PostTestAPI(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED) # Check if the response status code is 201 Created
         self.assertEqual(response.data['title'], "New Post") # Check if the title in the response matches the created post title
 
+    def test_get_post_list(self):
+        response = self.client.get(self.create_url) # get post-list via create_url
+        self.assertEqual(response.status_code, status.HTTP_200_OK) # check if the reponse status code is 200 ok 
+        self.assertGreaterEqual(len(response.data), 1) # checks that the response from the API contains at least one post in the list
