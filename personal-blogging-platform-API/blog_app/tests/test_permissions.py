@@ -24,7 +24,16 @@ class AuthTestCase(APITestCase):
         # register user manually for token request
         self.user = User.objects.create_user(**self.user_data)
 
+    
+    def test_register_user(self):
+        data = {
+            "username": "testuser",
+            "password": "testpass123"
+        }
 
+        response = self.client.post(self.register_url, data, format="json") # try registering the user
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED) # will check if status is 201 created
+        self.assertTrue(User.objects.filter(username="testuser").exists()) # will check if the user created exist
 
 
 class PostUnauthenticatedAccessTest(APITestCase):
