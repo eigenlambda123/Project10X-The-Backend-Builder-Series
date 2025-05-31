@@ -2,6 +2,7 @@ from rest_framework.test import APITestCase, APIClient
 from django.contrib.auth.models import User
 from blog_app.models import Post, Category, Tag
 from django.urls import reverse
+from rest_framework import status
 
 class PostUnauthenticatedAccessTest(APITestCase):
     """
@@ -24,4 +25,16 @@ class PostUnauthenticatedAccessTest(APITestCase):
         self.client = APIClient
         self.create_url = reverse('post-list')  # /api/posts/
         self.detail_url = reverse('post-detail', kwargs={'slug': self.post.slug})  # /api/posts/<slug>/
+
+    def test_guest_cannot_create_post(self):
+        data = {
+            "title": "New Post",
+            "content": "Not Allowed",
+            "category": self.category.name,
+            "tags": [self.tag.name],
+            "author": self.user.id
+        }
+
+        response = self.client.post(self.create_url, data, format='json') # try creating a new post
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED) # will check if status is 401 unathorized
 
