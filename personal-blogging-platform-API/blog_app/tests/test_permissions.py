@@ -62,8 +62,8 @@ class PostPermissionTest:
     but cannot update or delete the owners post.
     """
     def setUp(self):
-        self.owner = User.objects.create_user(username="owner", password="secret") # create a new user
-        self.other_user = User.objects.create_user(username="intruder", password="intrude") # create another user
+        self.owner = User.objects.create_user(username="owner", password="secret") # create a new user -> owner
+        self.other_user = User.objects.create_user(username="intruder", password="intrude") # create another user -> hacker
         self.category = Category.objects.create(name="Django") # create a category
         self.tag = Tag.objects.create(name="test") # create a tag
 
