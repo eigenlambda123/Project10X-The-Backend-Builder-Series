@@ -155,6 +155,17 @@ class PostFilteringTest(APITestCase):
             self.assertTrue(any(tag in slugs for tag in post["tags"]))  # Assert at least one tag in post matches the filter
 
 
+    def test_filter_with_invalid_category(self):
+        response = self.client.get(self.url, {"category": "invalid-slug"})  # Send GET request with invalid category slug
+        self.assertEqual(response.status_code, 200)  # Check if response status is 200 OK
+        self.assertEqual(len(response.data["results"]), 0)  # Assert that no posts are returned
+
+    def test_filter_with_invalid_tag(self):
+        response = self.client.get(self.url, {"tags": "invalid-slug"})  # Send GET request with invalid tag slug
+        self.assertEqual(response.status_code, 200)  # Check if response status is 200 OK
+        self.assertEqual(len(response.data["results"]), 0)  # Assert that no posts are returned
+
+
 
     
 
