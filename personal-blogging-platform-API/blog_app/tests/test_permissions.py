@@ -47,6 +47,17 @@ class AuthTestCase(APITestCase):
         self.assertIn("access", response.data) # check if access token is in response
         self.assertIn("refresh", response.data) # check if refresh token is in response
 
+    def test_protected_endpoint_requires_auth(self):
+        data = {
+            "title": "Unauthorized Post",
+            "content": "Should fail",
+            "category": "Django", 
+            "tags": []
+        }
+        response = self.client.post(self.protected_url, data, format='json') # try posting via protected_url with unauthorized
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED) # check if status code 401 unauthorized
+
+
 
 
 class PostUnauthenticatedAccessTest(APITestCase):
