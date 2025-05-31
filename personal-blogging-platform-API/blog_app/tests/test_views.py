@@ -57,3 +57,16 @@ class PostTestAPI(APITestCase):
         response = self.client.get(self.detail_url) # get post-detail via detail_url
         self.assertEqual(response.status_code, status.HTTP_200_OK) # check if the reponse status code is 200 ok 
         self.assertEqual(response.data['slug'], self.post.slug) # ensures that the api returns the correct post for the given slug
+
+    def test_update_post(self):
+        # updates the created data title and content
+        data = {
+            "title": "Updated Title",
+            "content": "Updated content.",
+            "category": self.category.name,
+            "tags": [self.tag.name],
+            "author": self.user.id
+        }
+        response = self.client.put(self.detail_url, data, format='json') # sends a PUT request to the API to update an existing post
+        self.assertEqual(response.status_code, status.HTTP_200_OK) # check if the reponse status code is 200 ok 
+        self.assertEqual(response.data['title'], "Updated Title") # check if the current title is equal to the updated title
