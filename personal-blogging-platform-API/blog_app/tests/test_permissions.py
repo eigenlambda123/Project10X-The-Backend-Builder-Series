@@ -22,7 +22,7 @@ class PostUnauthenticatedAccessTest(APITestCase):
             category = self.category
         )
         self.post.tags.add(self.tag) # add tag to the post
-        self.client = APIClient
+        self.client = APIClient()
         self.create_url = reverse('post-list')  # /api/posts/
         self.detail_url = reverse('post-detail', kwargs={'slug': self.post.slug})  # /api/posts/<slug>/
 
