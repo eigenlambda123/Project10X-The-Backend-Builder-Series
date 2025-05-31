@@ -137,8 +137,23 @@ class PostFilteringTest(APITestCase):
     def test_filter_by_category(self):
         response = self.client.get(self.url, {"category": self.cat1.slug})  # Send GET request with category filter
         self.assertEqual(response.status_code, 200)  # check if response status is 200 OK
-        for post in response.data:  # Iterate through returned posts
-            self.assertEqual(post["category"], self.cat1.slug)  # Assert each post's category matches filter
+        for post in response.data["results"]:  # Iterate through returned posts
+            self.assertEqual(post["category"], self.cat1.name)  # Assert each post's category matches filter
+
+
+    def test_filter_by_tag(self):
+        response = self.client.get(self.url, {"tags": self.tag1.slug}) # Send GET request with tag filter
+        self.assertEqual(response.status_code, 200)  # check if response status is 200 OK
+        for post in response.data["results"]:  # Iterate through returned posts
+            self.assertIn(self.tag1.name, post["tags"]) # Assert each post's category matches tag
+
+    def test_filter_by_multiple_tags(self):
+        response = self.client.get(self.url, {"tags": f"{self.tag1.slug},{self.tag2.slug}"})  # Send GET request with multiple tag slugs
+        self.assertEqual(response.status_code, 200)  # Check if response status is 200 OK
+        slugs = [self.tag1.slug, self.tag2.slug]  # Prepare list of tag slugs for comparison
+        for post in response.data["results"]: 
+            self.assertTrue(any(tag in slugs for tag in post["tags"]))  # Assert at least one tag in post matches the filter
+
 
 
     
