@@ -37,6 +37,17 @@ class AuthTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED) # will check if status is 201 created
         self.assertTrue(User.objects.filter(username="testuser").exists()) # will check if the user created exist
 
+    def test_login_returns_jwt_tokens(self):
+        data = {
+            "username": self.user_data["username"],  
+            "password": self.user_data["password"]   
+        }
+        response = self.client.post(self.login_url, data, format='json')  # send POST to login endpoint
+        self.assertEqual(response.status_code, status.HTTP_200_OK) # check if login was successful (HTTP 200)
+        self.assertIn("access", response.data) # check if access token is in response
+        self.assertIn("refresh", response.data) # check if refresh token is in response
+
+
 
 class PostUnauthenticatedAccessTest(APITestCase):
     """
