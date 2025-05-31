@@ -27,6 +27,9 @@ class AuthTestCase(APITestCase):
 
     
     def test_register_user(self):
+        """
+        Ensure a new user can register successfully via the API.
+        """
         data = {
             "username": "testuser",
             "password": "testpass123",
@@ -38,6 +41,9 @@ class AuthTestCase(APITestCase):
         self.assertTrue(User.objects.filter(username="testuser").exists()) # will check if the user created exist
 
     def test_login_returns_jwt_tokens(self):
+        """
+        Ensure a registered user can log in and receive JWT access and refresh tokens.
+        """
         data = {
             "username": self.user_data["username"],  
             "password": self.user_data["password"]   
@@ -48,6 +54,9 @@ class AuthTestCase(APITestCase):
         self.assertIn("refresh", response.data) # check if refresh token is in response
 
     def test_protected_endpoint_requires_auth(self):
+        """
+        Ensure that unauthenticated users cannot create a post (should return 401).
+        """
         data = {
             "title": "Unauthorized Post",
             "content": "Should fail",
@@ -59,6 +68,9 @@ class AuthTestCase(APITestCase):
 
 
     def test_access_with_token(self):
+        """
+        Ensure that an authenticated user with a valid token can access protected endpoints.
+        """
         # Log in to get token
         login_data = {
             "username": self.user_data["username"],    
@@ -74,6 +86,9 @@ class AuthTestCase(APITestCase):
 
 
     def test_token_refresh(self):
+        """
+        Ensure that a valid refresh token can be used to obtain a new access token.
+        """
         login_data = {
             "username": self.user_data["username"],
             "password": self.user_data["password"]
