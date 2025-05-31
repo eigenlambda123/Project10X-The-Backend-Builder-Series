@@ -18,7 +18,8 @@ class AuthTestCase(APITestCase):
         # test data for creating or authenticating a user in API test
         self.user_data = {
             "username": "newuser",
-            "password": "strongpassword123"
+            "password": "strongpassword123",
+            "email": "newuser@example.com" 
         }
 
         # register user manually for token request
@@ -28,7 +29,8 @@ class AuthTestCase(APITestCase):
     def test_register_user(self):
         data = {
             "username": "testuser",
-            "password": "testpass123"
+            "password": "testpass123",
+            "email": "testuser@example.com"  
         }
 
         response = self.client.post(self.register_url, data, format="json") # try registering the user
