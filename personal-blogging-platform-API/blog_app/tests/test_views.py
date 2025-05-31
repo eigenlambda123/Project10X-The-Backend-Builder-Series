@@ -70,3 +70,8 @@ class PostTestAPI(APITestCase):
         response = self.client.put(self.detail_url, data, format='json') # sends a PUT request to the API to update an existing post
         self.assertEqual(response.status_code, status.HTTP_200_OK) # check if the reponse status code is 200 ok 
         self.assertEqual(response.data['title'], "Updated Title") # check if the current title is equal to the updated title
+
+    def test_delete_post(self):
+        response = self.client.delete(self.detail_url) # delete the post via detail_url
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT) # check if the response status is 204 no content
+        self.assertFalse(Post.objects.filter(slug=self.post.slug).exists()) # make sure the slug of the delete post doesnt exist
