@@ -50,4 +50,7 @@ class PostUnauthenticatedAccessTest(APITestCase):
         response = self.client.put(self.detail_url, data, format='json') # try updating an existing post
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)  # will check if status is 401 unathorized
 
+    def test_guest_cannot_delete_post(self):
+        response = self.client.delete(self.detail_url) # try deleting an existing post
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED) # will check if status is 401 unathorized
 
