@@ -4,6 +4,29 @@ from blog_app.models import Post, Category, Tag
 from django.urls import reverse
 from rest_framework import status
 
+class AuthTestCase(APITestCase):
+    """
+    Tests user registration and authentication endpoints.
+    Sets up a test user for use in authentication-related tests.
+    """
+    def setUp(self):
+        self.register_url = reverse('register') # /register/
+        self.login_url = reverse('token_obtain_pair') # /api/login/
+        self.refresh_url = reverse('token_refresh')  # /api/token/refresh/
+        self.protected_url = reverse('post-list')  # /api/posts/
+
+        # test data for creating or authenticating a user in API test
+        self.user_data = {
+            "username": "newuser",
+            "password": "strongpassword123"
+        }
+
+        # register user manually for token request
+        self.user = User.objects.create_user(**self.user_data)
+
+
+
+
 class PostUnauthenticatedAccessTest(APITestCase):
     """
     Tests that unauthenticated users can read posts
