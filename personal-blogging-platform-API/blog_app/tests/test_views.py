@@ -134,5 +134,12 @@ class PostFilteringTest(APITestCase):
         self.url = reverse("post-list") # use post-list as self.url
 
 
+    def test_filter_by_category(self):
+        response = self.client.get(self.url, {"category": self.cat1.slug})  # Send GET request with category filter
+        self.assertEqual(response.status_code, 200)  # check if response status is 200 OK
+        for post in response.data:  # Iterate through returned posts
+            self.assertEqual(post["category"], self.cat1.slug)  # Assert each post's category matches filter
+
+
     
 
