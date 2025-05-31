@@ -31,7 +31,7 @@ if (!token) {
         (data.results || []).forEach((post) => {
             const li = document.createElement('li'); // Create a list item for each post
             const link = document.createElement('a'); // Create a link for the post
-            link.href = `post.html?id=${post.id}`; // Set the link to the post details page
+            link.href = `detail.html?slug=${post.slug}`; // Set the link to the post details page
             link.textContent = post.title; // Set the link text to the post title
             li.appendChild(link); // Append the link to the list item
             postList.appendChild(li); // Append the list item to the post list
