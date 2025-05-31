@@ -38,3 +38,16 @@ class PostUnauthenticatedAccessTest(APITestCase):
         response = self.client.post(self.create_url, data, format='json') # try creating a new post
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED) # will check if status is 401 unathorized
 
+    def test_guest_cannot_update_post(self):
+        data = {
+            "title": "Hack",
+            "content": "Not yours",
+            "category": self.category.name,
+            "tags": [self.tag.name],
+            "author": self.user.id
+        }
+
+        response = self.client.put(self.detail_url, data, format='json') # try updating an existing post
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)  # will check if status is 401 unathorized
+
+
