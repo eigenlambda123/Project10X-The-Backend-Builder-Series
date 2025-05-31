@@ -54,3 +54,29 @@ class PostUnauthenticatedAccessTest(APITestCase):
         response = self.client.delete(self.detail_url) # try deleting an existing post
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED) # will check if status is 401 unathorized
 
+
+
+class PostPermissionTest:
+    """
+    Tests that non owner users can read posts
+    but cannot update or delete the owners post.
+    """
+    def setUp(self):
+        self.owner = User.objects.create_user(username="owner", password="secret") # create a new user
+        self.other_user = User.objects.create_user(username="intruder", password="intrude") # create another user
+        self.category = Category.objects.create(name="Django") # create a category
+        self.tag = Tag.objects.create(name="test") # create a tag
+
+        # create a new post with owner = owner
+        self.post = Post.objects.create(
+            title="Owner's Post",
+            content="Protected",
+            author=self.owner,
+            category=self.category
+        )
+        self.post.tags.add(self.tag) # add tag to post
+        self.client = APIClient()
+        self.detail_url = reverse('post-detail', kwargs={'slug': self.post.slug}) # /api/posts/<slug>/
+
+
+
