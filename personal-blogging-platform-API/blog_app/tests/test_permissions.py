@@ -92,3 +92,7 @@ class PostPermissionTest:
         response = self.client.put(self.detail_url, data, format='json') # try updating the data using other_user
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN) # will check if status is 403 forbidden
 
+    def test_non_owner_cannot_delete_post(self):
+        self.client.force_authenticate(user=self.other_user) # force authentication for other_user
+        response = self.client.delete(self.detail_url) # try deleting owners post using other_user
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN) # will check if status is 403 forbidden
