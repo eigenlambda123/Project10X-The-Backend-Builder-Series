@@ -6,8 +6,13 @@ from django.core.exceptions import ValidationError
 
 class CategoryModelTests(TestCase):
     """
-    Tests for the Category model, including slug generation,
-    custom slug preservation, string representation, and unique constraints.
+    Unit tests for the Category model.
+
+    These tests verify:
+    - Automatic slug generation from the category name.
+    - That a custom slug is preserved and not overwritten.
+    - The string representation returns the category name.
+    - The uniqueness constraint for category name per user.
     """
     def setUp(self):
         self.user = User.objects.create_user(username='testuser', password='password') # create dummy user
@@ -42,6 +47,12 @@ class CategoryModelTests(TestCase):
 
 class TransactionsModelTests(TestCase):
     """
+    Unit tests for the Transactions model.
+
+    These tests verify:
+    - Valid Transactions objects can be created with required fields.
+    - The 'type' field only accepts valid choices and raises ValidationError for invalid values.
+    - The 'amount' field enforces a maximum of two decimal places.
     """
     def setUp(self):
         self.user = User.objects.create_user(username='rmvilla', password='password') # create new user
