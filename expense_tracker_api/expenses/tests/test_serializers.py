@@ -55,3 +55,14 @@ class CategorySerializerTest(TestCase):
         self.assertTrue(serializer.is_valid(), serializer.errors)  # checks that the serializer's data is valid. If serializer.is_valid() returns False, the test will fail and display serializer.error
         category = serializer.save() # save the data
         self.assertEqual(category.slug, 'travel-budget')  # should generate the following slug
+
+
+    def test_duplicate_name_for_same_user_fails(self):
+        """
+        Test that creating a Category with a duplicate name for the same user returns a validation error.
+        """
+        # 
+        Category.objects.create(name='Food', user=self.user) # create new cateogry 
+        data = {'name': 'Food'}  # attemp to create another category with the same name for the same user
+        serializer = CategorySerializer(data=data, context=self.get_serializer_context())  # Initialize serializer with duplicate data
+        self.assertIn('non_field_errors', serializer.errors)  # Check that a non-field error is returned for the uniqueness violation
