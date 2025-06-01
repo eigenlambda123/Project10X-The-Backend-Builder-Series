@@ -5,6 +5,8 @@ from django.db.utils import IntegrityError
 
 class CategoryModelTests(TestCase):
     """
+    Tests for the Category model, including slug generation,
+    custom slug preservation, string representation, and unique constraints.
     """
     def setUp(self):
         self.user = User.objects.create_user(username='testuser', password='password') # create dummy user
