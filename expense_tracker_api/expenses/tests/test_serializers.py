@@ -5,6 +5,13 @@ from expenses.serializers import CategorySerializer, TransactionsSerializer
 
 class CategorySerializerTest(TestCase):
     """
+    Unit tests for the CategorySerializer.
+
+    These tests verify:
+    - Categories can be created with valid data.
+    - Validation fails when required fields are missing or invalid.
+    - Slugs are automatically generated from the category name.
+    - Duplicate category names for the same user are not allowed.
     """
     def setUp(self):
         """
