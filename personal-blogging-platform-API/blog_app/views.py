@@ -9,6 +9,19 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.permissions import AllowAny
 from rest_framework import generics
+from rest_framework_simplejwt.views import TokenObtainPairView
+from .serializers import MyTokenObtainPairSerializer
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    """
+    Custom view for obtaining JWT token pairs.
+
+    This view uses the custom MyTokenObtainPairSerializer to include the username
+    in the JWT payload when a user logs in. By overriding the default serializer,
+    the frontend can access the username directly from the token without making
+    an additional API call.
+    """
+    serializer_class = MyTokenObtainPairSerializer
 
 
 class RegisterViewSet(generics.CreateAPIView):
