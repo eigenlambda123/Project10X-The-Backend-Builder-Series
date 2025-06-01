@@ -35,4 +35,13 @@ class CategorySerializerTest(TestCase):
         category = serializer.save()  # Save the validated data and create a Category instance
         self.assertEqual(category.name, 'Food')  # Assert the category name is set correctly
         self.assertEqual(category.user, self.user)  # Assert the category user is set to the test user
+        
+    def test_missing_name_fails(self):
+        """
+        Test if creating a Category with invalid data (missing name) is sending an error
+        """
 
+        data = {'name': ''} # missing name 
+        serializer = CategorySerializer(data=data, context=self.get_serializer_context()) # Initialize serializer with data and context
+        self.assertFalse(serializer.is_valid()) # check if data is valid (should be false)
+        self.assertIn('name', serializer.errors) # checks that the string 'name' is a key in the serializer.errors dictionary
