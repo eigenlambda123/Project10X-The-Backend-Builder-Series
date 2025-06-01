@@ -23,5 +23,16 @@ class CategorySerializerTest(TestCase):
         request = self.factory.get('/') # Create a mock GET request to the root URL
         request.user = self.user # Assign the test user to the request
         return {'request': request} # Return context dictionary with the request
-
     
+    def test_valid_data_creates_category(self):
+        """
+        Test if creating a Category with valid data is working correctly
+        """
+
+        data = {'name': 'Food'}  # Input data for the Category
+        serializer = CategorySerializer(data=data, context=self.get_serializer_context())  # Initialize serializer with data and context
+        self.assertTrue(serializer.is_valid(), serializer.errors)  # Assert that the serializer validates the input data
+        category = serializer.save()  # Save the validated data and create a Category instance
+        self.assertEqual(category.name, 'Food')  # Assert the category name is set correctly
+        self.assertEqual(category.user, self.user)  # Assert the category user is set to the test user
+
