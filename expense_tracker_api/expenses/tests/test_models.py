@@ -2,6 +2,7 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 from expenses.models import Category, Transactions
 from django.db.utils import IntegrityError
+from django.core.exceptions import ValidationError
 
 class CategoryModelTests(TestCase):
     """
@@ -67,4 +68,24 @@ class TransactionsModelTests(TestCase):
         self.assertEqual(transaction.amount, 100.00) # check if transaction amount is correct
         self.assertEqual(transaction.category, self.category) # check if transaction category is correct
         self.assertEqual(transaction.user, self.user) # check if user of the transaction is set properly
+
+
+    def test_invalid_transaction_type_raises(self):
+        """
+        Test that creating a Transactions instance with an invalid 'type' value raises a ValidationError.
+
+        This test ensures that the 'type' field in the Transactions model only accepts valid choices.
+        If an invalid value is provided, calling full_clean() should raise a ValidationError.
+        """
+
+        # create new transacction
+        transaction = Transactions(
+            user=self.user,
+            category=self.category,
+            title='Unknown',
+            type='invalid_type',
+            amount=50
+        )
+        with self.assertRaises(ValidationError):
+            transaction.full_clean()  # Should raise due to invalid choice
 
