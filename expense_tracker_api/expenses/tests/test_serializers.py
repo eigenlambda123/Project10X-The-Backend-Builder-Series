@@ -74,3 +74,23 @@ class CategorySerializerTest(TestCase):
         serializer = CategorySerializer(data=data, context=self.get_serializer_context())  # Initialize serializer with duplicate data
         self.assertFalse(serializer.is_valid())  # Ensure validation is run before accessing errors
         self.assertIn('non_field_errors', serializer.errors)  # Check that a non-field error is returned for the uniqueness violation
+
+
+
+
+class TransactionsSerializerTest(TestCase):
+    """
+    """
+    def setUp(self):
+        """
+        Set up test dependencies before each test method.
+
+        - Initializes a RequestFactory instance for simulating HTTP requests in tests.
+        - Creates a test user for authentication-related test cases.
+        - Creates a test category associated with the test user.
+        """
+        self.factory = RequestFactory()
+        self.user = User.objects.create_user(username='john', email='john@example.com', password='pass1234') # create dummy user
+        self.category = Category.objects.create(name='Groceries', user=self.user) # create new category
+
+    
