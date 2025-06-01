@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
 from expenses.models import Category
+from django.db.utils import IntegrityError
 
 class CategoryModelTests(TestCase):
     """
@@ -28,3 +29,9 @@ class CategoryModelTests(TestCase):
         category = Category(name='Utilities', user=self.user, slug='custom-slug') # create a new Category with custom slug
         category.save() # save 
         self.assertEqual(category.slug, 'custom-slug') # check if the custom slug isnt overwritten
+
+    def test_unique_together_name_user(self):
+        Category.objects.create(name='Travel', user=self.user) # create new category
+        with self.assertRaises(IntegrityError):
+            # Creating a category with same name and user should raise error
+            Category.objects.create(name='Travel', user=self.user)
