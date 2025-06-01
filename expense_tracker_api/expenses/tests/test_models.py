@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
-from expenses.models import Category
+from expenses.models import Category, Transactions
 from django.db.utils import IntegrityError
 
 class CategoryModelTests(TestCase):
@@ -45,4 +45,26 @@ class TransactionsModelTests(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(username='rmvilla', password='password') # create new user
         self.category = Category.objects.create(name='Bills', user=self.user) # create new category with user set to self.user
+
+
+    def test_create_transaction_valid(self):
+        """
+        Test that a valid Transactions object can be created with the required fields,
+        and that its attributes are correctly set upon creation.
+        """
+
+        # create new transaction
+        transaction = Transactions.objects.create(
+            user=self.user,
+            category=self.category,
+            title='Electricity Bill',
+            description='Monthly bill',
+            type='expense',
+            amount=100.00
+        )
+        self.assertEqual(transaction.title, 'Electricity Bill') # check if transaction title is correct
+        self.assertEqual(transaction.type, 'expense') # check if transaction type is correct
+        self.assertEqual(transaction.amount, 100.00) # check if transaction amount is correct
+        self.assertEqual(transaction.category, self.category) # check if transaction category is correct
+        self.assertEqual(transaction.user, self.user) # check if user of the transaction is set properly
 
