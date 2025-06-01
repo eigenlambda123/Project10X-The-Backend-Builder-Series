@@ -44,6 +44,36 @@ class CategoryAPITest(APITestCase):
         self.assertEqual(len(response.data), 2) # check if the length of retured data is 2
 
 
+class TransactionAPITest(APITestCase):
+    """
+    """
+
+    def setUp(self):
+        self.user = User.objects.create_user(username='john', password='pass1234') # create dummy user
+        self.client = APIClient()
+        self.client.force_authenticate(user=self.user) # bypass authentication
+        self.category = Category.objects.create(name='Bills', user=self.user) # created new category
+
+        self.transaction_url = reverse('transactions-list')  # if using DRF ViewSets with routers
+
+
+    def test_create_transaction(self):
+        """
+        Test that a transaction can be successfully created via the API
+        """
+
+        # Input data for the new transaction
+        data = {
+            'title': 'Electric Bill',
+            'description': 'Monthly payment',
+            'type': 'expense',
+            'amount': '50.00',
+            'category': self.category.id
+        }
+        response = self.client.post(self.transaction_url, data)  # Send POST request to transaction_url with data
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)  # Check if status is 201 Created
+        self.assertEqual(response.data['title'], 'Electric Bill')  # Check if the created transaction's title is correct
+        self.assertEqual(response.data['amount'], '50.00')  # Check if the amount is correct
 
 
     
