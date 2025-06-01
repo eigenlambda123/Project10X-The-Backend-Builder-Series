@@ -89,3 +89,19 @@ class TransactionsModelTests(TestCase):
         with self.assertRaises(ValidationError):
             transaction.full_clean()  # Should raise due to invalid choice
 
+    
+    def test_amount_decimal_places(self):
+        """
+        Test that the Transactions model enforces a maximum of two decimal places for the 'amount' field.
+        Attempts to create a transaction with more than two decimal places should raise a ValidationError.
+        """
+        transaction = Transactions(
+            user=self.user,
+            category=self.category,
+            title='Partial Payment',
+            type='income',
+            amount=123.4567  # More than 2 decimal places
+        )
+        with self.assertRaises(ValidationError):
+            transaction.full_clean()
+
