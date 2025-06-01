@@ -37,3 +37,12 @@ class CategoryModelTests(TestCase):
         with self.assertRaises(IntegrityError):
             # Creating a category with same name and user should raise error
             Category.objects.create(name='Travel', user=self.user)
+
+
+class TransactionsModelTests(TestCase):
+    """
+    """
+    def setUp(self):
+        self.user = User.objects.create_user(username='rmvilla', password='password') # create new user
+        self.category = Category.objects.create(name='Bills', user=self.user) # create new category with user set to self.user
+
