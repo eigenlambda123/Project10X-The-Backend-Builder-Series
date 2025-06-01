@@ -23,3 +23,16 @@ class CategoryAPITest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED) # check if status 201 created
         self.assertEqual(response.data['name'], 'Food') # check if the created data exist
         self.assertIn('slug', response.data) # check if slug is also created 
+
+    def test_list_categories(self):
+        """
+        Test that the category_url is returning properly
+        """
+
+        # Create dummy category data
+        Category.objects.create(name='Groceries', user=self.user)
+        Category.objects.create(name='Transport', user=self.user)
+
+        response = self.client.get(self.category_url) # send a GET request in category_url
+        self.assertEqual(response.status_code, status.HTTP_200_OK) # check if status 200 ok
+        self.assertEqual(len(response.data), 2) # check if the length of retured data is 2
