@@ -65,4 +65,5 @@ class CategorySerializerTest(TestCase):
         Category.objects.create(name='Food', user=self.user) # create new cateogry 
         data = {'name': 'Food'}  # attemp to create another category with the same name for the same user
         serializer = CategorySerializer(data=data, context=self.get_serializer_context())  # Initialize serializer with duplicate data
+        self.assertFalse(serializer.is_valid())  # Ensure validation is run before accessing errors
         self.assertIn('non_field_errors', serializer.errors)  # Check that a non-field error is returned for the uniqueness violation
