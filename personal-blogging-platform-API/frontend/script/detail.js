@@ -62,6 +62,10 @@ fetch(`http://127.0.0.1:8000/api/posts/${slug}/`, {
       });
 
       // TODO: Add edit logic here later
+      editBtn.addEventListener('click', () => {
+      window.location.href = `edit.html?slug=${slug}`;
+    });
+
     }
   })
   .catch((err) => {
