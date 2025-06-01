@@ -15,3 +15,13 @@ class CategorySerializerTest(TestCase):
         """
         self.factory = RequestFactory() 
         self.user = User.objects.create_user(username='testuser', password='pass') # create test user
+
+    def get_serializer_context(self):
+        """
+        Returns serializer context with a mock request and test user.
+        """
+        request = self.factory.get('/') # Create a mock GET request to the root URL
+        request.user = self.user # Assign the test user to the request
+        return {'request': request} # Return context dictionary with the request
+
+    
