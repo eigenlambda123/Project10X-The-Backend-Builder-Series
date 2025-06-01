@@ -2,6 +2,23 @@ from rest_framework import serializers
 from .models import Category, Tag, Post
 import markdown
 from django.contrib.auth.models import User
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    """
+    Custom TokenObtainPairSerializer for including the username in the JWT payload.
+
+    This serializer overrides the default get_token method to add the user's username
+    as a custom claim in the generated JWT token. This allows the frontend to easily
+    access the username from the token payload without making an extra API call.
+    """
+    @classmethod
+    def get_token(cls, user):
+        # Call the parent method to get the standard token
+        token = super().get_token(user)
+        # Add the username as a custom claim in the token payload
+        token['username'] = user.username
+        return token
 
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
