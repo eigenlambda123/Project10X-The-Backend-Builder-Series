@@ -16,7 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from rest_framework_simplejwt.views import TokenRefreshView
+from blog_app.views import MyTokenObtainPairView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -24,6 +25,6 @@ urlpatterns = [
 ]
 
 urlpatterns += [
-    path('api/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),  # Login view for JWT token
+    path('api/login/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),  # Login view for JWT token
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),  # JWT token refresh view
 ]
