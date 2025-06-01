@@ -93,4 +93,24 @@ class TransactionsSerializerTest(TestCase):
         self.user = User.objects.create_user(username='john', email='john@example.com', password='pass1234') # create dummy user
         self.category = Category.objects.create(name='Groceries', user=self.user) # create new category
 
+
+    def test_valid_data_is_accepted(self):
+        """
+        Test if transaction is working properly given valid data
+        """
+        request = self.factory.post('/')
+        request.user = self.user
+
+        # Input data
+        data = {
+            'category': self.category.id,
+            'title': 'Buy milk',
+            'description': 'Weekly grocery',
+            'type': 'expense',
+            'amount': '12.99',
+        }
+
+        serializer = TransactionsSerializer(data=data, context={'request': request}) # serialize with Input data as context
+        self.assertTrue(serializer.is_valid(), serializer.errors) # check if data is valid else return error
+
     
