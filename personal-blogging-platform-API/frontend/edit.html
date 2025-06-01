@@ -1,0 +1,26 @@
+<!-- edit.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Edit Post</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="container">
+    <h1>Edit Post</h1>
+    <form id="edit-form">
+      <label for="title">Title</label>
+      <input type="text" id="title" required />
+
+      <label for="content">Content (Markdown)</label>
+      <textarea id="content" rows="10" required></textarea>
+
+      <button type="submit" class="btn">Update Post</button>
+    </form>
+  </main>
+
+  <script src="script/edit.js" type="module"></script>
+</body>
+</html>
