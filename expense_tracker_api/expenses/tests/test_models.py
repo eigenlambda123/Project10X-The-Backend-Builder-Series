@@ -18,3 +18,13 @@ class CategoryModelTests(TestCase):
         self.assertEqual(category.name, 'Groceries')  # check if the category name is correct
         self.assertEqual(category.slug, 'groceries')  # check if slug is auto-generated correctly
         self.assertEqual(str(category), 'Groceries')  # check string representation of category
+
+    def test_slug_not_overwritten_if_exists(self):
+        """
+        Test that if a Category is created with a custom slug,
+        saving the object does not overwrite the provided slug
+        with an auto-generated one.
+        """
+        category = Category(name='Utilities', user=self.user, slug='custom-slug') # create a new Category with custom slug
+        category.save() # save 
+        self.assertEqual(category.slug, 'custom-slug') # check if the custom slug isnt overwritten
