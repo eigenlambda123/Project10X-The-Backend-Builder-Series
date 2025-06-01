@@ -19,6 +19,7 @@ if (!slug) {
 
 // 3. Decode JWT to get current username
 const payload = JSON.parse(atob(token.split('.')[1]));
+console.log('JWT payload:', payload);
 const currentUser = payload.username;
 
 // 4. Fetch post data by slug
@@ -36,11 +37,12 @@ fetch(`http://127.0.0.1:8000/api/posts/${slug}/`, {
     
     // Normalize author display (string or object)
     const postAuthor = typeof post.author === 'string' ? post.author : post.author.username;
+    console.log('postAuthor:', postAuthor, '| currentUser:', currentUser);
     authorEl.textContent = postAuthor;
     dateEl.textContent = new Date(post.created_at).toLocaleString();
 
     // 6. Show edit/delete buttons if current user is the author
-    if (postAuthor === currentUser) {
+    if (postAuthor && currentUser && postAuthor.trim().toLowerCase() === currentUser.trim().toLowerCase()) {
       editBtn.style.display = 'inline-block';
       deleteBtn.style.display = 'inline-block';
 
