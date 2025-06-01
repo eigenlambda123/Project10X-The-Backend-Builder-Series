@@ -80,6 +80,12 @@ class CategorySerializerTest(TestCase):
 
 class TransactionsSerializerTest(TestCase):
     """
+    Unit tests for the TransactionsSerializer.
+
+    These tests verify:
+    - Transactions can be created with valid data.
+    - Validation fails when required fields are missing or invalid.
+    - The serializer correctly handles associations with users and categories.
     """
     def setUp(self):
         """
