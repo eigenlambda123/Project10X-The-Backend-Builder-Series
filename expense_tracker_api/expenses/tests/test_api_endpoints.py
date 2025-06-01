@@ -6,6 +6,12 @@ from rest_framework import status
 
 class CategoryAPITest(APITestCase):
     """
+    API tests for the Category endpoints.
+
+    These tests verify:
+    - Categories can be created via the API.
+    - The category list endpoint returns the correct data.
+    - Authentication is required for category actions.
     """
     def setUp(self):
         self.user = User.objects.create_user(username='john', password='pass1234') # create dummy user
@@ -36,3 +42,6 @@ class CategoryAPITest(APITestCase):
         response = self.client.get(self.category_url) # send a GET request in category_url
         self.assertEqual(response.status_code, status.HTTP_200_OK) # check if status 200 ok
         self.assertEqual(len(response.data), 2) # check if the length of retured data is 2
+
+
+    
