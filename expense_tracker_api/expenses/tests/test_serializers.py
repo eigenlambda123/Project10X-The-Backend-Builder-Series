@@ -113,4 +113,27 @@ class TransactionsSerializerTest(TestCase):
         serializer = TransactionsSerializer(data=data, context={'request': request}) # serialize with Input data as context
         self.assertTrue(serializer.is_valid(), serializer.errors) # check if data is valid else return error
 
+
+    def test_missing_required_fields_are_rejected(self):
+        """
+        Test if transaction will give error given invalid data (Missing data)
+        """
+        request = self.factory.post('/')
+        request.user = self.user
+
+        # input data
+        data = {
+            'title': '',  # Missing title
+            'amount': '',  # Missing amount
+            'type': '',  # Missing type
+            'category': '',  # Missing category
+        }
+
+        serializer = TransactionsSerializer(data=data, context={'request': request}) # serialize with Input data as context
+        self.assertFalse(serializer.is_valid()) # check serializer if not valid
+        self.assertIn('category', serializer.errors) # check if category return error
+        self.assertIn('title', serializer.errors)  # check if title return error
+        self.assertIn('type', serializer.errors)  # check if type return error
+        self.assertIn('amount', serializer.errors)  # check if amount return error
+
     
