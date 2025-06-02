@@ -60,3 +60,20 @@ class TransactionEdgeCaseTests(APITestCase):
         response = self.client.post(url, data) # send a post request to transactions-list endpoint
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST) # check if status 400 bad request
         self.assertIn('category', response.data) # check if  the error involved the category
+
+    def test_create_transaction_negative_amount(self):
+        """
+        Test that Should reject negative amounts if not allowed
+        """
+
+        url = reverse('transactions-list') # transactions-list endpoint
+        data = {
+            'title': 'Bad Expense',
+            'amount': -50, # negative ammount
+            'type': 'expense',
+            'category': self.cat1.id
+        }
+
+        response = self.client.post(url, data) # send a post request to transactions-list endpoint
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST) # check if status 400 bad request
+        self.assertIn('amount', response.data) # check if  the error involved the amount
