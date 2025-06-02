@@ -98,3 +98,21 @@ class TransactionEdgeCaseTests(APITestCase):
 
         response = self.client.put(url, data)  # Send a PUT request as user1
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)  # Should return 404 Not Found
+
+
+    def test_user_cannot_delete_another_users_transaction(self):
+        """
+        Test that an authenticated user cannot delete another user's transaction
+        """
+        # Create a transaction that belongs to user2
+        other_tx = Transactions.objects.create(
+            title='Other Expense',
+            amount=30,
+            type='expense',
+            category=self.cat2,
+            user=self.user2
+        )
+
+        url = reverse('transactions-detail', args=[other_tx.id])  # Get the detail endpoint for the transaction
+        response = self.client.delete(url)  # Attempt to delete as user1 (authenticated)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)  # Should return 404 Not Found
