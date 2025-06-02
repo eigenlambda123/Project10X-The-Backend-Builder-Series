@@ -36,3 +36,18 @@ class AuthPermissionTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)  # Check for 200 OK status
         self.assertIn('access', response.data)  # Check if access token is present in the response
         self.assertIn('refresh', response.data)  # Check if refresh token is present in the response
+
+
+    def test_unauthorized_access_returns_401(self):
+        """
+        Test if unauthorized user cannot access category and transaction endpoints
+        """
+        category_url = reverse('category-list')
+        expense_url = reverse('transactions-list')
+
+        response1 = self.client.get(category_url)
+        response2 = self.client.get(expense_url)
+
+        self.assertEqual(response1.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response2.status_code, status.HTTP_401_UNAUTHORIZED)
+
