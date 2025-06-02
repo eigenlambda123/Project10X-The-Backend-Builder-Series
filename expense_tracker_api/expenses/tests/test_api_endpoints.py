@@ -78,7 +78,7 @@ class TransactionAPITest(APITestCase):
     
     def test_get_transaction_list(self):
         """
-        Test if transaction-list endpoint is working
+        Test if accessing transaction-list endpoint is working
         """
         # create new transactions
         Transactions.objects.create(
