@@ -2,6 +2,7 @@ from django.urls import reverse
 from rest_framework.test import APITestCase
 from rest_framework import status
 from django.contrib.auth.models import User
+from expenses.models import Category, Transactions
 
 class AuthPermissionTests(APITestCase):
     def authenticate(self):
@@ -79,5 +80,45 @@ class AuthPermissionTests(APITestCase):
         # Assert that both endpoints return HTTP 200 OK for authenticated access
         self.assertEqual(response1.status_code, status.HTTP_200_OK)
         self.assertEqual(response2.status_code, status.HTTP_200_OK)
+
+
+    def test_user_sees_only_their_own_data(self):
+        """
+        Test for confirming that user can only see their own data
+        """
+        # Create two users
+        user1 = User.objects.create_user(username='user1', password='pass1234')
+        user2 = User.objects.create_user(username='user2', password='pass5678')
+
+        # Create categories and expenses for both
+        cat1 = Category.objects.create(name='Food', user=user1)
+        cat2 = Category.objects.create(name='Bills', user=user2)
+
+        Transactions.objects.create(title='Lunch', amount=12, type='expense', category=cat1, user=user1)
+        Transactions.objects.create(title='Electricity', amount=50, type='expense', category=cat2, user=user2)
+
+        # Authenticate as user1
+        url = reverse('token_obtain_pair')
+        response = self.client.post(url, {'username': 'user1', 'password': 'pass1234'})
+        token = response.data['access']
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {token}')
+
+        # GET categories and expenses
+        category_url = reverse('category-list')
+        expense_url = reverse('transactions-list')
+
+        cat_response = self.client.get(category_url)
+        exp_response = self.client.get(expense_url)
+
+        self.assertEqual(cat_response.status_code, status.HTTP_200_OK)
+        self.assertEqual(exp_response.status_code, status.HTTP_200_OK)
+
+        # Only one category and one expense should be visible to user1
+        self.assertEqual(len(cat_response.data), 1)
+        self.assertEqual(cat_response.data[0]['name'], 'Food')
+
+        self.assertEqual(len(exp_response.data), 1)
+        self.assertEqual(exp_response.data[0]['title'], 'Lunch')
+
 
 
