@@ -2,7 +2,7 @@ from django.urls import reverse
 from rest_framework.test import APITestCase
 from rest_framework import status
 from django.contrib.auth.models import User
-from expenses.models import Category
+from expenses.models import Category, Transactions
 
 
 class TransactionEdgeCaseTests(APITestCase):
@@ -77,3 +77,24 @@ class TransactionEdgeCaseTests(APITestCase):
         response = self.client.post(url, data) # send a post request to transactions-list endpoint
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST) # check if status 400 bad request
         self.assertIn('amount', response.data) # check if  the error involved the amount
+
+
+    def test_user_cannot_update_another_users_transaction(self):
+        """
+        Test that an authenticated user cannot update another user's transaction
+        """
+
+        # Create a transaction belonging to user2
+        other_tx = Transactions.objects.create(
+            title='Other Expense',
+            amount=30,
+            type='expense',
+            category=self.cat2,
+            user=self.user2
+        )
+
+        url = reverse('transactions-detail', args=[other_tx.id])  # Get the detail endpoint for the transaction
+        data = {'title': 'Hacked!', 'amount': 999}  # Attempt to update with new data
+
+        response = self.client.put(url, data)  # Send a PUT request as user1
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)  # Should return 404 Not Found
