@@ -94,5 +94,24 @@ class TransactionAPITest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK) # check if status 200 ok
         self.assertEqual(len(response.data), 2) # check if the length of transaction-list == 2
 
+    def test_update_transaction(self):
+        """
+        Test if accessing transaction endpoint and updating a transaction is working
+        """
+
+        # dummy created existing transaction
+        txn = Transactions.objects.create(
+            user=self.user, category=self.category,
+            title='Phone Bill', type='expense', amount=60
+        )
+        url = reverse('transactions-detail', kwargs={'pk': txn.pk}) # navigate to transaction-list 
+
+        updated_data = {'title': 'Updated Phone Bill', 'amount': '70.00', 'type': 'expense', 'category': self.category.id} # input data for updating 
+        response = self.client.put(url, updated_data) # update the url using the updated_data
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK) # check if status 200 ok
+        self.assertEqual(response.data['title'], 'Updated Phone Bill') # check if title is properly updated
+        self.assertEqual(response.data['amount'], '70.00') # check if amount is properly updated
+
 
     
