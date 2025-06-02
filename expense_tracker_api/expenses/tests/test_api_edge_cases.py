@@ -22,3 +22,23 @@ class TransactionEdgeCaseTests(APITestCase):
         response = self.client.post(url, {'username': 'user1', 'password': 'pass123'})
         token = response.data['access']
         self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {token}')
+
+
+    def test_create_transaction_missing_required_fields(self):
+        """
+        Test that Should return 400 if required fields are missing
+        """
+        url = reverse('transactions-list') # transactions-list endpoint
+
+        # dummy input data with missing fields
+        data = {
+            'title': '',  # Missing
+            'amount': '',  # Missing
+            'type': 'expense',
+            'category': self.cat1.id
+        }
+
+        response = self.client.post(url, data) # send a post request to transactions-list endpoint
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST) # check if status 400 bad request
+        self.assertIn('title', response.data) # check if  the error involved the title
+        self.assertIn('amount', response.data) # check if  the error involved the amount
