@@ -42,3 +42,21 @@ class TransactionEdgeCaseTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST) # check if status 400 bad request
         self.assertIn('title', response.data) # check if  the error involved the title
         self.assertIn('amount', response.data) # check if  the error involved the amount
+
+
+    def test_create_transaction_invalid_category(self):
+        """
+        Test that Should return 400 if the category ID does not exist or does not belong to user
+        """
+        url = reverse('transactions-list') # transactions-list endpoint
+        invalid_category_id = 999  # id that Doesn't exist
+        data = {
+            'title': 'Test',
+            'amount': 10,
+            'type': 'expense',
+            'category': invalid_category_id # invalid id
+        }
+
+        response = self.client.post(url, data) # send a post request to transactions-list endpoint
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST) # check if status 400 bad request
+        self.assertIn('category', response.data) # check if  the error involved the category
