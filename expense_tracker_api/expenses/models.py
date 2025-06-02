@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
+from django.core.validators import MinValueValidator
 
 class Category(models.Model):
     name = models.CharField(max_length=100) # Name of the category
@@ -35,6 +36,10 @@ class Transactions(models.Model):
     title = models.CharField(max_length=100) # Title of the transaction
     description = models.TextField(blank=True) # Description of the transaction
     type = models.CharField(max_length=7, choices=TRANSACTION_TYPE) # Type of the transaction (income or expense)
-    amount = models.DecimalField(max_digits=10, decimal_places=2) # Amount of the transaction
+    amount = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        validators=[MinValueValidator(0)]
+    )
     created_at = models.DateTimeField(auto_now_add=True) # Timestamp when the transaction was created
     updated_at = models.DateTimeField(auto_now=True) # Timestamp when the transaction was last updated
