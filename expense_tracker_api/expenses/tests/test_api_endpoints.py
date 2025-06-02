@@ -50,11 +50,11 @@ class TransactionAPITest(APITestCase):
 
     def setUp(self):
         self.user = User.objects.create_user(username='john', password='pass1234') # create dummy user
-        self.client = APIClient()
+        self.client = APIClient() # use for Actualt Endpoints
         self.client.force_authenticate(user=self.user) # bypass authentication
         self.category = Category.objects.create(name='Bills', user=self.user) # created new category
 
-        self.transaction_url = reverse('transactions-list')  # if using DRF ViewSets with routers
+        self.transaction_url = reverse('transactions-list')  # http://127.0.0.1:8000/api/transactions/ endpoint 
 
 
     def test_create_transaction(self):
