@@ -46,6 +46,12 @@ class CategoryAPITest(APITestCase):
 
 class TransactionAPITest(APITestCase):
     """
+    API tests for the Transactions endpoints.
+
+    These tests verify:
+    - Transactions can be created, listed, updated, and deleted via the API.
+    - The correct status codes and data are returned for each operation.
+    - Authentication is required for transaction actions.
     """
 
     def setUp(self):
