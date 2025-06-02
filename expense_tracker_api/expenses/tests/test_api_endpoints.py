@@ -1,6 +1,6 @@
 from rest_framework.test import APITestCase, APIClient
 from django.contrib.auth.models import User
-from expenses.models import Category
+from expenses.models import Category,  Transactions
 from django.urls import reverse
 from rest_framework import status
 
@@ -74,6 +74,25 @@ class TransactionAPITest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)  # Check if status is 201 Created
         self.assertEqual(response.data['title'], 'Electric Bill')  # Check if the created transaction's title is correct
         self.assertEqual(response.data['amount'], '50.00')  # Check if the amount is correct
+
+    
+    def test_get_transaction_list(self):
+        """
+        Test if transaction-list endpoint is working
+        """
+        # create new transactions
+        Transactions.objects.create(
+            user=self.user, category=self.category,
+            title='Water Bill', type='expense', amount=30
+        )
+        Transactions.objects.create(
+            user=self.user, category=self.category,
+            title='Internet', type='expense', amount=45
+        )
+
+        response = self.client.get(self.transaction_url) # navigate to transaction-list 
+        self.assertEqual(response.status_code, status.HTTP_200_OK) # check if status 200 ok
+        self.assertEqual(len(response.data), 2) # check if the length of transaction-list == 2
 
 
     
