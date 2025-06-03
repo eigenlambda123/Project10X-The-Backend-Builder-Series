@@ -36,3 +36,15 @@ class ShortURLModelTest(TestCase):
         )
         self.assertIsNotNone(url.created_at) # check if created_at is created
         self.assertAlmostEqual(url.created_at.timestamp(), timezone.now().timestamp(), delta=2)
+
+
+    def test_clicks_default_to_zero(self):
+        """
+        Test if clicks starts at 0
+        """
+
+        # create short url
+        url = ShortURL.objects.create(
+            original_url=self.valid_url
+        )
+        self.assertEqual(url.clicks, 0) # check if clicks == 0
