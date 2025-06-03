@@ -48,3 +48,15 @@ class ShortURLModelTest(TestCase):
             original_url=self.valid_url
         )
         self.assertEqual(url.clicks, 0) # check if clicks == 0
+
+    def test_optional_expiration_date(self):
+        """
+        Test if expiration date is set properly
+        """
+
+        # create short url
+        url = ShortURL.objects.create(
+            original_url=self.valid_url,
+            expiration_date=self.expiration_date
+        )
+        self.assertEqual(url.expiration_date, self.expiration_date) # check if expiration_date is using the correct value
