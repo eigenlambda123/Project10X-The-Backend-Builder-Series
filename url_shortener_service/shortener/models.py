@@ -22,16 +22,11 @@ class ShortURL(models.Model):
     
     def save(self, *args, **kwargs):
         """Override the save method to generate a short code if not already set."""
-        # If the object is new (no id), save it first to get an id
-        if not self.id:
-           super().save(*args, **kwargs)
-        # If the short_code is not set, generate it using Hashids
-        if not self.short_code:  
+        is_new = self.pk is None
+        super().save(*args, **kwargs)
+        if is_new and not self.short_code:
             self.short_code = hashids.encode(self.id)
             super().save(update_fields=['short_code'])
-        # If the short_code is already set, just save the object
-        else:
-            super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.short_code} → {self.original_url}"

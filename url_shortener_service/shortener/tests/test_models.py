@@ -2,6 +2,7 @@ from django.test import TestCase
 from django.utils import timezone
 from datetime import timedelta
 from shortener.models import ShortURL
+import uuid
 
 class ShortURLModelTest(TestCase):
     """
@@ -60,3 +61,17 @@ class ShortURLModelTest(TestCase):
             expiration_date=self.expiration_date
         )
         self.assertEqual(url.expiration_date, self.expiration_date) # check if expiration_date is using the correct value
+    
+
+    def test_str_method_returns_expected_string(self):
+        """
+        Test if str method is returning correct short url
+        """
+        # create short url with a unique short_code
+        unique_code = str(uuid.uuid4())[:8] 
+        url = ShortURL.objects.create(
+            original_url=self.valid_url,
+            short_code=unique_code
+        )
+        expected_str = f"{unique_code} → https://example.com"
+        self.assertEqual(str(url), expected_str) # check if returning correct url
