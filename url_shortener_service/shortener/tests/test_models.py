@@ -6,6 +6,7 @@ import uuid
 
 class ShortURLModelTest(TestCase):
     """
+    Tests for the ShortURL model: creation, defaults, expiration, and string representation
     """
 
     def setUp(self):
