@@ -21,7 +21,7 @@ class ShortURLViewSet(viewsets.ModelViewSet):
     """
     queryset = ShortURL.objects.all()  # retrieve all ShortURL objects
     serializer_class = ShortURLSerializer  # serialization and deserialization of ShortURL objects
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly] # Allow authenticated users to create, update, and delete ShortURL objects, while others can only read them
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly ,IsOwnerOrReadOnly] # Allow authenticated users to create, update, and delete ShortURL objects, while others can only read them
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter] # Enable filtering on the queryset 
     filterset_fields = ['clicks', 'expiration_date'] # Fields that can be filtered in the queryset
     ordering = ['-clicks'] # Default ordering of the queryset by clicks in descending order
@@ -29,6 +29,7 @@ class ShortURLViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user if self.request.user.is_authenticated else None)  # Save the user if authenticated, otherwise None
+
 
 
 class RedirectToOriginalView(APIView):
@@ -58,7 +59,7 @@ class ListUserURLsView(generics.ListAPIView):
     APIView to list all ShortURL objects created by the authenticated user.
     """
     serializer_class = ShortURLSerializer  # Use the ShortURLSerializer for serialization
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly] # Only authenticated users can access this view, and only the owner can modify their URLs
+    permission_classes = [IsOwnerOrReadOnly] # Allow authenticated users to view their own ShortURL objects, while others can only read them
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter] # Enable filtering on the queryset 
     filterset_fields = ['clicks', 'expiration_date'] # Fields that can be filtered in the queryset
     ordering = ['-clicks'] # Default ordering of the queryset by clicks in descending order
