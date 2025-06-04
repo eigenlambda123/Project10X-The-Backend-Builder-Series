@@ -55,3 +55,18 @@ class RedirectViewTest(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_410_GONE) # check if the status code is 410 Gone
         self.assertIn("expired", response.data["detail"].lower()) # check if the response contains an expired message in the detail field
+
+
+
+class ClickTrackingTest(APITestCase):
+    """
+    """
+
+    def setUp(self):
+        # create a dummy short URL 
+        self.shorturl = ShortURL.objects.create(
+            original_url="https://clicks.com",
+            short_code="track123",
+            expiration_date=timezone.now() + timedelta(days=7),
+        )
+        self.redirect_url = reverse("redirect", args=[self.shorturl.short_code]) # reverse the URL for the redirect view using the short code
