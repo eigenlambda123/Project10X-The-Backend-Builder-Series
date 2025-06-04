@@ -59,3 +59,17 @@ class ShortURLSerializerTest(TestCase):
         """
         serializer = ShortURLSerializer(data={"original_url": self.valid_url}) # serialize valid url without expiration_date
         self.assertTrue(serializer.is_valid(), serializer.errors) # serializer shold be valid
+
+
+    def test_expiration_date_must_be_in_the_future(self):
+        """
+        Test that expiration date must be explicitly set in the future
+        """
+
+        # set the dummy data's expiration_date to that past
+        serializer = ShortURLSerializer(data={
+            "original_url": self.valid_url,
+            "expiration_date": self.past_date
+        })
+        self.assertFalse(serializer.is_valid()) # must be invalid
+        self.assertIn("expiration_date", serializer.errors) # check if the error involves expiration_date
