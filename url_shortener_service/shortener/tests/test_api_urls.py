@@ -61,3 +61,14 @@ class ShortURLAPITest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK) # check if status 200 OK
         self.assertEqual(response.data["original_url"], "https://abc.com") # check if original_url in response data matches the created short URL
         self.assertIn("short_code", response.data) # check if short_code is in response data
+
+    def test_delete_short_url(self):
+        """
+        Test if deleting a short URL works correctly
+        """
+        shorturl = ShortURL.objects.create(user=self.user, original_url="https://delete.com") # create a new dummy short URL to delete
+        url_detail = reverse("shorturl-detail", args=[shorturl.id]) # get the detail URL for the created short URL via id
+        response = self.client.delete(url_detail) # send a DELETE request to the detail URL
+
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT) # check if status 204 no content
+        self.assertFalse(ShortURL.objects.filter(id=shorturl.id).exists()) # check if the short URL is successfully deleted
