@@ -60,6 +60,10 @@ class RedirectViewTest(APITestCase):
 
 class ClickTrackingTest(APITestCase):
     """
+    Tests for click tracking functionality in the URL shortener service.
+
+    This test class verifies:
+    - The click count for a short URL increments correctly each time the redirect endpoint is accessed
     """
 
     def setUp(self):
