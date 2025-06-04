@@ -2,6 +2,8 @@ from rest_framework.test import APITestCase
 from shortener.models import ShortURL
 from django.urls import reverse
 from rest_framework import status
+from django.utils import timezone
+from datetime import timedelta
 
 class RedirectViewTest(APITestCase):
     """
@@ -29,3 +31,20 @@ class RedirectViewTest(APITestCase):
         response = self.client.get(url) # send a GET request to the redirect URL with the non-existent short code
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)  # check if the status code is 404 Not Found
+
+    def test_expired_short_code_returns_410(self):
+        """
+        Test that an expired short code returns HTTP 410 Gone or a custom error
+        """
+
+        # created an expired short URL
+        expired_url = ShortURL.objects.create(
+            original_url="https://expired.com",
+            expiration_date=timezone.now() - timedelta(days=1)
+        )
+
+        url = reverse("redirect", args=[expired_url.short_code]) # reverse the URL for the redirect view using the expired short code
+        response = self.client.get(url) # send a GET request to the redirect URL with the expired short code
+
+        self.assertEqual(response.status_code, status.HTTP_410_GONE) # check if the status code is 410 Gone
+        self.assertIn("expired", response.data["detail"].lower()) # check if the response contains an expired message in the detail field
