@@ -20,3 +20,12 @@ class RedirectViewTest(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_302_FOUND) # check if the status code is 302 Found
         self.assertEqual(response["Location"], self.valid_url) # check if the Location header matches the original URL
+
+    def test_invalid_short_code_returns_404(self):
+        """
+        Test that a non-existent short code returns HTTP 404 Not Found
+        """
+        url = reverse("redirect", args=["nonexistent"]) # reverse the URL for the redirect view using a non-existent short code
+        response = self.client.get(url) # send a GET request to the redirect URL with the non-existent short code
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)  # check if the status code is 404 Not Found
