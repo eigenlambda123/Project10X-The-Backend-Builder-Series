@@ -11,6 +11,15 @@ User = get_user_model()
 
 class ShortURLAPITest(APITestCase):
     """
+    API integration tests for the ShortURL endpoints.
+
+    This test class verifies the following behaviors:
+    - Authenticated creation of short URLs via POST
+    - Retrieval of a user's short URL list, including pagination handling
+    - Retrieval of individual short URL details
+    - Deletion of short URLs
+    - Partial updates (PATCH) to short URLs, such as updating expiration dates
+    - Validation that creating a short URL with an invalid original URL returns a 400 Bad Request
     """
     def setUp(self):
         self.user = User.objects.create_user(username="testuser", password="testpass123") # created dummy user
