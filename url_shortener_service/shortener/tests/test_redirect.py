@@ -70,3 +70,18 @@ class ClickTrackingTest(APITestCase):
             expiration_date=timezone.now() + timedelta(days=7),
         )
         self.redirect_url = reverse("redirect", args=[self.shorturl.short_code]) # reverse the URL for the redirect view using the short code
+
+    def test_click_count_increments_on_redirect(self):
+        """
+        Test that confirm click count increases on each redirect access
+        """
+
+        initial_clicks = self.shorturl.clicks # initial click count before redirects
+        num_redirects = 3 # number of redirects to simulate
+
+        for _ in range(num_redirects): # simulate multiple redirects
+            response = self.client.get(self.redirect_url) # send a GET request to the redirect URL
+            self.assertEqual(response.status_code, status.HTTP_302_FOUND) # check if the status code is 302 Found
+
+        self.shorturl.refresh_from_db() # refresh the ShortURL instance from the database to get the updated click count
+        self.assertEqual(self.shorturl.clicks, initial_clicks + num_redirects) # check if the click count has increased by the number of redirects
