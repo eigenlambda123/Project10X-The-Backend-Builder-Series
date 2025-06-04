@@ -2,6 +2,7 @@ from rest_framework.test import APITestCase
 from django.urls import reverse
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import get_user_model
+from rest_framework import status
 
 User = get_user_model()
 
@@ -25,3 +26,12 @@ class ShortURLPermissionTest(APITestCase):
             "original_url": "https://example.com"
         }
 
+    def test_unauthenticated_post_fails(self):
+        """
+        Test that an authenticated user cannot create a short URL
+        """
+        self.client.credentials()  # Remove auth header
+        response = self.client.post(self.url_list, self.valid_payload, format='json') # make a POST request to create a short URL
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED) # check if status 401 UNAUTHORIZED
+
+        
