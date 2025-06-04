@@ -5,6 +5,7 @@ import qrcode
 import base64
 from io import BytesIO
 from rest_framework.validators import UniqueValidator
+from django.utils import timezone
 
 class ShortURLSerializer(serializers.ModelSerializer):
     short_code = serializers.CharField(
@@ -52,3 +53,12 @@ class ShortURLSerializer(serializers.ModelSerializer):
         qr.save(buffer, format='PNG')
         base64_qr = base64.b64encode(buffer.getvalue()).decode('utf-8')  # Encode the image to base64
         return f'data:image/png;base64,{base64_qr}'
+    
+    def validate_expiration_date(self, value):
+        """
+        Validate that the expiration date is in the future if provided
+        """
+        # if value is provided, check if it is in the past
+        if value and value <= timezone.now():
+            raise serializers.ValidationError("Expiration date must be in the future.") # raise an error then
+        return value # return the value if valid
