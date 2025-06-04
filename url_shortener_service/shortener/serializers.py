@@ -12,7 +12,7 @@ class ShortURLSerializer(serializers.ModelSerializer):
         validators=[
             UniqueValidator(queryset=ShortURL.objects.all(), message="This short code is already in use. Please choose a different one.")
         ]
-    )  # Make short_code read-only since it's generated automatically
+    )  # Allow custom short codes, but ensure they are unique
     clicks = serializers.ReadOnlyField()  # Make clicks read-only since it's managed by the application
     created_at = serializers.ReadOnlyField()  # Make created_at read-only since it's set automatically
 
