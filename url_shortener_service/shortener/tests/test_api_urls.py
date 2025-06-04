@@ -86,3 +86,14 @@ class ShortURLAPITest(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK) # check if status 200 OK
         self.assertEqual(response.data["expiration_date"][:10], new_expiry.date().isoformat()) # check if the expiration date in response data matches the new expiration date
+
+
+    def test_create_with_invalid_url_returns_400(self):
+        """
+        Test if creating a short URL with an invalid original URL returns a 400 Bad Request
+        """
+
+        bad_payload = {"original_url": "invalid-url"} # invalid URL payload
+        response = self.client.post(self.url_list, bad_payload, format='json') # send a POST request with the invalid payload
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST) # check if status 400 Bad Request 
+        self.assertIn("original_url", response.data) # check if the error involves original_url
