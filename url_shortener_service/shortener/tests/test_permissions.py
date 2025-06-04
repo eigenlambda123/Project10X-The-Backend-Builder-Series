@@ -19,7 +19,7 @@ class ShortURLPermissionTest(APITestCase):
         self.access_token_user1 = str(refresh.access_token)
         self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token_user1)
 
-        self.url_list = reverse('user_urls') # URL for listing user URLs
+        self.url_list = reverse('shorturl-list') # URL for the list of short URLs
 
         # Create a valid payload for creating a short URL
         self.valid_payload = {
@@ -34,4 +34,20 @@ class ShortURLPermissionTest(APITestCase):
         response = self.client.post(self.url_list, self.valid_payload, format='json') # make a POST request to create a short URL
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED) # check if status 401 UNAUTHORIZED
 
-        
+    def test_authenticated_user_can_create_and_view_own_links(self):
+        """
+        Test that an authenticated user can create a short URL and view their own links
+        """
+
+        # user 1 creates a short URL
+        post_response = self.client.post(self.url_list, self.valid_payload, format='json') # make a POST request to create a short URL
+        self.assertEqual(post_response.status_code, status.HTTP_201_CREATED) # check if status 201 CREATED
+
+
+        # User1 retrieves their link
+        get_response = self.client.get(self.url_list) # make a GET request to retieve the list of short URLs
+        self.assertEqual(get_response.status_code, status.HTTP_200_OK) # check if status 200 OK
+        self.assertEqual(len(get_response.data["results"]), 1) # check if one short URL is returned
+        self.assertEqual(get_response.data["results"][0]["original_url"], "https://example.com") # check if the original URL matches
+
+
