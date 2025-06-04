@@ -48,3 +48,16 @@ class ShortURLAPITest(APITestCase):
 
         user_urls = [item for item in data if item['original_url'] in ["https://abc.com", "https://xyz.com"]] # filter the response data to get URLs created by the user
         self.assertEqual(len(user_urls), 2) # check if the number of URLs returned is 2
+
+
+    def test_get_url_detail(self):
+        """
+        Test if retrieving the details of a specific short URL works correctly
+        """
+        shorturl = ShortURL.objects.create(user=self.user, original_url="https://abc.com") # create new dummy short URL
+        url_detail = reverse("shorturl-detail", args=[shorturl.id]) # get the detail URL for the created short URL via id
+        response = self.client.get(url_detail) # send a GET request to the detail URL
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK) # check if status 200 OK
+        self.assertEqual(response.data["original_url"], "https://abc.com") # check if original_url in response data matches the created short URL
+        self.assertIn("short_code", response.data) # check if short_code is in response data
