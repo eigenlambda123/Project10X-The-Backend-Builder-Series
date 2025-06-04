@@ -4,9 +4,15 @@ from urllib.parse import urlparse
 import qrcode
 import base64
 from io import BytesIO
+from rest_framework.validators import UniqueValidator
 
 class ShortURLSerializer(serializers.ModelSerializer):
-    short_code = serializers.ReadOnlyField()  # Make short_code read-only since it's generated automatically
+    short_code = serializers.CharField(
+        required=False,
+        validators=[
+            UniqueValidator(queryset=ShortURL.objects.all(), message="This short code is already in use. Please choose a different one.")
+        ]
+    )  # Make short_code read-only since it's generated automatically
     clicks = serializers.ReadOnlyField()  # Make clicks read-only since it's managed by the application
     created_at = serializers.ReadOnlyField()  # Make created_at read-only since it's set automatically
 

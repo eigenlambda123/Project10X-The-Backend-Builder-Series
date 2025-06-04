@@ -27,3 +27,18 @@ class ShortURLSerializerTest(TestCase):
         serializer = ShortURLSerializer(data={"original_url": invalid_url}) # serialize invalid url
         self.assertFalse(serializer.is_valid()) # check if not valid
         self.assertIn("original_url", serializer.errors) # check if the error involves original_url
+
+    def test_custom_short_code_must_be_unique(self):
+        """
+        Test for custom short code, custom short code created by the user must be unique 
+        """
+       
+        ShortURL.objects.create(original_url=self.valid_url, short_code="custom123")  # Create a ShortURL with a specific short_code
+
+        # Try to create another with the same short_code
+        not_unique_short_code = ShortURLSerializer(data={
+            "original_url": "https://another.com",
+            "short_code": "custom123"
+        })
+        self.assertFalse(not_unique_short_code.is_valid()) # check if not_unique_short_code is not valid
+        self.assertIn("short_code", not_unique_short_code.errors) # check if the error involves short_code 
