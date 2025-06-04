@@ -4,7 +4,8 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import get_user_model
 from rest_framework import status
 from shortener.models import ShortURL
-
+from django.utils import timezone
+from datetime import timedelta
 
 User = get_user_model()
 
@@ -54,4 +55,41 @@ class ShortURLEdgeCaseTests(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST) # check if status 400 BAD REQUEST
         self.assertIn("short_code", response.data) # check if the response data contains short_code error
+
+
+    
+    def test_updating_non_editable_and_editable_fields(self):
+        """
+        Test that updating editable and non-editable fields via PATCH behaves correctly:
+        - `short_code` should be updatable.
+        - `clicks` and `created_at` should remain unchanged.
+        """
+
+        # Create a short URL with initial values
+        shorturl = ShortURL.objects.create(
+            user=self.user,
+            original_url="https://example.com",
+            short_code="initialcode",
+            clicks=0
+        )
+        original_created_at = shorturl.created_at # Store the original created_at for later comparison
+
+        url_detail = reverse("shorturl-detail", args=[shorturl.id]) # Get the detail URL for the created short URL
+
+        # Attempt to update the short_code and clicks
+        payload = {
+            "clicks": 999,
+            "created_at": timezone.now().isoformat(),
+            "short_code": "updatedcode"
+        }
+
+        response = self.client.patch(url_detail, payload, format="json") # send a PATCH request to update the short URL
+        self.assertEqual(response.status_code, status.HTTP_200_OK) # check if status 200 OK
+
+        shorturl.refresh_from_db() # Refresh the short URL instance from the database
+        self.assertEqual(shorturl.short_code, "updatedcode")  # updating short code should be allowed
+        self.assertNotEqual(shorturl.clicks, 999)  # updating clicks should not change
+        self.assertEqual(shorturl.clicks, 0) # Should remain unchanged
+        self.assertEqual(shorturl.created_at, original_created_at)  # Should remain unchanged
+
 
