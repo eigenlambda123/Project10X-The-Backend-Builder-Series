@@ -6,6 +6,16 @@ from datetime import timedelta
 
 class ShortURLSerializerTest(TestCase):
     """
+    Unit tests for the ShortURLSerializer.
+
+    This test class covers:
+    - Validation of original URLs (accepts valid, rejects invalid)
+    - Enforcement of unique custom short codes
+    - Automatic generation of short codes when not provided
+    - Optionality of the expiration_date field
+    - Validation that expiration_date, if provided, must be in the future
+
+    Each test ensures the serializer behaves as expected for common and edge cases in the URL shortener service.
     """
     def setUp(self):
         self.valid_url = "https://example.com" # dummy url
