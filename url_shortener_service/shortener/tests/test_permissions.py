@@ -3,6 +3,7 @@ from django.urls import reverse
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import get_user_model
 from rest_framework import status
+from shortener.models import ShortURL
 
 User = get_user_model()
 
@@ -49,5 +50,23 @@ class ShortURLPermissionTest(APITestCase):
         self.assertEqual(get_response.status_code, status.HTTP_200_OK) # check if status 200 OK
         self.assertEqual(len(get_response.data["results"]), 1) # check if one short URL is returned
         self.assertEqual(get_response.data["results"][0]["original_url"], "https://example.com") # check if the original URL matches
+
+
+    def test_user_cannot_delete_others_links(self):
+        """
+        Test that a user cannot delete another user's short URL
+        """
+        # User1 creates a short URL
+        short_url = ShortURL.objects.create(user=self.user1, original_url="https://private.com")
+
+        # Authenticate as user2
+        refresh = RefreshToken.for_user(self.user2) # Create a refresh token for user2
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + str(refresh.access_token)) # Authenticate user2
+
+
+        # Try to delete user1's short URL
+        url_detail = reverse("shorturl-detail", args=[short_url.id]) # GET the detail URL for the short URL created by user 1
+        response = self.client.delete(url_detail) # try deleting the url_detail created by user 1 with user 2
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN) # check if status 403 FORBIDDEN
 
 
