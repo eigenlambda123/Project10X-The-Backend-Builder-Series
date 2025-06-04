@@ -7,6 +7,13 @@ from datetime import timedelta
 
 class RedirectViewTest(APITestCase):
     """
+    Tests for the redirect endpoint of the URL shortener service
+
+    This test class verifies:
+    - A valid short code issues an HTTP 302 redirect to the original URL
+    - An invalid (non-existent) short code returns HTTP 404 Not Found
+    - An expired short code returns HTTP 410 Gone with an appropriate error message
+
     """
 
     def setUp(self):
