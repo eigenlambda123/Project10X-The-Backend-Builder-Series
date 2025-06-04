@@ -11,6 +11,14 @@ User = get_user_model()
 
 class ShortURLEdgeCaseTests(APITestCase):
     """
+    Tests for edge cases in the ShortURL API.
+
+    This test class verifies:
+    - Creating a short URL without the required original_url field returns HTTP 400 Bad Request
+    - Creating a short URL with an invalid original_url returns HTTP 400 Bad Request
+    - Creating a short URL with a duplicate custom short_code returns HTTP 400 Bad Request
+    - Updating editable fields (like short_code) is allowed, while non-editable fields (like clicks and created_at) remain unchanged
+
     """
     def setUp(self):
         self.user = User.objects.create_user(username="edgeuser", password="edgepass") # create a dummy user 
