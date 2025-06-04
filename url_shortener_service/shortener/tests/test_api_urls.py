@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from django.urls import reverse
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
+from shortener.models import ShortURL
 
 User = get_user_model()
 
@@ -30,3 +31,20 @@ class ShortURLAPITest(APITestCase):
         self.assertIn("short_code", response.data) # check if short_code is in response data
         self.assertEqual(response.data["original_url"], self.valid_payload["original_url"]) # check if original_url is response data matches valid_payload
         self.assertEqual(response.data["clicks"], 0) # chec if clicks is added and is 0
+
+
+    def test_get_url_list(self):
+        """
+        Test if retrieving the list of URLs works correctly
+        """
+        ShortURL.objects.create(user=self.user, original_url="https://abc.com") # create a short URL 1
+        ShortURL.objects.create(user=self.user, original_url="https://xyz.com") # create a short URL 2
+
+        response = self.client.get(self.url_list) # send a GET request to url_list
+        self.assertEqual(response.status_code, status.HTTP_200_OK) # check if status 200 OK
+        
+        # Handle paginated response
+        data = response.data["results"] if "results" in response.data else response.data # check if the response data is paginated, if so get the results, otherwise get the data directly
+
+        user_urls = [item for item in data if item['original_url'] in ["https://abc.com", "https://xyz.com"]] # filter the response data to get URLs created by the user
+        self.assertEqual(len(user_urls), 2) # check if the number of URLs returned is 2
