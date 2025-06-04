@@ -4,6 +4,8 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 from shortener.models import ShortURL
+from datetime import timedelta
+from django.utils import timezone
 
 User = get_user_model()
 
@@ -72,3 +74,15 @@ class ShortURLAPITest(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT) # check if status 204 no content
         self.assertFalse(ShortURL.objects.filter(id=shorturl.id).exists()) # check if the short URL is successfully deleted
+
+    def test_update_short_url_patch(self):
+        """
+        Test if updating a short URL's expiration date works correctly
+        """
+        shorturl = ShortURL.objects.create(user=self.user, original_url="https://initial.com") # create a new dummy short URL to update
+        new_expiry = timezone.now() + timedelta(days=7) # set a new expiration date 7 days in the future
+        url_detail = reverse("shorturl-detail", args=[shorturl.id]) # get the detail URL for the created short URL via id
+        response = self.client.patch(url_detail, {"expiration_date": new_expiry}, format="json") # send a PATCH request to update the expiration date
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK) # check if status 200 OK
+        self.assertEqual(response.data["expiration_date"][:10], new_expiry.date().isoformat()) # check if the expiration date in response data matches the new expiration date
