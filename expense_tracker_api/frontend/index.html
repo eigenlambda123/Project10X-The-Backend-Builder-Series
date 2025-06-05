@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dashboard - Expense Tracker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>Expense Tracker Dashboard</h1>
+
+  <!-- Summary Section -->
+  <section id="summary">
+    <h2>Summary</h2>
+    <p>Balance: <span id="balance">-</span></p>
+    <p>Total Income: <span id="total-income">-</span></p>
+    <p>Total Expenses: <span id="total-expenses">-</span></p>
+  </section>
+
+  <!-- Transactions Table Section -->
+  <section id="transactions-section">
+    <h2>Transactions</h2>
+    <table id="transactions-table" border="1" cellpadding="5" cellspacing="0">
+      <thead>
+        <tr>
+          <th>Description</th>
+          <th>Amount</th>
+          <th>Category</th>
+          <th>Date</th>
+          <th>Type</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="transactions-body">
+        <!-- Transactions will be rendered here -->
+      </tbody>
+    </table>
+    <div id="pagination-controls">
+      <button id="prev-page-btn" disabled>Previous</button>
+      <button id="next-page-btn" disabled>Next</button>
+    </div>
+  </section>
+
+  <!-- New Transaction Form Section -->
+  <section id="new-transaction">
+    <h2>New Transaction</h2>
+    <form id="transaction-form">
+      <label>
+        Description:
+        <input type="text" id="desc" name="description" required />
+      </label>
+      <br />
+
+      <label>
+        Amount:
+        <input type="number" step="0.01" id="amount" name="amount" required />
+      </label>
+      <br />
+
+      <label>
+        Category:
+        <select id="category" name="category" required>
+          <!-- Categories loaded here -->
+        </select>
+      </label>
+      <br />
+
+      <label>
+        Date:
+        <input type="date" id="date" name="date" required />
+      </label>
+      <br />
+
+      <label>
+        Type:
+        <select id="type" name="type" required>
+          <option value="income">Income</option>
+          <option value="expense">Expense</option>
+        </select>
+      </label>
+      <br />
+
+      <button type="submit">Add Transaction</button>
+    </form>
+  </section>
+
+  <!-- Logout Button -->
+  <button id="logout-btn">Logout</button>
+
+  <!-- Error Message Display -->
+  <div id="error" style="color: red;"></div>
+
+  <!-- Main JavaScript Module -->
+  <script type="module" src="script/index.js"></script>
+</body>
+</html>
