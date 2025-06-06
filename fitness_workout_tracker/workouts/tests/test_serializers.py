@@ -26,4 +26,14 @@ class WorkoutSerializerTest(TestCase):
         serializer = WorkoutSerializer(data=data) # Initialize the serializer with the data
         self.assertTrue(serializer.is_valid()) # check if valid 
 
+    def test_missing_required_fields(self):
+        """
+        Test that the WorkoutSerializer raises validation error for missing required fields
+        """
+        data = {"notes": "Missing name and date"} # data with missing required fields
+        serializer = WorkoutSerializer(data=data) # Initialize the serializer with the data
+        self.assertFalse(serializer.is_valid()) # check if invalid
+        self.assertIn('name', serializer.errors) # check if the error involves name
+        self.assertIn('date', serializer.errors) # check if the error involves date
+
     
