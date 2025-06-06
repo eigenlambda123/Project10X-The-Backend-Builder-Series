@@ -70,5 +70,12 @@ class ExerciseModelTest(TestCase):
         exercise = Exercise.objects.create(name='Crunches', category='core', description='') # create an exercise with empty description
         self.assertEqual(exercise.description, '') # check if the description is empty
 
+    def test_str_method_returns_exercise_name(self):
+        """
+        Test if the __str__ method returns the exercise name
+        """
+        exercise = Exercise.objects.create(name='Bench Press', category='push') # create an exercise with name 'Bench Press'
+        self.assertEqual(str(exercise), 'Bench Press') # check if the string representation is correct
+
 
 
