@@ -18,3 +18,22 @@ class Workout(models.Model):
         """
         return f"{self.name} - {self.user.username} ({self.date})"
     
+
+class Exercise(models.Model):
+    """
+    Model representing an exercise within a workout
+    """
+    workout = models.ForeignKey(Workout, on_delete=models.CASCADE, related_name='exercises') # Link to the workout this exercise belongs to
+    name = models.CharField(max_length=100) # name of exercise
+    sets = models.PositiveIntegerField() # number of sets for the exercise
+    reps = models.PositiveIntegerField() # number of repetitions for each set
+    weight = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True) # weight used for the exercise, optional
+    duration = models.DurationField(blank=True, null=True) # duration of the exercise, optional
+    notes = models.TextField(blank=True, optional=True) # additional notes about the exercise
+
+    def __str__(self):
+        """
+        String representation of the Exercise model
+        """
+        return f"{self.name} - {self.workout.name} ({self.sets} sets, {self.reps} reps)"
+    
