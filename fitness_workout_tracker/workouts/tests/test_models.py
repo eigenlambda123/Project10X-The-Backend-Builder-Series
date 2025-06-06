@@ -131,6 +131,21 @@ class SetModelTest(TestCase):
         self.assertIsNone(set_obj.weight) # check if the weight is None
         self.assertIsNone(set_obj.duration) # check if the duration is None
 
+    def test_str_method_returns_formatted_string(self):
+        """
+        Test the string representation of the Set model
+        """
+
+        # create a Set instance
+        set_obj = Set.objects.create(
+            workout=self.workout,
+            exercise=self.exercise,
+            reps=12,
+            weight=75.5,
+            order=1
+        )
+        self.assertEqual(str(set_obj), "Incline Bench Press: 12 reps @ 75.5 lbs") # check if the string representation is correct
+
 
 
 
