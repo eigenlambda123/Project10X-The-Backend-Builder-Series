@@ -27,3 +27,10 @@ class WorkoutModelTest(TestCase):
         """
         workout = Workout.objects.create(user=self.user, name='Push Day', date=date.today(), notes='') # create a workout with empty notes
         self.assertEqual(workout.notes, '') # check if the notes are empty
+
+    def test_str_method_returns_expected_format(self):
+        """
+        Test if the __str__ method returns the expected format
+        """
+        workout = Workout.objects.create(user=self.user, name='Pull Day', date=date(2025, 6, 6)) # create a workout with specific date
+        self.assertEqual(str(workout), "Pull Day - testuser (2025-06-06)") # check if the string representation is correct
