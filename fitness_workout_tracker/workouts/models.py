@@ -23,12 +23,22 @@ class Exercise(models.Model):
     """
     Catalog of exercise types
     """
+    CATEGORY_CHOICES = [
+        ('push', 'Push'),
+        ('pull', 'Pull'),
+        ('legs', 'Legs'),
+        ('cardio', 'Cardio'),
+        ('core', 'Core'),
+        ('other', 'Other'),
+    ]
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='other') # category of the exercise
     name = models.CharField(max_length=100) # name of the exercise
     description = models.TextField(blank=True, null=True) # description of the exercise, optional
     
     def __str__(self):
         """
-        returns the name of the exercise"""
+        returns the name of the exercise
+        """
         return self.name
     
 class Set(models.Model):
@@ -42,7 +52,7 @@ class Set(models.Model):
     duration = models.DurationField(blank=True, null=True) # duration of the set, optional
     notes = models.TextField(blank=True, null=True) # additional notes about the set
     created_at = models.DateTimeField(auto_now_add=True)
-    
+    updated_at = models.DateTimeField(auto_now=True) # when the set was last updated
 
     def __str__(self):
         """
