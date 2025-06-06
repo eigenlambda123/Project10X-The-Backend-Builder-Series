@@ -36,4 +36,20 @@ class WorkoutSerializerTest(TestCase):
         self.assertIn('name', serializer.errors) # check if the error involves name
         self.assertIn('date', serializer.errors) # check if the error involves date
 
+    def test_blank_name_invalid(self):
+        """
+        Test that the WorkoutSerializer raises validation error for the blank name
+        """
+
+        # data with blank name
+        data = {
+            "name": "",
+            "date": str(date.today())
+        }
+        serializer = WorkoutSerializer(data=data) # Initialize the serializer with the data
+        self.assertFalse(serializer.is_valid()) # check if invalid
+        self.assertIn('name', serializer.errors) # check if the error involves name
+
+    
+
     
