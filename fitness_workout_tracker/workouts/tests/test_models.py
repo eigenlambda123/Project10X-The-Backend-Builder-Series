@@ -6,6 +6,12 @@ from datetime import date
 
 class WorkoutModelTest(TestCase):
     """
+    Unit tests for the Workout model.
+
+    This test case verifies:
+    - Creation of Workout instances with required and optional fields
+    - That the notes field can be left blank or None
+    - The string representation (__str__) of the Workout model returns the expected format
     """
     def setUp(self):
         self.user = User.objects.create_user(username='testuser', password='pass') # create dummy user
