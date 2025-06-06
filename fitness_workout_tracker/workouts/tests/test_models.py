@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
-from workouts.models import Workout, Exercise
+from workouts.models import Workout, Exercise, Set
 from datetime import date
 
 
@@ -93,7 +93,24 @@ class SetModelTest(TestCase):
         self.workout = Workout.objects.create(user=self.user, name='Chest Day', date=date.today()) # create a workout for the user
         self.exercise = Exercise.objects.create(name='Incline Bench Press', category='push') # create an exercise for the workout
 
+    def test_create_set_with_required_fields(self):
+        """
+        Test creating a Set instance with required fields
+        """
+
+        # create a Set instance with required fields
+        set_obj = Set.objects.create(
+            workout=self.workout,
+            exercise=self.exercise,
+            reps=10,
+            order=1
+        )
         
+        self.assertEqual(set_obj.reps, 10) # check if the reps are set correctly
+        self.assertEqual(set_obj.weight, None) # check if the weight is None by default
+        self.assertEqual(set_obj.duration, None) # check if the duration is None by default
+        self.assertEqual(set_obj.notes, None) # check if the notes are None by default
+
 
 
 
