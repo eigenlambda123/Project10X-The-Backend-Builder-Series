@@ -40,7 +40,7 @@ async function fetchSummary() {
     // Update UI with summary values, defaulting to 0 if missing
     balanceEl.textContent = (data.net_balance || 0).toFixed(2);
     incomeEl.textContent = (data.total_income || 0).toFixed(2);
-    expensesEl.textContent = (data.total_expenses || 0).toFixed(2);
+    expensesEl.textContent = (data.total_expense || 0).toFixed(2);
   } catch (err) {
     showError(err.message);
   }
