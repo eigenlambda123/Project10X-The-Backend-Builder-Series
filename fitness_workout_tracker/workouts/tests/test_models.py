@@ -19,3 +19,11 @@ class WorkoutModelTest(TestCase):
         self.assertEqual(workout.name, 'Leg Day') # check if the name is set correctly
         self.assertEqual(workout.date, date.today()) # check if the date is set correctly
         self.assertIsNone(workout.notes) # check if the note is none by default
+
+
+    def test_optional_notes_field_accepts_blank(self):
+        """
+        Test that the notes field can be blank
+        """
+        workout = Workout.objects.create(user=self.user, name='Push Day', date=date.today(), notes='') # create a workout with empty notes
+        self.assertEqual(workout.notes, '') # check if the notes are empty
