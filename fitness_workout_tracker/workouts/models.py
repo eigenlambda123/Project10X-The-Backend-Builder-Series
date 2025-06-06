@@ -14,26 +14,39 @@ class Workout(models.Model):
 
     def __str__(self):
         """
-        String representation of the Workout model
+        returns the name of the workout, username, and date of the workout
         """
         return f"{self.name} - {self.user.username} ({self.date})"
     
 
 class Exercise(models.Model):
     """
-    Model representing an exercise within a workout
+    Catalog of exercise types
     """
-    workout = models.ForeignKey(Workout, on_delete=models.CASCADE, related_name='exercises') # Link to the workout this exercise belongs to
-    name = models.CharField(max_length=100) # name of exercise
-    sets = models.PositiveIntegerField() # number of sets for the exercise
-    reps = models.PositiveIntegerField() # number of repetitions for each set
-    weight = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True) # weight used for the exercise, optional
-    duration = models.DurationField(blank=True, null=True) # duration of the exercise, optional
-    notes = models.TextField(blank=True, optional=True) # additional notes about the exercise
+    name = models.CharField(max_length=100) # name of the exercise
+    description = models.TextField(blank=True, null=True) # description of the exercise, optional
+    
+    def __str__(self):
+        """
+        returns the name of the exercise"""
+        return self.name
+    
+class Set(models.Model):
+    """
+    Model representing a set within an exercise
+    """
+    workout = models.ForeignKey(Workout, on_delete=models.CASCADE, related_name='sets') # Link to the workout this set belongs to
+    exercise = models.ForeignKey(Exercise, on_delete=models.CASCADE) # Link to the exercise this set belongs to
+    reps = models.PositiveIntegerField() # number of reps for this set
+    weight = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True) # weight used for this set, optional
+    duration = models.DurationField(blank=True, null=True) # duration of the set, optional
+    notes = models.TextField(blank=True, null=True) # additional notes about the set
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         """
-        String representation of the Exercise model
+        returns the exercise name, reps, and weight for the set
         """
-        return f"{self.name} - {self.workout.name} ({self.sets} sets, {self.reps} reps)"
+        return f"{self.exercise.name}: {self.reps} reps @ {self.weight} lbs"
+
     
