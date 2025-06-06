@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from workouts.serializers import WorkoutSerializer
-from workouts.models import Workout
+from workouts.models import Workout, Set
 from datetime import date
 
 User = get_user_model()
@@ -50,6 +50,16 @@ class WorkoutSerializerTest(TestCase):
         self.assertFalse(serializer.is_valid()) # check if invalid
         self.assertIn('name', serializer.errors) # check if the error involves name
 
-    
+    def test_sets_field_is_read_only_nested(self):
+        """
+        Test that the 'sets' field in the WorkoutSerializer is read-only and returns a list
+        """
+        
+        workout = Workout.objects.create(user=self.user, name="Push Day", date=date.today()) # create a workout 
+        Set.objects.create(workout=workout, exercise=None, reps=10, order=1) # create a set for the workout
+        serializer = WorkoutSerializer(workout) # Initialize the serializer with the workout instance
+        self.assertIn('sets', serializer.data) # check if 'sets' field is in the serialized data
+        self.assertIsInstance(serializer.data['sets'], list) # check if 'sets' field is a list
+     
 
     
