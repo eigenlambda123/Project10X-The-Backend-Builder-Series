@@ -56,5 +56,13 @@ class ExerciseModelTest(TestCase):
         self.assertEqual(exercise.category, 'pull') # check if the category is set correctly
         self.assertIsNone(exercise.description) # check if the description is none by default
 
+    def test_default_category_is_other(self):
+        """
+        Test that the default category is 'other' when not specified
+        """
+        exercise = Exercise.objects.create(name='Unknown Move') # create an exercise without specifying category
+        self.assertEqual(exercise.category, 'other') # check if the category is set to 'other' by default
+        
+
 
 
