@@ -1,0 +1,34 @@
+<!-- frontend/edit.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Edit Transaction</title>
+</head>
+<body>
+  <h1>Edit Transaction</h1>
+
+  <form id="edit-transaction-form">
+    <label>Description: <input type="text" id="description" required></label><br>
+    <label>Amount: <input type="number" id="amount" step="0.01" required></label><br>
+    <label>Type:
+      <select id="type" required>
+        <option value="income">Income</option>
+        <option value="expense">Expense</option>
+      </select>
+    </label><br>
+    <label>Category:
+      <select id="category" required></select>
+    </label><br>
+    <label>Date: <input type="date" id="date" required></label><br>
+    
+    <button type="submit">Save Changes</button>
+  </form>
+
+  <p id="error" style="color: red;"></p>
+
+  <a href="index.html">Cancel</a>
+
+  <script type="module" src="script/edit.js"></script>
+</body>
+</html>
