@@ -53,6 +53,8 @@ class Set(models.Model):
     notes = models.TextField(blank=True, null=True) # additional notes about the set
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True) # when the set was last updated
+    order = models.PositiveIntegerField() # order of the set within the exercise, used for sorting
+ 
 
     def __str__(self):
         """
