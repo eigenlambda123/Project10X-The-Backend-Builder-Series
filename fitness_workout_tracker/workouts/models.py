@@ -42,6 +42,7 @@ class Set(models.Model):
     duration = models.DurationField(blank=True, null=True) # duration of the set, optional
     notes = models.TextField(blank=True, null=True) # additional notes about the set
     created_at = models.DateTimeField(auto_now_add=True)
+    
 
     def __str__(self):
         """
