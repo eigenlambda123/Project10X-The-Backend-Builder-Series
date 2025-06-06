@@ -146,6 +146,18 @@ class SetModelTest(TestCase):
         )
         self.assertEqual(str(set_obj), "Incline Bench Press: 12 reps @ 75.5 lbs") # check if the string representation is correct
 
+    def test_reps_and_order_must_be_positive_integers(self):
+        """
+        Test that reps and order must be positive integers
+        """
+
+        # Test that reps must be a positive integer
+        with self.assertRaises(Exception):
+            Set.objects.create(workout=self.workout, exercise=self.exercise, reps=-1, order=1)
+
+        # Test that order must be a positive integer
+        with self.assertRaises(Exception):
+            Set.objects.create(workout=self.workout, exercise=self.exercise, reps=10, order=0)
 
 
 
