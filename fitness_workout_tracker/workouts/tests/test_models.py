@@ -85,4 +85,15 @@ class ExerciseModelTest(TestCase):
         self.assertEqual(str(exercise), 'Bench Press') # check if the string representation is correct
 
 
+class SetModelTest(TestCase):
+    """
+    """
+    def setUp(self):
+        self.user = User.objects.create_user(username='tester', password='pass') # create a dummy user
+        self.workout = Workout.objects.create(user=self.user, name='Chest Day', date=date.today()) # create a workout for the user
+        self.exercise = Exercise.objects.create(name='Incline Bench Press', category='push') # create an exercise for the workout
+
+        
+
+
 
