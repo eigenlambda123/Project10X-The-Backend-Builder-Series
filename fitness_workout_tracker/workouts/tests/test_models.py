@@ -62,7 +62,13 @@ class ExerciseModelTest(TestCase):
         """
         exercise = Exercise.objects.create(name='Unknown Move') # create an exercise without specifying category
         self.assertEqual(exercise.category, 'other') # check if the category is set to 'other' by default
-        
+
+    def test_optional_description_accepts_blank(self):
+        """
+        Test that the description field can be blank
+        """
+        exercise = Exercise.objects.create(name='Crunches', category='core', description='') # create an exercise with empty description
+        self.assertEqual(exercise.description, '') # check if the description is empty
 
 
 
