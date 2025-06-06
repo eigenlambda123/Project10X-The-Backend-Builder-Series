@@ -10,3 +10,8 @@ class ExerciseSerializer(ModelSerializer):
     class Meta:
         model = Exercise
         fields = ['id', 'category', 'name', 'description']
+
+class SetSerializer(ModelSerializer):
+    class Meta:
+        model = Set
+        fields = ['id', 'workout', 'exercise', 'reps', 'weight', 'duration', 'notes', 'created_at', 'updated_at', 'order']
