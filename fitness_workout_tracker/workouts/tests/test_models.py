@@ -112,5 +112,25 @@ class SetModelTest(TestCase):
         self.assertEqual(set_obj.notes, None) # check if the notes are None by default
 
 
+    def test_optional_fields_accept_null_or_blank(self):
+        """
+        Test that optional fields can be set to None or blank
+        """
+
+        # create a Set instance with optional fields set to None
+        set_obj = Set.objects.create(
+            workout=self.workout,
+            exercise=self.exercise,
+            reps=8,
+            weight=None,
+            duration=None,
+            notes='',
+            order=2
+        )
+        self.assertEqual(set_obj.notes, '') # check if the notes are empty
+        self.assertIsNone(set_obj.weight) # check if the weight is None
+        self.assertIsNone(set_obj.duration) # check if the duration is None
+
+
 
 
