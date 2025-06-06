@@ -45,6 +45,13 @@ class WorkoutModelTest(TestCase):
 
 class ExerciseModelTest(TestCase):
     """
+    Unit tests for the Exercise model.
+
+    This test case verifies:
+    - Creation of Exercise instances with required fields
+    - That the default category is 'other' when not specified
+    - The description field can be left blank or None
+    - The string representation (__str__) of the Exercise model returns the exercise name
     """
 
     def test_create_exercise_with_required_fields(self):
