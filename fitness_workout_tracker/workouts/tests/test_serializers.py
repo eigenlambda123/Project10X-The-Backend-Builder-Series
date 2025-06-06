@@ -61,6 +61,20 @@ class WorkoutSerializerTest(TestCase):
         serializer = WorkoutSerializer(workout) # Initialize the serializer with the workout instance
         self.assertIn('sets', serializer.data) # check if 'sets' field is in the serialized data
         self.assertIsInstance(serializer.data['sets'], list) # check if 'sets' field is a list
-     
+
+    def test_user_field_is_read_only(self):
+        """
+        Test that the 'user' field in the WorkoutSerializer is read-only
+        """
+
+        # create a valid workout data without user
+        data = {
+            "name": "Leg Day",
+            "date": str(date.today()),
+            "user": self.user.id
+        }
+        serializer = WorkoutSerializer(data=data) # Initialize the serializer with the data
+        self.assertTrue(serializer.is_valid()) # check if valid
+        self.assertNotIn('user', serializer.validated_data) # check if 'user' field is not in the validated data
 
     
