@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
-from workouts.models import Workout
+from workouts.models import Workout, Exercise
 from datetime import date
 
 
@@ -40,3 +40,21 @@ class WorkoutModelTest(TestCase):
         """
         workout = Workout.objects.create(user=self.user, name='Pull Day', date=date(2025, 6, 6)) # create a workout with specific date
         self.assertEqual(str(workout), "Pull Day - testuser (2025-06-06)") # check if the string representation is correct
+
+
+
+class ExerciseModelTest(TestCase):
+    """
+    """
+
+    def test_create_exercise_with_required_fields(self):
+        """
+        Test creating an Exercise instance with required fields
+        """
+        exercise = Exercise.objects.create(name='Deadlift', category='pull') # create an exercise with required fields
+        self.assertEqual(exercise.name, 'Deadlift') # check if the name is set correctly
+        self.assertEqual(exercise.category, 'pull') # check if the category is set correctly
+        self.assertIsNone(exercise.description) # check if the description is none by default
+
+
+
