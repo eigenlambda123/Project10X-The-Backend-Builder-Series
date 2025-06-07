@@ -23,13 +23,20 @@ class WorkoutEndpointTests(TestCase):
         }
 
     def test_create_workout(self):
+        """
+        Test creating a workout via the API endpoint
+        """
+
+        # data 
         response = self.client.post(self.url, {
             "name": self.test_workout_data["name"],
             "date": self.test_workout_data["date"],
             "notes": self.test_workout_data["notes"],
         }, format='json')
         
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED) # check if status code is 201 CREATED
+
+        # check if the response data matches the input data
         self.assertEqual(response.data['name'], self.test_workout_data['name'])
         self.assertEqual(response.data['notes'], self.test_workout_data['notes'])
         self.assertEqual(response.data['date'], self.test_workout_data['date'])
