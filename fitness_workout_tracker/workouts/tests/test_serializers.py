@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
-from workouts.serializers import WorkoutSerializer
+from workouts.serializers import WorkoutSerializer, SetSerializer
 from workouts.models import Workout, Set, Exercise
 from datetime import date
 
@@ -84,5 +84,16 @@ class WorkoutSerializerTest(TestCase):
         serializer = WorkoutSerializer(data=data) # Initialize the serializer with the data
         self.assertTrue(serializer.is_valid()) # check if valid
         self.assertNotIn('user', serializer.validated_data) # check if 'user' field is not in the validated data
+
+
+
+class SetSerializerTest(TestCase):
+    """
+    """
+    def setUp(self):
+        self.user = User.objects.create_user(username='tester2', password='pass123') # create dummy user
+        self.workout = Workout.objects.create(user=self.user, name="Pull Day", date=date.today()) # create a workout 
+        self.exercise = Exercise.objects.create(name="Pull-up", category="upper") # create an exercise
+
 
     
