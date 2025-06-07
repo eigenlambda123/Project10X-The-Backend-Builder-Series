@@ -22,6 +22,12 @@ class WorkoutViewSet(ModelViewSet):
     ordering_fields = ['date', 'created_at'] # Allow ordering by date and created_at
     search_fields = ['name', 'notes'] # Allow searching by name and notes
 
+    def perform_create(self, serializer):
+        """
+        Override to set the user automatically when creating a workout
+        """
+        serializer.save(user=self.request.user)
+
 class ExerciseViewSet(ModelViewSet):
     """
     API endpoint for viewing and editing Exercise instances
