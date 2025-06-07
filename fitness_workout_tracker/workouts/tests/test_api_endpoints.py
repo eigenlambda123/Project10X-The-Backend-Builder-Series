@@ -1,8 +1,10 @@
+from workouts.tests.test_serializers import User
 from workouts.views import WorkoutViewSet
 from django.test import TestCase
 from rest_framework.test import APIClient
 from rest_framework import status
 
+get_user_model = User
 
 class WorkoutEndpointTests(TestCase):
     """
@@ -10,6 +12,8 @@ class WorkoutEndpointTests(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.url = '/api/workouts/' # url for the WorkoutViewSet]
+        self.user = get_user_model().objects.create_user(username='testuser', password='testpass') # create a dummy user for authentication
+        self.client.force_authenticate(user=self.user) # force authentication for the client
         self.test_workout_data = {
             "name": "Test Workout",
             "date": "2023-10-01",
