@@ -4,6 +4,7 @@ from rest_framework.viewsets import ModelViewSet
 from .models import Workout
 from .serializers import WorkoutSerializer
 from rest_framework import filters
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 class WorkoutViewSet(ModelViewSet):
@@ -16,7 +17,7 @@ class WorkoutViewSet(ModelViewSet):
     """
     queryset = Workout.objects.all().order_by('-date') # Order workouts by date, most recent first
     serializer_class = WorkoutSerializer # serialize to convert model instances to JSON
-    filter_backends = [filters.OrderingFilter, filters.SearchFilter, filters.DjangoFilterBackend] # Enable ordering, searching, and filtering
+    filter_backends = [filters.OrderingFilter, filters.SearchFilter, DjangoFilterBackend] # Enable ordering, searching, and filtering
     filterset_fields = ['date'] # Allow filtering by date
     ordering_fields = ['date', 'created_at'] # Allow ordering by date and created_at
     search_fields = ['name', 'notes'] # Allow searching by name and notes
