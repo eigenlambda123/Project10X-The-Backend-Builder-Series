@@ -5,6 +5,7 @@ from .models import Workout
 from .serializers import WorkoutSerializer
 from rest_framework import filters
 
+
 class WorkoutViewSet(ModelViewSet):
     """
     API endpoint for viewing and editing Workout instances
