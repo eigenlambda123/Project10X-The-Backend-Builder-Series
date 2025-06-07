@@ -218,3 +218,19 @@ class ExerciseSerializerTest(TestCase):
         }
         serializer = ExerciseSerializer(data=data) # serialize the data
         self.assertTrue(serializer.is_valid()) # check if valid
+
+    
+    def test_missing_category_defaults_to_other(self):
+        """
+        Test that the ExerciseSerializer defaults to 'other' category if not provided 
+        """
+
+        # valid exercise data without category
+        data = {
+            "name": "Jump Rope",
+            "description": "High intensity"
+        }
+        serializer = ExerciseSerializer(data=data) # serialize the data
+        self.assertTrue(serializer.is_valid()) # check if valid
+        instance = serializer.save() # save the instance
+        self.assertEqual(instance.category, "other") # check if category is set to 'other' by default
