@@ -8,6 +8,14 @@ User = get_user_model()
 
 class WorkoutSerializerTest(TestCase):
     """
+    Unit tests for the WorkoutSerializer.
+
+    This test case verifies:
+    - The serializer correctly validates valid and invalid workout data
+    - Required fields are enforced and missing fields raise validation errors
+    - The 'name' field cannot be blank
+    - The 'sets' field is read-only and returns a list of related sets
+    - The 'user' field is read-only and cannot be set via input data
     """
     def setUp(self):
         self.user = User.objects.create_user(username='tester', password='pass123') # create dummy user
