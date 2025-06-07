@@ -234,3 +234,18 @@ class ExerciseSerializerTest(TestCase):
         self.assertTrue(serializer.is_valid()) # check if valid
         instance = serializer.save() # save the instance
         self.assertEqual(instance.category, "other") # check if category is set to 'other' by default
+
+
+    def test_missing_name_fails(self):
+        """
+        Test that the ExerciseSerializer raises validation error for missing name
+        """
+
+        # data with missing name
+        data = {
+            "category": "lower",
+            "description": "Squat variant"
+        }
+        serializer = ExerciseSerializer(data=data) # serialize the data
+        self.assertFalse(serializer.is_valid()) # check if invalid
+        self.assertIn('name', serializer.errors) # check if the error involves name
