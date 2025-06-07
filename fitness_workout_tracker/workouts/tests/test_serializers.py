@@ -189,6 +189,13 @@ class SetSerializerTest(TestCase):
 
 class ExerciseSerializerTest(TestCase):
     """
+    Unit tests for the ExerciseSerializer.
+
+    This test case verifies:
+    - The serializer correctly validates valid and invalid exercise data
+    - The 'description' field can be blank
+    - The 'category' field defaults to 'other' if not provided
+    - The 'name' field is required and missing it raises a validation error
     """
 
     def test_valid_exercise_data(self):
