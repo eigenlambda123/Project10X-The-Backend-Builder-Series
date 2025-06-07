@@ -147,4 +147,21 @@ class SetSerializerTest(TestCase):
         self.assertIn('reps', serializer.errors) # check if the error involves reps
 
 
+    def test_negative_order_invalid(self):
+        """
+        Test that the SetSerializer raises validation error for negative order
+        """
+
+        # data with negative order
+        data = {
+            "workout": self.workout.id,
+            "exercise": self.exercise.id,
+            "reps": 10,
+            "order": -2
+        }
+        serializer = SetSerializer(data=data) # serialize the data
+        self.assertFalse(serializer.is_valid()) # check if invalid
+        self.assertIn('order', serializer.errors) # check if the error involves order
+
+
     
