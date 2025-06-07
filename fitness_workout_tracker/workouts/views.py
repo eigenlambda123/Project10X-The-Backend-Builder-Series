@@ -1,8 +1,8 @@
 from django.shortcuts import render
 
 from rest_framework.viewsets import ModelViewSet
-from .models import Workout, Set
-from .serializers import WorkoutSerializer, SetSerializer
+from .models import Workout, Set, Exercise
+from .serializers import WorkoutSerializer, SetSerializer, ExerciseSerializer
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -21,6 +21,16 @@ class WorkoutViewSet(ModelViewSet):
     filterset_fields = ['date'] # Allow filtering by date
     ordering_fields = ['date', 'created_at'] # Allow ordering by date and created_at
     search_fields = ['name', 'notes'] # Allow searching by name and notes
+
+class ExerciseViewSet(ModelViewSet):
+    """
+    API endpoint for viewing and editing Exercise instances
+
+    Provides list, create, retrieve, update, and delete actions for exercises
+    Exercises are ordered by their name by default
+    """
+    queryset = Exercise.objects.all().order_by('name') # order exercises by their name
+    serializer_class = ExerciseSerializer # serialize to convert model instances to JSON
 
 class SetViewSet(ModelViewSet):
     """
