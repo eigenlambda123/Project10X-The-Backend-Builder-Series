@@ -112,4 +112,23 @@ class SetSerializerTest(TestCase):
         self.assertTrue(serializer.is_valid()) # check if valid
 
 
+    def test_optional_fields_accepted(self):
+        """
+        Test that the SetSerializer accepts optional fields like weight, duration, and notes
+        """
+
+        # valid set data with optional fields
+        data = {
+            "workout": self.workout.id,
+            "exercise": self.exercise.id,
+            "reps": 12,
+            "order": 2,
+            "weight": None,
+            "duration": None,
+            "notes": ""
+        }
+        serializer = SetSerializer(data=data) # serialize the data
+        self.assertTrue(serializer.is_valid()) # check if valid
+
+
     
