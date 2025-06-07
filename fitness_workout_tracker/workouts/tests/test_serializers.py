@@ -204,3 +204,17 @@ class ExerciseSerializerTest(TestCase):
         }
         serializer = ExerciseSerializer(data=data) # serialize the data
         self.assertTrue(serializer.is_valid()) # check if valid
+
+
+    def test_blank_description_accepted(self):
+        """
+        Test that the ExerciseSerializer accepts blank description
+        """
+        # valid exercise data with blank description
+        data = {
+            "category": "core",
+            "name": "Plank",
+            "description": ""
+        }
+        serializer = ExerciseSerializer(data=data) # serialize the data
+        self.assertTrue(serializer.is_valid()) # check if valid
