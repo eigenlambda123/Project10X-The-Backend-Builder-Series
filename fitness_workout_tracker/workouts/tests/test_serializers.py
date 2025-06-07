@@ -96,4 +96,20 @@ class SetSerializerTest(TestCase):
         self.exercise = Exercise.objects.create(name="Pull-up", category="upper") # create an exercise
 
 
+    def test_valid_set_data(self):
+        """
+        Test that the SetSerializer validates correct set data
+        """
+
+        # valid set data
+        data = {
+            "workout": self.workout.id,
+            "exercise": self.exercise.id,
+            "reps": 8,
+            "order": 1
+        }
+        serializer = SetSerializer(data=data) # serialize the data
+        self.assertTrue(serializer.is_valid()) # check if valid
+
+
     
