@@ -87,6 +87,10 @@ class ExerciseModelTest(TestCase):
 
 class SetModelTest(TestCase):
     """
+    API endpoint for viewing and editing Set instances.
+
+    Provides list, create, retrieve, update, and delete actions for sets
+    Sets are ordered by their 'order' field by default
     """
     def setUp(self):
         self.user = User.objects.create_user(username='tester', password='pass') # create a dummy user
