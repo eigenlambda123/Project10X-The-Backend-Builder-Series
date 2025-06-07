@@ -130,5 +130,21 @@ class SetSerializerTest(TestCase):
         serializer = SetSerializer(data=data) # serialize the data
         self.assertTrue(serializer.is_valid()) # check if valid
 
+    def test_negative_reps_invalid(self):
+        """
+        Test that the SetSerializer raises validation error for negative reps
+        """
+
+        # data with negative reps
+        data = {
+            "workout": self.workout.id,
+            "exercise": self.exercise.id,
+            "reps": -5,
+            "order": 1
+        }
+        serializer = SetSerializer(data=data) # serialize the data
+        self.assertFalse(serializer.is_valid()) # check if invalid
+        self.assertIn('reps', serializer.errors) # check if the error involves reps
+
 
     
