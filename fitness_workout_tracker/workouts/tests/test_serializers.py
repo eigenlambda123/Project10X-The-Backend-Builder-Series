@@ -164,4 +164,20 @@ class SetSerializerTest(TestCase):
         self.assertIn('order', serializer.errors) # check if the error involves order
 
 
+    def test_read_only_exercise_name(self):
+        """
+        Test that the 'exercise_name' field in SetSerializer is read-only and returns the exercise name
+        """
+
+        # create a set instance
+        set_instance = Set.objects.create(
+            workout=self.workout,
+            exercise=self.exercise,
+            reps=10,
+            order=1
+        )
+        serializer = SetSerializer(set_instance) # serialize the set instance
+        self.assertEqual(serializer.data['exercise_name'], "Pull-up") # check if 'exercise_name' field returns the correct exercise name
+
+
     
