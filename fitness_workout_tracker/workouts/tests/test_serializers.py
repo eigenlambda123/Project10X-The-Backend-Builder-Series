@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
-from workouts.serializers import WorkoutSerializer, SetSerializer
+from workouts.serializers import WorkoutSerializer, SetSerializer, ExerciseSerializer
 from workouts.models import Workout, Set, Exercise
 from datetime import date
 
@@ -187,4 +187,20 @@ class SetSerializerTest(TestCase):
         self.assertEqual(serializer.data['exercise_name'], "Pull-up") # check if 'exercise_name' field returns the correct exercise name
 
 
-    
+class ExerciseSerializerTest(TestCase):
+    """
+    """
+
+    def test_valid_exercise_data(self):
+        """
+        Test that the ExerciseSerializer validates correct exercise data
+        """
+
+        # valid exercise data
+        data = {
+            "category": "cardio",
+            "name": "Running",
+            "description": "Outdoor run"
+        }
+        serializer = ExerciseSerializer(data=data) # serialize the data
+        self.assertTrue(serializer.is_valid()) # check if valid
