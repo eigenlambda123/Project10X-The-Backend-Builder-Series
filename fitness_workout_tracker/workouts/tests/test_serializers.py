@@ -89,6 +89,13 @@ class WorkoutSerializerTest(TestCase):
 
 class SetSerializerTest(TestCase):
     """
+    Unit tests for the SetSerializer.
+
+    This test case verifies:
+    - The serializer correctly validates valid and invalid set data
+    - Required and optional fields are handled as expected
+    - Negative values for 'reps' and 'order' fields raise validation errors
+    - The 'exercise_name' field is read-only and returns the correct exercise name
     """
     def setUp(self):
         self.user = User.objects.create_user(username='tester2', password='pass123') # create dummy user
