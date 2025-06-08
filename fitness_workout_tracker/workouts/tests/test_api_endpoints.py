@@ -439,5 +439,38 @@ class SetEndpointTests(TestCase):
         self.assertEqual(response.data['notes'], "Updated set notes") # check if notes is updated
 
 
-    
-        
+    def test_delete_set(self):
+        """
+        Test deleting a set via the API endpoint
+        """
+        # create a workout
+        workout_response = self.client.post(reverse('workout-list'), {
+            "name": "Test Workout",
+            "date": "2023-10-01",
+            "notes": "This is a test workout."
+        }, format='json')
+        workout_id = workout_response.data['id']
+
+        # create an exercise
+        exercise_response = self.client.post(reverse('exercise-list'), {
+            "name": "Test Exercise",
+            "category": "push",
+            "description": "This is a test exercise."
+        }, format='json')
+        exercise_id = exercise_response.data['id']
+
+        # create a set
+        set_response = self.client.post(self.url, {
+            "workout": workout_id,
+            "exercise": exercise_id,
+            "reps": self.test_workout_data["reps"],
+            "weight": self.test_workout_data["weight"],
+            "duration": self.test_workout_data["duration"],
+            "notes": self.test_workout_data["notes"],
+            "order": 1
+        }, format='json')
+        set_id = set_response.data['id']
+
+        # delete the set
+        response = self.client.delete(f"{self.url}{set_id}/", format='json')
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
