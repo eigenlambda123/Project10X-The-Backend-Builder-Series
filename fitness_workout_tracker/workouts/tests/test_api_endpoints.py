@@ -43,6 +43,27 @@ class WorkoutEndpointTests(TestCase):
         self.assertEqual(response.data['user'], self.user.id) 
 
 
+    def test_get_list_workouts(self):
+        """
+        Test retrieving the list of workouts via the API endpoint
+        """
+        # workout creation
+        self.client.post(self.url, {
+            "name": self.test_workout_data["name"],
+            "date": self.test_workout_data["date"],
+            "notes": self.test_workout_data["notes"],
+        }, format='json')
+
+        # get the list of workouts
+        response = self.client.get(self.url, format='json') # send a GET request to the workouts endpoint
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK) # check if status code is 200 OK
+
+        
+
+
+
+
     
 
         
