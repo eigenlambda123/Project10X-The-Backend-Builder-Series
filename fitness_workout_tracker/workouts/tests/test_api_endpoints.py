@@ -168,6 +168,21 @@ class ExerciseEndpointTests(TestCase):
             "description": "This is a test exercise."
         }
 
+    def test_create_exercise(self):
+        """
+        Test creating an exercise via the API endpoint
+        """
+
+        # create an exercise
+        response = self.client.post(self.url, {
+            "name": self.test_exercise_data["name"],
+            "category": self.test_exercise_data["category"],
+            "description": self.test_exercise_data["description"],
+        }, format='json')
+        
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED) # check if status code is 201 CREATED
+
+
 
 
 
