@@ -156,6 +156,10 @@ class WorkoutEndpointTests(TestCase):
 
 class ExerciseEndpointTests(TestCase):
     """
+    Integration tests for the Exercise API endpoints
+
+    This test case covers the core CRUD operations for the Exercise resource,
+    including creation, retrieval (single and list), updating, and deletion
     """
     def setUp(self):
         self.client = APIClient()
