@@ -104,6 +104,26 @@ class WorkoutEndpointTests(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK) # check if status code is 200 OK
         self.assertEqual(response.data['name'], "Updated Workout") # check if the name is updated
+
+
+    def test_delete_workout(self):
+        """
+        Test that deleting a workout via the API endpoint works
+        """
+
+        # workout creation
+        self.client.post(self.url, {
+            "name": self.test_workout_data["name"],
+            "date": self.test_workout_data["date"],
+            "notes": self.test_workout_data["notes"],
+        }, format='json')
+
+        # delete the workout 
+        response = self.client.delete(f"{self.url}1/", format='json')
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT) # check if status code is 204 NO CONTENT
+
+    
+
         
 
 
