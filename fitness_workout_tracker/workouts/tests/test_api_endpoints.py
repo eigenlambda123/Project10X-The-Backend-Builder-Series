@@ -254,6 +254,22 @@ class ExerciseEndpointTests(TestCase):
         self.assertEqual(response.data['category'], "core")
         self.assertEqual(response.data['description'], "This exercise has been updated")
 
+    def test_delete_exercise(self):
+        """
+        Test that deleting an exercise via the API endpoint works
+        """
+
+        # create an exercise
+        self.client.post(self.url, {
+            "name": self.test_exercise_data["name"],
+            "category": self.test_exercise_data["category"],
+            "description": self.test_exercise_data["description"],
+        }, format='json')
+
+        
+        response = self.client.delete(f"{self.url}1/", format='json') # delete the exercise 
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT) # check if status code is 204 NO CONTENT
+
 
 
 
