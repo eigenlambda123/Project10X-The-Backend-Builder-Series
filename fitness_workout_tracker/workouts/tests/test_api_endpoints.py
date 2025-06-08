@@ -206,6 +206,30 @@ class ExerciseEndpointTests(TestCase):
         self.assertEqual(len(response.data), 2) # check if two exercises are returned
 
 
+    def test_get_single_exercise(self):
+        """
+        Test retrieving a single exercise via the API endpoint
+        """
+
+        # create exercises
+        self.client.post(self.url, {
+            "name": self.test_exercise_data["name"],
+            "category": self.test_exercise_data["category"],
+            "description": self.test_exercise_data["description"],
+        }, format='json')
+
+        self.client.post(self.url, {
+            "name": "Another Exercise",
+            "category": "pull",
+            "description": "This is another test exercise."
+        }, format='json')
+
+        response = self.client.get(f"{self.url}2/", format='json') # get first exercise by id 2
+        self.assertEqual(response.status_code, status.HTTP_200_OK) # check if status code is 200 OK
+        self.assertEqual(response.data['name'], "Another Exercise") # check if the name matches
+
+
+
 
 
 
