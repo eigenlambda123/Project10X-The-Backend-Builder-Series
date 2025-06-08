@@ -389,5 +389,55 @@ class SetEndpointTests(TestCase):
         self.assertEqual(len(response.data), 2) # check if two exercises are returned
 
 
+    def test_update_set(self):
+        """
+        Test updating a set via the API endpoint
+        """
+        # create a workout
+        workout_response = self.client.post(reverse('workout-list'), {
+            "name": "Test Workout",
+            "date": "2023-10-01",
+            "notes": "This is a test workout."
+        }, format='json')
+        workout_id = workout_response.data['id']
+
+        # create an exercise
+        exercise_response = self.client.post(reverse('exercise-list'), {
+            "name": "Test Exercise",
+            "category": "push",
+            "description": "This is a test exercise."
+        }, format='json')
+        exercise_id = exercise_response.data['id']
+
+        # create a set
+        set_response = self.client.post(self.url, {
+            "workout": workout_id,
+            "exercise": exercise_id,
+            "reps": self.test_workout_data["reps"],
+            "weight": self.test_workout_data["weight"],
+            "duration": self.test_workout_data["duration"],
+            "notes": self.test_workout_data["notes"],
+            "order": 1
+        }, format='json')
+        set_id = set_response.data['id']
+
+        # update the set
+        response = self.client.put(f"{self.url}{set_id}/", {
+            "workout": workout_id,
+            "exercise": exercise_id,
+            "reps": 12,
+            "weight": 60.0,
+            "duration": "00:35:00",
+            "notes": "Updated set notes",
+            "order": 1
+        }, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK) # check if status 200 OK
+        self.assertEqual(response.data['reps'], 12) # check if reps is updated 
+        self.assertEqual(float(response.data['weight']), 60.0) # check if weight is updated
+        self.assertEqual(response.data['duration'], "00:35:00") # check if duration is updated
+        self.assertEqual(response.data['notes'], "Updated set notes") # check if notes is updated
+
+
     
         
