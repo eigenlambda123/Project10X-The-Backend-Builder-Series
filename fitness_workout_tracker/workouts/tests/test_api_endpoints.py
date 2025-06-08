@@ -275,21 +275,24 @@ class ExerciseEndpointTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT) # check if status code is 204 NO CONTENT
 
 
+class SetEndpointTests(TestCase):
+    """
+    """
 
-
-
-
-
-        
-
-
-
-
-
-
-
-
+    def setUp(self):
+        self.client = APIClient()
+        self.url = reverse('set-list') # dynamically resolve the URL for the SetViewSet
+        self.user = User.objects.create_user(username='testuser', email='testuser@example.com', password='testpass') # create a dummy user for authentication
+        self.client.force_authenticate(user=self.user) # authenticate the client with the test user
+        self.test_workout_data = {
+            "user": self.user.id,  
+            "workout": "Test Workout",
+            "exercise": "Test Exercise",
+            "reps": 10,
+            "weight": 50.0,
+            "duration": "00:30:00", 
+            "notes": "This is a test set.",
+        }
     
-
-        
-
+    
+    
