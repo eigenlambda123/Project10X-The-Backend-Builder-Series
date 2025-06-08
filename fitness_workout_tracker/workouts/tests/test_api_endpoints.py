@@ -154,6 +154,22 @@ class WorkoutEndpointTests(TestCase):
 
 
 
+class ExerciseEndpointTests(TestCase):
+    """
+    """
+    def setUp(self):
+        self.client = APIClient()
+        self.url = reverse('exercise-list') # dynamically resolve the URL for the ExerciseViewSet
+        self.user = User.objects.create_user(username='testuser', email='testuser@example.com', password='testpass') # create a dummy user for authentication
+        self.client.force_authenticate(user=self.user) # authenticate the client with the test user
+        self.test_exercise_data = {
+            "name": "Test Exercise",
+            "category": "push",
+            "description": "This is a test exercise."
+        }
+
+
+
 
 
         
