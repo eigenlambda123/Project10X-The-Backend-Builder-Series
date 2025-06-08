@@ -9,6 +9,12 @@ User = get_user_model()
 
 class WorkoutEndpointTests(TestCase):
     """
+    Integration tests for the Workout API endpoints
+
+    This test case covers the core CRUD operations for the Workout resource,
+    including creation, retrieval (single and list), updating, deletion, and
+    filtering by date. Each test simulates authenticated API requests using
+    APIClient to ensure the endpoints behave as expected.
     """
     def setUp(self):
         self.client = APIClient()
@@ -122,7 +128,33 @@ class WorkoutEndpointTests(TestCase):
         response = self.client.delete(f"{self.url}1/", format='json')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT) # check if status code is 204 NO CONTENT
 
-    
+    def test_filter_workouts_by_date(self):
+        """
+        Test filtering workouts by date via the API endpoint
+        """
+        # workout creation
+        self.client.post(self.url, {
+            "name": self.test_workout_data["name"],
+            "date": self.test_workout_data["date"],
+            "notes": self.test_workout_data["notes"],
+        }, format='json')
+
+        self.client.post(self.url, {
+            "name": "Another Workout",
+            "date": "2024-10-02",
+            "notes": "This is another test workout."
+        }, format='json')
+
+        # filter workouts by date
+        response = self.client.get(f"{self.url}?date={"2024-10-02"}", format='json') # filter by date 2024-10-02
+        self.assertEqual(response.status_code, status.HTTP_200_OK) # check is status code is 200 OK
+        self.assertEqual(len(response.data), 1) # check if only one workout is returned
+        self.assertEqual(response.data[0]['name'], "Another Workout") # check if the name matches
+        self.assertEqual(response.data['date'], "2024-10-02") # check if the date matches
+
+
+
+
 
         
 
