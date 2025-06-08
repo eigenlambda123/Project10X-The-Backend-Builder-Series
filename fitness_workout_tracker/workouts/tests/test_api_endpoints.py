@@ -83,6 +83,31 @@ class WorkoutEndpointTests(TestCase):
         self.assertEqual(response.data['name'], "Another Workout") # check if the name matches
 
 
+    def test_update_workout(self):
+        """
+        Test that updating a workout via the API endpoint Works
+        """
+
+        # workout creation
+        self.client.post(self.url, {
+            "name": self.test_workout_data["name"],
+            "date": self.test_workout_data["date"],
+            "notes": self.test_workout_data["notes"],
+        }, format='json')
+
+        # update the workout
+        response = self.client.put(f"{self.url}1/", { 
+            "name": "Updated Workout",
+            "date": "2023-10-03",
+            "notes": "This workout has been updated"
+        }, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK) # check if status code is 200 OK
+        self.assertEqual(response.data['name'], "Updated Workout") # check if the name is updated
+        
+
+
+
 
 
 
