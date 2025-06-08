@@ -182,6 +182,29 @@ class ExerciseEndpointTests(TestCase):
         
         self.assertEqual(response.status_code, status.HTTP_201_CREATED) # check if status code is 201 CREATED
 
+    def test_get_list_exercises(self):
+        """
+        Test retrieving the list of exercises via the API endpoint
+        """
+
+        # create exercises
+        self.client.post(self.url, {
+            "name": self.test_exercise_data["name"],
+            "category": self.test_exercise_data["category"],
+            "description": self.test_exercise_data["description"],
+        }, format='json')
+
+        self.client.post(self.url, {
+            "name": "Another Exercise",
+            "category": "pull",
+            "description": "This is another test exercise."
+        }, format='json')
+
+        # get the list of exercises
+        response = self.client.get(self.url, format='json') # send a GET request to the exercises endpoint
+        self.assertEqual(response.status_code, status.HTTP_200_OK) # check if status code is 200 OK
+        self.assertEqual(len(response.data), 2) # check if two exercises are returned
+
 
 
 
