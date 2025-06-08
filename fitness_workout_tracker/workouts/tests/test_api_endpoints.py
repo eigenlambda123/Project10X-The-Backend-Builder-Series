@@ -59,7 +59,31 @@ class WorkoutEndpointTests(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK) # check if status code is 200 OK
 
-        
+    def test_get_single_workout(self):
+        """
+        Test retrieving a single workout via the API endpoint
+        """
+
+        # workout creation
+        self.client.post(self.url, {
+            "name": self.test_workout_data["name"],
+            "date": self.test_workout_data["date"],
+            "notes": self.test_workout_data["notes"],
+        }, format='json')
+
+        self.client.post(self.url, {
+            "name": "Another Workout",
+            "date": "2023-10-02",
+            "notes": "This is another test workout."
+        }, format='json')
+
+        # get single workout via ID
+        response = self.client.get(f"{self.url}2/", format='json') # get second workout by id 2
+        self.assertEqual(response.status_code, status.HTTP_200_OK) # check if status code is 200 OK
+        self.assertEqual(response.data['name'], "Another Workout") # check if the name matches
+
+
+
 
 
 
