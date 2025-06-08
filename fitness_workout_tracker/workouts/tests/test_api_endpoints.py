@@ -228,6 +228,32 @@ class ExerciseEndpointTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK) # check if status code is 200 OK
         self.assertEqual(response.data['name'], "Another Exercise") # check if the name matches
 
+    def test_update_exercise(self):
+        """
+        Test that updating an exercise via the API endpoint works
+        """
+
+        # create an exercise
+        self.client.post(self.url, {
+            "name": self.test_exercise_data["name"],
+            "category": self.test_exercise_data["category"],
+            "description": self.test_exercise_data["description"],
+        }, format='json')
+
+        # update the exercise
+        response = self.client.put(f"{self.url}1/", { 
+            "name": "Updated Exercise",
+            "category": "core",
+            "description": "This exercise has been updated"
+        }, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK) # check if status code is 200 OK
+
+        # check if the datas are updated
+        self.assertEqual(response.data['name'], "Updated Exercise") 
+        self.assertEqual(response.data['category'], "core")
+        self.assertEqual(response.data['description'], "This exercise has been updated")
+
 
 
 
