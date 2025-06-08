@@ -334,3 +334,60 @@ class SetEndpointTests(TestCase):
         self.assertEqual(float(response.data['weight']), float(self.test_workout_data['weight'])) # check if the weight matches
         self.assertEqual(response.data['duration'], self.test_workout_data['duration']) # check if the duration matches
         self.assertEqual(response.data['notes'], self.test_workout_data['notes']) # check if the notes match
+
+
+    def test_get_set_list(self):
+        """
+        Test for getting the list of the set via API endpoint
+        """
+         # create a workout
+        workout_response = self.client.post(reverse('workout-list'), {
+            "name": "Test Workout",
+            "date": "2023-10-01",
+            "notes": "This is a test workout."
+        }, format='json')
+    
+        workout_id = workout_response.data['id']  # dynamically retrieve the workout ID
+
+
+        # create an exercise
+        exercise_response = self.client.post(reverse('exercise-list'), {
+            "name": "Test Exercise",
+            "category": "push",
+            "description": "This is a test exercise."
+        }, format='json')
+        exercise_id = exercise_response.data['id']  # dynamically retrieve the exercise ID
+    
+
+        # create a set
+        self.client.post(self.url, {
+            "workout": workout_id,  # use the dynamically retrieved workout ID
+            "exercise": exercise_id,  # use the dynamically retrieved exercise ID
+            "reps": self.test_workout_data["reps"],
+            "weight": self.test_workout_data["weight"],
+            "duration": self.test_workout_data["duration"],
+            "notes": self.test_workout_data["notes"],
+            "order": 1 
+        }, format='json')
+
+
+        # create a set
+        self.client.post(self.url, {
+            "workout": workout_id,  # use the dynamically retrieved workout ID
+            "exercise": exercise_id,  # use the dynamically retrieved exercise ID
+            "reps": 5,
+            "weight": 0,
+            "duration": "",
+            "notes": "Set Number 2",
+            "order": 1 
+        }, format='json')
+
+
+        # get the list of exercises
+        response = self.client.get(self.url, format='json') # send a GET request to the set endpoint
+        self.assertEqual(response.status_code, status.HTTP_200_OK) # check if status code is 200 OK
+        self.assertEqual(len(response.data), 2) # check if two exercises are returned
+
+
+    
+        
