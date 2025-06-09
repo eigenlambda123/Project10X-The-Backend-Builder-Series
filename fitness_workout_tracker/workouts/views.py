@@ -1,18 +1,20 @@
 from django.shortcuts import render
+from django.contrib.auth.models import User
 
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.generics import CreateAPIView
+from rest_framework.permissions import AllowAny
+from rest_framework import filters
+
+from django_filters.rest_framework import DjangoFilterBackend
+
 from .models import Workout, Set, Exercise
 from .serializers import (
-                        WorkoutSerializer,
-                        SetSerializer,
-                        ExerciseSerializer,
-                        RegisterSerializer
-                        )
-from rest_framework import filters
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.permissions import AllowAny
-from rest_framework.generics import CreateAPIView
-from django.contrib.auth.models import User
+    WorkoutSerializer,
+    SetSerializer,
+    ExerciseSerializer,
+    RegisterSerializer,
+)
 
 class RegisterView(CreateAPIView):
     """
