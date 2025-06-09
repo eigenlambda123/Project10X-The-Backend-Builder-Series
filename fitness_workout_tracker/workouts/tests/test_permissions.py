@@ -130,4 +130,17 @@ class TestSetPermission(TestCase):
         response = self.client.get(self.set_detail_url) # Attempt to access the set detail without authentication
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED) # Check if the response status is 401 Unauthorized
 
-    
+    def test_authenticated_user_can_only_create_sets_for_own_workouts(self):
+        """
+        Test that authenticated users can only create sets for their own workouts
+        """
+        self.client.force_authenticate(user=self.user2) # Authenticate as user2
+
+        # Attempt to create set on user1's workout
+        response = self.client.post(self.set_list_url, {
+            "workout": self.workout_user1.id,
+            "exercise": self.exercise.id,
+            "reps": 12,
+            "order": 2
+        }, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST) # Check if the response status is 400 Bad Request
