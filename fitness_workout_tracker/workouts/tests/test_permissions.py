@@ -5,6 +5,8 @@ from django.contrib.auth import get_user_model
 from workouts.models import Workout, Set, Exercise
 from rest_framework import status
 from datetime import date
+from django.utils.timezone import now
+from datetime import timedelta
 
 User = get_user_model()
 
@@ -225,3 +227,32 @@ class ExercisePermissionTests(TestCase):
 
         response = self.client.get(self.exercise_list_url) # Attempt to access the exercise list
         self.assertEqual(response.status_code, status.HTTP_200_OK) # Check if the response status is 200 OK
+
+
+class PersonalRecordsViewTests(TestCase):
+    """
+    """
+    def setUp(self):
+        self.client = APIClient() # Create an API client for testing
+        self.user1 = User.objects.create_user(username='user1', password='pass123') # create dummy user1
+        self.user2 = User.objects.create_user(username='user2', password='pass123') # create dummy user2
+ 
+        # Create exercises
+        self.exercise1 = Exercise.objects.create(name="Bench Press", category="push") 
+        self.exercise2 = Exercise.objects.create(name="Deadlift", category="pull") 
+
+        # Create workouts
+        self.workout_user1 = Workout.objects.create(user=self.user1, name="Workout A", date=now().date())
+        self.workout_user2 = Workout.objects.create(user=self.user2, name="Workout B", date=now().date())
+
+        # Sets for user1
+        Set.objects.create(workout=self.workout_user1, exercise=self.exercise1, reps=5, weight=100, order=1)
+        Set.objects.create(workout=self.workout_user1, exercise=self.exercise1, reps=3, weight=120, order=2)
+        Set.objects.create(workout=self.workout_user1, exercise=self.exercise2, reps=5, weight=200, order=1)
+
+        # Sets for user2 (should not appear in user1's response)
+        Set.objects.create(workout=self.workout_user2, exercise=self.exercise1, reps=5, weight=300, order=1)
+
+        self.url = reverse('personal-records') # URL for the personal records view
+
+        
