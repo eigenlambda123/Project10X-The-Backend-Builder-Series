@@ -2,8 +2,9 @@ from django.test import TestCase
 from django.urls import reverse
 from rest_framework.test import APIClient
 from django.contrib.auth import get_user_model
-from workouts.models import Workout
+from workouts.models import Workout, Set, Exercise
 from rest_framework import status
+from datetime import date
 
 User = get_user_model()
 
@@ -86,3 +87,28 @@ class WorkoutPermissionTests(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED) # Check if the response status is 201 Created
         self.assertEqual(response.data['user'], self.user2.id) # Check if the user is set to user2, not user1
+
+
+class TestSetPermission(TestCase):
+    """
+    """
+    def setUp(self):
+        self.client = APIClient() # Create an API client for testing
+        self.user1 = User.objects.create_user(username='user1', password='pass123') # create dummy user1
+        self.user2 = User.objects.create_user(username='user2', password='pass123') # create dummy user2
+
+        self.exercise = Exercise.objects.create(name="Bench Press", category="push") # create an exercise
+        self.workout_user1 = Workout.objects.create(user=self.user1, name="User1 Workout", date=date.today()) # create a workout for user1
+        self.workout_user2 = Workout.objects.create(user=self.user2, name="User2 Workout", date=date.today()) # create a workout for user2
+
+        # Create a set for user1's workout
+        self.set_user1 = Set.objects.create(
+            workout=self.workout_user1,
+            exercise=self.exercise,
+            reps=10,
+            order=1
+        )
+        self.set_detail_url = reverse('set-detail', args=[self.set_user1.id]) # URL for the set detail view
+        self.set_list_url = reverse('set-list') # URL for the set list view
+
+    
