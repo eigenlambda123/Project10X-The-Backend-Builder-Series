@@ -42,3 +42,26 @@ class WorkoutPermissionTests(TestCase):
 
         response = self.client.get(self.workout_detail_url) # Attempt to access the workout detail without authentication
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED) # Check if the response status is 401 Unauthorized
+
+
+    def test_authenticated_user_can_only_access_own_workouts(self):
+        """
+        Test that authenticated users can only access their own workouts
+        """
+
+        self.client.force_authenticate(user=self.user2) # Authenticate as user2
+
+        # Try to retrieve user1's workout
+        response = self.client.get(self.workout_detail_url) # Attempt to get user1's workout
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND) # Check if the response status is 404 Not Found
+
+        # Try to update user1's workout
+        response = self.client.put(self.workout_detail_url, {
+            "name": "Hacked Workout",
+            "date": "2023-10-05"
+        }, format='json')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND) # Check if the response status is 404 Not Found
+
+        # Try to delete user1's workout
+        response = self.client.delete(self.workout_detail_url) # Attempt to delete user1's workout
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND) # Check if the response status is 404 Not Found
