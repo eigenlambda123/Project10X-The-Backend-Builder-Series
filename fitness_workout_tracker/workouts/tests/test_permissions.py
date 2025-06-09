@@ -3,6 +3,7 @@ from django.urls import reverse
 from rest_framework.test import APIClient
 from django.contrib.auth import get_user_model
 from workouts.models import Workout
+from rest_framework import status
 
 User = get_user_model()
 
@@ -23,3 +24,21 @@ class WorkoutPermissionTests(TestCase):
         )
         self.workout_detail_url = reverse('workout-detail', args=[self.workout.id]) # URL for the workout detail view
         self.workout_list_url = reverse('workout-list') # URL for the workout list view
+
+
+    def test_unauthenticated_access_is_denied(self):
+        """
+        Test that unauthenticated users cannot access workout endpoints
+        """
+        response = self.client.get(self.workout_list_url) # Attempt to access the workout list without authentication
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED) # Check if the response status is 401 Unauthorized
+
+        # Attempt to send a POST request without authentication
+        response = self.client.post(self.workout_list_url, {
+            "name": "Anonymous Workout",
+            "date": "2023-10-02"
+        }, format='json')
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED) # Check if the response status is 401 Unauthorized
+
+        response = self.client.get(self.workout_detail_url) # Attempt to access the workout detail without authentication
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED) # Check if the response status is 401 Unauthorized
