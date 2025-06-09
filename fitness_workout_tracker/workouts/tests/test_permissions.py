@@ -204,3 +204,19 @@ class ExercisePermissionTests(TestCase):
 
         response = self.client.get(self.exercise_detail_url) # Attempt to access the exercise detail without authentication
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED) # Check if the response status is 401 Unauthorized
+
+    def test_authenticated_user_can_create_and_view_exercises(self):
+        """
+        Test that authenticated users can create and view exercises
+        """
+        self.client.force_authenticate(user=self.user2) # Authenticate as user2
+
+        # Create a new exercise
+        response = self.client.post(self.exercise_list_url, {
+            "name": "Jump Squat",
+            "category": "legs"
+        }, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED) # Check if the response status is 201 Created
+
+        response = self.client.get(self.exercise_list_url) # Attempt to access the exercise list
+        self.assertEqual(response.status_code, status.HTTP_200_OK) # Check if the response status is 200 OK
