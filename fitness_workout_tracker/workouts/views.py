@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import CreateAPIView
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework import filters
 
 from django_filters.rest_framework import DjangoFilterBackend
@@ -43,6 +43,7 @@ class WorkoutViewSet(ModelViewSet):
     filterset_fields = ['date'] # Allow filtering by date
     ordering_fields = ['date', 'created_at'] # Allow ordering by date and created_at
     search_fields = ['name', 'notes'] # Allow searching by name and notes
+    permission_classes = [IsAuthenticated] # User should be Authenticated to access this view
 
     def perform_create(self, serializer):
         """
@@ -59,6 +60,7 @@ class ExerciseViewSet(ModelViewSet):
     """
     queryset = Exercise.objects.all().order_by('name') # order exercises by their name
     serializer_class = ExerciseSerializer # serialize to convert model instances to JSON
+    permission_classes = [IsAuthenticated] # User should be Authenticated to access this view
 
 class SetViewSet(ModelViewSet):
     """
@@ -69,3 +71,4 @@ class SetViewSet(ModelViewSet):
     """
     queryset = Set.objects.all().order_by('order') # order sets by their order field
     serializer_class = SetSerializer # serialize to convert model instances to JSON
+    permission_classes = [IsAuthenticated] # User should be Authenticated to access this view
