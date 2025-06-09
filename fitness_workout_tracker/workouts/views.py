@@ -81,6 +81,31 @@ class SetViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly] # User should be Authenticated to access this view
 
 
+class PersonalRecordsView(APIView):
+    """
+    API endpoint to retrieve personal records for the authenticated user
+
+    - Returns the maximum weight lifted for each exercise performed by the user
+    - The response is a list of exercises with their IDs, names, and the user's max weight for each
+    - Only authenticated users can access their own records
+    """
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+
+        # Get max weight per exercise for this user
+        records = (
+            Set.objects
+            .filter(workout__user=user) # filter to owner 
+            .values('exercise__id', 'exercise__name') # display id and name
+            .annotate(max_weight=Max('weight')) # get and display max weight
+            .order_by('exercise__name') # order by name
+        )
+
+        return Response(records) # return annotated record response
+    
+
 class WorkoutStreakView(APIView):
     """
     API endpoint to retrieve workout streak statistics for the authenticated user.
