@@ -231,6 +231,11 @@ class ExercisePermissionTests(TestCase):
 
 class PersonalRecordsViewTests(TestCase):
     """
+    Test suite for verifying personal records API permissions and logic
+
+    - Ensures unauthenticated users cannot access personal records (should receive 401 Unauthorized)
+    - Ensures authenticated users can only see their own personal records (max weights per exercise)
+    - Verifies that records from other users are not included in the response
     """
     def setUp(self):
         self.client = APIClient() # Create an API client for testing
