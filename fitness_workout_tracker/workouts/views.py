@@ -20,6 +20,9 @@ from .serializers import (
     RegisterSerializer,
 )
 
+from datetime import timedelta
+from django.utils.timezone import now
+
 class RegisterView(CreateAPIView):
     """
     API endpoint for user registration.
@@ -78,26 +81,51 @@ class SetViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly] # User should be Authenticated to access this view
 
 
-class PersonalRecordsView(APIView):
+class WorkoutStreakView(APIView):
     """
-    API endpoint to retrieve personal records for the authenticated user
+    API endpoint to retrieve workout streak statistics for the authenticated user.
 
-    - Returns the maximum weight lifted for each exercise performed by the user
-    - The response is a list of exercises with their IDs, names, and the user's max weight for each
-    - Only authenticated users can access their own records
+    - Returns the user's longest streak (most consecutive days with a workout)
+    - Returns the user's current streak (consecutive days up to today with a workout)
+    - Only authenticated users can access their own streak data
     """
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
         user = request.user
-
-        # Get max weight per exercise for this user
-        records = (
-            Set.objects
-            .filter(workout__user=user) # filter to owner 
-            .values('exercise__id', 'exercise__name') # display id and name
-            .annotate(max_weight=Max('weight')) # get and display max weight
-            .order_by('exercise__name') # order by name
+        # Get all unique workout dates for the user, ordered by date
+        dates = (
+            Workout.objects
+            .filter(user=user)
+            .values_list('date', flat=True)
+            .distinct()
+            .order_by('date')
         )
 
-        return Response(records) # return annotated record response
+        # Convert to set of unique dates for quick lookup
+        date_set = set(dates)
+
+        longest_streak = 0
+        current_streak = 0
+        today = now().date()
+
+        # Calculate the longest streak by checking consecutive days in the user's workout history
+        for date in dates:
+            streak = 1
+            next_day = date + timedelta(days=1)
+            while next_day in date_set:
+                streak += 1
+                next_day += timedelta(days=1)
+            longest_streak = max(longest_streak, streak)
+
+        # Calculate the current streak (consecutive days up to today)
+        streak_day = today
+        while streak_day in date_set:
+            current_streak += 1
+            streak_day -= timedelta(days=1)
+
+        # Return the streak statistics as a JSON response
+        return Response({
+            "longest_streak": longest_streak,
+            "current_streak": current_streak
+        })
