@@ -172,3 +172,19 @@ class TestSetPermission(TestCase):
 
         response = self.client.delete(self.set_detail_url) # Attempt to delete user1's set
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND) # Check if the response status is 404 Not Found
+
+
+class ExercisePermissionTests(TestCase):
+    """
+    """
+    def setUp(self):
+        self.client = APIClient()
+        self.user1 = User.objects.create_user(username='user1', password='pass123') # create dummy user1
+        self.user2 = User.objects.create_user(username='user2', password='pass123') # create dummy user2
+
+        self.exercise_user1 = Exercise.objects.create(name="Push-up", category="push", user=self.user1) # create an exercise for user1
+
+        self.exercise_list_url = reverse('exercise-list') # URL for the exercise list view
+        self.exercise_detail_url = reverse('exercise-detail', args=[self.exercise_user1.id]) # URL for the exercise detail view
+
+    
