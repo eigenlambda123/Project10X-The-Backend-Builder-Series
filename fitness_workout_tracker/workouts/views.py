@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.contrib.auth.models import User
 
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.views import APIView
+from rest_framework.response import Response
 from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from . permissions import IsOwnerOrReadOnly
@@ -10,6 +12,7 @@ from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
 
 from .models import Workout, Set, Exercise
+from django.db.models import Max
 from .serializers import (
     WorkoutSerializer,
     SetSerializer,
@@ -73,3 +76,28 @@ class SetViewSet(ModelViewSet):
     queryset = Set.objects.all().order_by('order') # order sets by their order field
     serializer_class = SetSerializer # serialize to convert model instances to JSON
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly] # User should be Authenticated to access this view
+
+
+class PersonalRecordsView(APIView):
+    """
+    API endpoint to retrieve personal records for the authenticated user
+
+    - Returns the maximum weight lifted for each exercise performed by the user
+    - The response is a list of exercises with their IDs, names, and the user's max weight for each
+    - Only authenticated users can access their own records
+    """
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+
+        # Get max weight per exercise for this user
+        records = (
+            Set.objects
+            .filter(workout__user=user) # filter to owner 
+            .values('exercise__id', 'exercise__name') # display id and name
+            .annotate(max_weight=Max('weight')) # get and display max weight
+            .order_by('exercise__name') # order by name
+        )
+
+        return Response(records) # return annotated record response
