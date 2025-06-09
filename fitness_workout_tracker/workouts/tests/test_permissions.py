@@ -65,3 +65,19 @@ class WorkoutPermissionTests(TestCase):
         # Try to delete user1's workout
         response = self.client.delete(self.workout_detail_url) # Attempt to delete user1's workout
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND) # Check if the response status is 404 Not Found
+
+    def test_authenticated_user_can_create_workout_and_user_is_set_server_side(self):
+        """
+        Test that authenticated users can create a workout and the user is set server-side
+        """
+        self.client.force_authenticate(user=self.user2) # Authenticate as user2
+
+        # Create a new workout
+        response = self.client.post(self.workout_list_url, {
+            "name": "User2 Workout",
+            "date": "2023-10-03",
+            "user": self.user1.id  # attempt to assign another user
+        }, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED) # Check if the response status is 201 Created
+        self.assertEqual(response.data['user'], self.user2.id) # Check if the user is set to user2, not user1
