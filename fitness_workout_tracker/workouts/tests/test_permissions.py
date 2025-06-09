@@ -111,4 +111,23 @@ class TestSetPermission(TestCase):
         self.set_detail_url = reverse('set-detail', args=[self.set_user1.id]) # URL for the set detail view
         self.set_list_url = reverse('set-list') # URL for the set list view
 
+    def test_unauthenticated_user_cannot_access_sets(self):
+        """
+        Test that unauthenticated users cannot access set endpoints
+        """
+        response = self.client.get(self.set_list_url) # Attempt to access the set list without authentication
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED) # Check if the response status is 401 Unauthorized
+
+        # Attempt to create a set without authentication
+        response = self.client.post(self.set_list_url, {
+            "workout": self.workout_user1.id,
+            "exercise": self.exercise.id,
+            "reps": 8,
+            "order": 1
+        }, format='json')
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED) # Check if the response status is 401 Unauthorized
+
+        response = self.client.get(self.set_detail_url) # Attempt to access the set detail without authentication
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED) # Check if the response status is 401 Unauthorized
+
     
