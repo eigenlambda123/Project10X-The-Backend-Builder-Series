@@ -74,7 +74,7 @@ class ExerciseViewSet(ModelViewSet):
     """
     queryset = Exercise.objects.all().order_by('name') # order exercises by their name
     serializer_class = ExerciseSerializer # serialize to convert model instances to JSON
-    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly] # User should be Authenticated to access this view
+    permission_classes = [IsAuthenticated] # User should be Authenticated to access this view
 
 class SetViewSet(ModelViewSet):
     """
