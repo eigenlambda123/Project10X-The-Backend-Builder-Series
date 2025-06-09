@@ -182,9 +182,25 @@ class ExercisePermissionTests(TestCase):
         self.user1 = User.objects.create_user(username='user1', password='pass123') # create dummy user1
         self.user2 = User.objects.create_user(username='user2', password='pass123') # create dummy user2
 
-        self.exercise_user1 = Exercise.objects.create(name="Push-up", category="push", user=self.user1) # create an exercise for user1
+        self.exercise_user1 = Exercise.objects.create(name="Push-up", category="push") # create an exercise for user1
 
         self.exercise_list_url = reverse('exercise-list') # URL for the exercise list view
         self.exercise_detail_url = reverse('exercise-detail', args=[self.exercise_user1.id]) # URL for the exercise detail view
 
     
+    def test_unauthenticated_user_cannot_access_exercises(self):
+        """
+        Test that unauthenticated users cannot access exercise endpoints
+        """
+        response = self.client.get(self.exercise_list_url) # Attempt to access the exercise list without authentication
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED) # Check if the response status is 401 Unauthorized
+
+        # Attempt to create an exercise without authentication
+        response = self.client.post(self.exercise_list_url, {
+            "name": "Burpee",
+            "category": "cardio"
+        }, format='json')
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED) # Check if the response status is 401 Unauthorized
+
+        response = self.client.get(self.exercise_detail_url) # Attempt to access the exercise detail without authentication
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED) # Check if the response status is 401 Unauthorized
