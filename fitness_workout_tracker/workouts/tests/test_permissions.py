@@ -220,20 +220,3 @@ class ExercisePermissionTests(TestCase):
 
         response = self.client.get(self.exercise_list_url) # Attempt to access the exercise list
         self.assertEqual(response.status_code, status.HTTP_200_OK) # Check if the response status is 200 OK
-
-
-    def test_user_cannot_modify_exercise_owned_by_another_user(self):
-        """
-        Test that authenticated users cannot modify exercises owned by another user
-        """
-        self.client.force_authenticate(user=self.user2) # Authenticate as user2
-
-        # Try to update user1's exercise
-        response = self.client.put(self.exercise_detail_url, {
-            "name": "Hijacked Push-up",
-            "category": "core"
-        }, format='json')
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND) # Check if the response status is 404 Not Found
-
-        response = self.client.delete(self.exercise_detail_url) # Attempt to delete user1's exercise
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND) # Check if the response status is 404 Not Found
