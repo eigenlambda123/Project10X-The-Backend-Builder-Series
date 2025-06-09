@@ -8,6 +8,7 @@ from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from . permissions import IsOwnerOrReadOnly
 from rest_framework import filters
+from rest_framework.exceptions import PermissionDenied
 
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -86,6 +87,22 @@ class SetViewSet(ModelViewSet):
     serializer_class = SetSerializer # serialize to convert model instances to JSON
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly] # User should be Authenticated to access this view
 
+    def perform_create(self, serializer):
+        """
+        Automatically set the workout for the set to the authenticated user's workout
+        """
+        workout = serializer.validated_data['workout']
+        if workout.user != self.request.user:
+            raise PermissionDenied("You can only create sets for your own workouts.")
+        serializer.save()
+
+    def get_queryset(self):
+        """
+        Only return sets for the authenticated user's workouts
+        """
+        return Set.objects.filter(workout__user=self.request.user).order_by('order')
+    
+    
 
 class PersonalRecordsView(APIView):
     """
