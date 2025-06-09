@@ -143,4 +143,4 @@ class TestSetPermission(TestCase):
             "reps": 12,
             "order": 2
         }, format='json')
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST) # Check if the response status is 400 Bad Request
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN) # Check if the response status is 403 Forbidden
