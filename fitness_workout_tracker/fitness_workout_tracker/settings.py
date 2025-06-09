@@ -40,7 +40,8 @@ INSTALLED_APPS = [
 
     'workouts',
     'django_filters',
-    'rest_framework',
+    'rest_framework',   
+    'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
@@ -133,4 +134,7 @@ REST_FRAMEWORK = {
 		'rest_framework.authentication.SessionAuthentication',
 		'rest_framework_simplejwt.authentication.JWTAuthentication',
 	],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
 }
