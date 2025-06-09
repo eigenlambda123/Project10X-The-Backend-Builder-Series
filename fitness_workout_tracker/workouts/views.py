@@ -58,6 +58,12 @@ class WorkoutViewSet(ModelViewSet):
         """
         serializer.save(user=self.request.user)
 
+    def get_queryset(self):
+        """
+        Only return workouts for the authenticated user
+        """
+        return Workout.objects.filter(user=self.request.user).order_by('-date')
+
 class ExerciseViewSet(ModelViewSet):
     """
     API endpoint for viewing and editing Exercise instances
