@@ -255,4 +255,29 @@ class PersonalRecordsViewTests(TestCase):
 
         self.url = reverse('personal-records') # URL for the personal records view
 
-        
+    def test_unauthenticated_user_cannot_access_records(self):
+        """
+        Test that unauthenticated users cannot access personal records
+        """
+        response = self.client.get(self.url) # Attempt to access personal records without authentication
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED) # Check if the response status is 401 Unauthorized
+
+    def test_authenticated_user_sees_only_their_max_records(self):
+        """
+        Test that authenticated users can access their personal records and see only their max weights
+        """
+        self.client.force_authenticate(user=self.user1) # Authenticate as user1
+        response = self.client.get(self.url) #  Attempt to access personal records
+        self.assertEqual(response.status_code, status.HTTP_200_OK) # Check if the response status is 200 OK
+
+        records = response.data # Get the response data
+        exercise_ids = [record["exercise__id"] for record in records] # Extract exercise IDs
+        max_weights = {record["exercise__name"]: record["max_weight"] for record in records} # Create a dictionary of exercise names and their max weights
+
+        self.assertIn(self.exercise1.id, exercise_ids) # Check if exercise1 is in the records
+        self.assertIn(self.exercise2.id, exercise_ids) # Check if exercise2 is in the records
+        self.assertEqual(max_weights["Bench Press"], 120) # Check if the max weight for Bench Press is 120
+        self.assertEqual(max_weights["Deadlift"], 200) # Check if the max weight for Deadlift is 200
+
+        # Ensure user2's data is not present
+        self.assertNotEqual(max_weights.get("Bench Press"), 300)
