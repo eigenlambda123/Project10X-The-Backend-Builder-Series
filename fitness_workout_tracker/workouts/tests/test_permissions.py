@@ -91,6 +91,11 @@ class WorkoutPermissionTests(TestCase):
 
 class TestSetPermission(TestCase):
     """
+    Test suite for verifying Set API permissions.
+
+    - Ensures unauthenticated users cannot access or modify sets (should receive 401 Unauthorized)
+    - Ensures authenticated users can only create sets for their own workouts (should receive 403 Forbidden for others')
+    - Ensures authenticated users cannot access, update, or delete sets belonging to other users (should receive 404 Not Found)
     """
     def setUp(self):
         self.client = APIClient() # Create an API client for testing
