@@ -2,9 +2,29 @@ from django.shortcuts import render
 
 from rest_framework.viewsets import ModelViewSet
 from .models import Workout, Set, Exercise
-from .serializers import WorkoutSerializer, SetSerializer, ExerciseSerializer
+from .serializers import (
+                        WorkoutSerializer,
+                        SetSerializer,
+                        ExerciseSerializer,
+                        RegisterSerializer
+                        )
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.permissions import AllowAny
+from rest_framework.generics import CreateAPIView
+from django.contrib.auth.models import User
+
+class RegisterView(CreateAPIView):
+    """
+    API endpoint for user registration.
+
+    - This view allows new users to register by submitting their information
+    - It uses the RegisterSerializer to validate and create a new User instance
+    - No authentication is required to access this endpoint
+    """
+    queryset = User.objects.all() # get all user
+    serializer_class = RegisterSerializer # use RegisterSerializer
+    permission_classes = [AllowAny] 
 
 
 class WorkoutViewSet(ModelViewSet):
