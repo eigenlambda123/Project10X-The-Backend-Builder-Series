@@ -144,3 +144,26 @@ class TestSetPermission(TestCase):
             "order": 2
         }, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN) # Check if the response status is 403 Forbidden
+
+
+    def test_user_cannot_access_or_modify_another_users_set(self):
+        """
+        Test that authenticated users cannot access or modify sets belonging to another user
+        """
+        self.client.force_authenticate(user=self.user2) # Authenticate as user2
+
+        
+        response = self.client.get(self.set_detail_url) # Attempt to access user1's set
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND) # Check if the response status is 404 Not Found
+
+        # Try to update user1's set
+        response = self.client.put(self.set_detail_url, {
+            "workout": self.workout_user1.id,
+            "exercise": self.exercise.id,
+            "reps": 15,
+            "order": 1
+        }, format='json')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND) # Check if the response status is 404 Not Found
+
+        response = self.client.delete(self.set_detail_url) # Attempt to delete user1's set
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND) # Check if the response status is 404 Not Found
