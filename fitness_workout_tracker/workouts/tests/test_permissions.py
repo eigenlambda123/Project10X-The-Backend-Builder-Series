@@ -176,6 +176,11 @@ class TestSetPermission(TestCase):
 
 class ExercisePermissionTests(TestCase):
     """
+    Test suite for verifying Exercise API permissions
+
+    - Ensures unauthenticated users cannot access or modify exercises (should receive 401 Unauthorized)
+    - Ensures authenticated users can list, retrieve, and create exercises
+    - Does not test per-user ownership, as exercises are global and not user-specific
     """
     def setUp(self):
         self.client = APIClient()
