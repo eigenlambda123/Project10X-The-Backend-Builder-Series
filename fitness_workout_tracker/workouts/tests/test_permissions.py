@@ -9,6 +9,11 @@ User = get_user_model()
 
 class WorkoutPermissionTests(TestCase): 
     """
+    Test suite for verifying workout API permissions
+
+    - Ensures unauthenticated users cannot access or modify workouts (should receive 401 Unauthorized)
+    - Ensures authenticated users can only access, update, or delete their own workouts (should receive 404 for others')
+    - Ensures authenticated users cannot create workouts for other users (user field is set server-side)
     """
     def setUp(self):
         self.client = APIClient() # Create an API client for testing
