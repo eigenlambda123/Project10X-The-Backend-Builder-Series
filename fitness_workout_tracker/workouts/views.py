@@ -12,13 +12,14 @@ from rest_framework.exceptions import PermissionDenied
 
 from django_filters.rest_framework import DjangoFilterBackend
 
-from .models import Workout, Set, Exercise
+from .models import Workout, Set, Exercise, ProgressPhoto
 from django.db.models import Max
 from .serializers import (
     WorkoutSerializer,
     SetSerializer,
     ExerciseSerializer,
     RegisterSerializer,
+    ProgressPhotoSerializer,
 )
 
 from datetime import timedelta
@@ -177,3 +178,30 @@ class WorkoutStreakView(APIView):
             "longest_streak": longest_streak,
             "current_streak": current_streak
         })
+    
+
+class ProgressPhotoViewSet(ModelViewSet):
+    """
+    API endpoint for viewing and editing ProgressPhoto instances.
+
+    Provides list, create, retrieve, update, and delete actions for progress photos
+    Progress photos are associated with workouts and can only be accessed by the user who created them.
+    """
+    queryset = ProgressPhoto.objects.all() # Get all progress photos
+    serializer_class = ProgressPhotoSerializer # Serialize to convert model instances to JSON
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly] # User should be Authenticated to access this view
+
+    def get_queryset(self):
+        """
+        Only return progress photos for the authenticated user's workouts.
+        """
+        return ProgressPhoto.objects.filter(workout__user=self.request.user)
+
+    def perform_create(self, serializer):
+        """
+        Automatically set the workout for the progress photo to the authenticated user's workout
+        """
+        workout = serializer.validated_data['workout']
+        if workout.user != self.request.user:
+            raise PermissionDenied("You can only create progress photos for your own workouts.")
+        serializer.save()
