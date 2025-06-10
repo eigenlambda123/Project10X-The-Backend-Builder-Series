@@ -8,6 +8,7 @@ from datetime import date
 from django.utils.timezone import now
 from datetime import timedelta
 
+
 User = get_user_model()
 
 class WorkoutPermissionTests(TestCase): 
@@ -286,3 +287,30 @@ class PersonalRecordsViewTests(TestCase):
 
         # Ensure user2's data is not present
         self.assertNotEqual(max_weights.get("Bench Press"), 300)
+
+
+class WorkoutStreakViewTests(TestCase):
+    """
+    """
+    def setUp(self):
+        self.client = APIClient() # Create an API client for testing
+        self.user1 = User.objects.create_user(username='user1', password='pass123') # create dummy user1
+        self.user2 = User.objects.create_user(username='user2', password='pass123') # create dummy user2
+
+        self.url = reverse('workout-streak')  # URL for the workout streak view
+
+        today = now().date() # today's date
+
+        # User1 has a current streak of 3 days: today, yesterday, 2 days ago
+        Workout.objects.create(user=self.user1, name="Day 1", date=today)
+        Workout.objects.create(user=self.user1, name="Day 2", date=today - timedelta(days=1))
+        Workout.objects.create(user=self.user1, name="Day 3", date=today - timedelta(days=2))
+
+        # User1 also has a past streak of 4 days
+        Workout.objects.create(user=self.user1, name="Old 1", date=today - timedelta(days=10))
+        Workout.objects.create(user=self.user1, name="Old 2", date=today - timedelta(days=11))
+        Workout.objects.create(user=self.user1, name="Old 3", date=today - timedelta(days=12))
+        Workout.objects.create(user=self.user1, name="Old 4", date=today - timedelta(days=13))
+
+         # User2 has 1 isolated workout
+        Workout.objects.create(user=self.user2, name="Solo", date=today - timedelta(days=5))
