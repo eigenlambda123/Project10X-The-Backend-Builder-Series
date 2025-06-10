@@ -291,13 +291,18 @@ class PersonalRecordsViewTests(TestCase):
 
 class WorkoutStreakViewTests(TestCase):
     """
+    Test suite for verifying the workout streak API logic and permissions.
+
+    - Ensures unauthenticated users cannot access the workout streak endpoint (should receive 401 Unauthorized)
+    - Ensures authenticated users can only see their own workout streaks
+    - Verifies that the current and longest streaks are calculated correctly for each user based on their workout history
     """
     def setUp(self):
         self.client = APIClient() # Create an API client for testing
         self.user1 = User.objects.create_user(username='user1', password='pass123') # create dummy user1
         self.user2 = User.objects.create_user(username='user2', password='pass123') # create dummy user2
 
-        self.url = reverse('workout-streak')  # URL for the workout streak view
+        self.url = reverse('workout-streaks')  # URL for the workout streak view
 
         today = now().date() # today's date
 
