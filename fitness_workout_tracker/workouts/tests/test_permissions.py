@@ -321,3 +321,21 @@ class WorkoutStreakViewTests(TestCase):
         """
         response = self.client.get(self.url) # Attempt to access the workout streak without authentication
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED) # Check if the response status is 401 Unauthorized
+
+    def test_authenticated_user_only_sees_own_streak(self):
+        """
+        Test that authenticated users can access their own workout streaks
+        """
+        self.client.force_authenticate(user=self.user1) # Authenticate as user1
+        response = self.client.get(self.url) # Attempt to access the workout streak
+        self.assertEqual(response.status_code, status.HTTP_200_OK) # Check if the response status is 200 OK
+        self.assertEqual(response.data["current_streak"], 3) # Check if the current streak is 3 days
+        self.assertEqual(response.data["longest_streak"], 4) # Check if the longest streak is 4 days
+
+        self.client.force_authenticate(user=self.user2) # Authenticate as user2
+        response = self.client.get(self.url) # Attempt to access the workout streak
+        self.assertEqual(response.status_code, status.HTTP_200_OK) # Check if the response status is 200 OK
+        self.assertEqual(response.data["current_streak"], 0) # Check if the current streak is 0 days
+        self.assertEqual(response.data["longest_streak"], 1) # Check if the longest streak is 1 day (the isolated workout)
+
+    
