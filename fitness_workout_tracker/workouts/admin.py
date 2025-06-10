@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Workout, Exercise, Set
+from .models import Workout, Exercise, Set, ProgressPhoto
 
 @admin.register(Workout)
 class WorkoutAdmin(admin.ModelAdmin):
@@ -15,3 +15,9 @@ class ExerciseAdmin(admin.ModelAdmin):
 class SetAdmin(admin.ModelAdmin):
     list_display = ('workout', 'exercise', 'reps', 'weight', 'order')
     list_filter = ('workout', 'exercise')
+
+@admin.register(ProgressPhoto)
+class ProgressPhotoAdmin(admin.ModelAdmin):
+    list_display = ('workout', 'caption', 'uploaded_at')
+    search_fields = ('workout__name', 'caption')
+    list_filter = ('uploaded_at',)
