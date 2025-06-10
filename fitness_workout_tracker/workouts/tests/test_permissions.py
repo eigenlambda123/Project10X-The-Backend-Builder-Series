@@ -314,3 +314,10 @@ class WorkoutStreakViewTests(TestCase):
 
          # User2 has 1 isolated workout
         Workout.objects.create(user=self.user2, name="Solo", date=today - timedelta(days=5))
+
+    def test_unauthenticated_user_cannot_access_streak(self):
+        """
+        Test that unauthenticated users cannot access the workout streak endpoint   
+        """
+        response = self.client.get(self.url) # Attempt to access the workout streak without authentication
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED) # Check if the response status is 401 Unauthorized
