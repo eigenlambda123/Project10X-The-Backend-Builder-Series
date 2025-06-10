@@ -1,6 +1,6 @@
 from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
-from .models import Workout, Exercise, Set
+from .models import Workout, Exercise, Set, ProgressPhoto
 from django.contrib.auth.models import User
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -38,3 +38,10 @@ class ExerciseSerializer(ModelSerializer):
     class Meta:
         model = Exercise
         fields = ['id', 'category', 'name', 'description']
+
+
+class ProgressPhotoSerializer(ModelSerializer):
+    class Meta:
+        model = ProgressPhoto
+        fields = ['id', 'workout', 'image', 'caption', 'uploaded_at']
+        read_only_fields = ['id', 'uploaded_at']
