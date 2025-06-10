@@ -61,5 +61,21 @@ class Set(models.Model):
         returns the exercise name, reps, and weight for the set
         """
         return f"{self.exercise.name}: {self.reps} reps @ {self.weight} lbs"
+    
+
+    class ProgressPhoto(models.Model):
+        """
+        Model representing a progress photo for a workout
+        """
+        workout = models.ForeignKey('Workout', on_delete=models.CASCADE, related_name='photos') # Link to the workout this photo belongs to
+        image = models.ImageField(upload_to='progress_photos/') # Image field for the progress photo
+        caption = models.CharField(max_length=255, blank=True, null=True) # optional caption for the photo
+        uploaded_at = models.DateTimeField(auto_now_add=True) # when the photo was uploaded
+
+        def __str__(self):
+            """
+            return the workout name and the date the photo was uploaded
+            """
+            return f"{self.workout.name} - {self.uploaded_at.date()}"
 
     
