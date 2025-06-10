@@ -38,4 +38,3 @@ class ExerciseSerializer(ModelSerializer):
     class Meta:
         model = Exercise
         fields = ['id', 'category', 'name', 'description']
-
