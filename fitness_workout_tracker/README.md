@@ -86,20 +86,10 @@
 
 ---
 
-### Progress Photos (`/api/progress-photos/`)
-
-* `POST /api/progress-photos/`
-  Upload a new progress photo linked to a workout or set.
-
-* `GET /api/progress-photos/`
-  List all progress photos of the authenticated user.
-
----
-
 ### Analytics (`/api/analytics/`)
 
 * `GET /api/analytics/personal-records/`
   View your max weight (1RM) per exercise.
 
-* `GET /api/analytics/streaks/`
+* `GET /api/analytics/workout-streaks/`
   Get the number of consecutive workout days.
