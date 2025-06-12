@@ -21,18 +21,18 @@ Projects are structured to reflect real-world systems rather than isolated examp
 
 ## Projects Included
 
-| #  | Project Name                           | Key Features                                                 | Stack               |
-| -- | -------------------------------------- | ------------------------------------------------------------ | ------------------- |
-| 1  | Personal Blogging Platform API         | Markdown, slugs, tags, authentication, filtering             | Django + DRF        |
-| 2  | Expense Tracker API                    | User data, date filtering, aggregation                       | Django + DRF        |
-| 3  | URL Shortener API                      | Short link hashing, redirection, click tracking              | Django + DRF        |
-| 4  | Fitness Workout Tracker                | Nested models (workouts > exercises), progress tracking      | Django + DRF        |
-| 5  | API Aggregator Microservice            | Async external fetch, response merging, optional caching     | **FastAPI + httpx** |
-| 6  | Movie Reservation System               | Time slots, seat logic, transactional integrity              | Django + DRF        |
-| 7  | Job Board API                          | User roles, job applications, advanced filtering             | Django + DRF        |
-| 8  | Real-Time Messaging & Polling Backend  | WebSockets, Django Channels, live chat/polling modules       | Django + Channels   |
-| 9  | Restaurant Review Platform + Sentiment | Text analysis (TextBlob/VADER), moderation, review filtering | Django + DRF + NLP  |
-| 10 | Simple E-commerce API                  | Product catalog, cart/checkout, payments, order tracking     | Django + DRF        |
+| #  | Project Name                           | Key Features                                                 | Stack                  |
+| -- | -------------------------------------- | ------------------------------------------------------------ | ---------------------- |
+| 1  | Personal Blogging Platform API         | Markdown, slugs, tags, authentication, filtering             | Django + DRF           |
+| 2  | Expense Tracker API                    | User data, date filtering, aggregation                       | Django + DRF           |
+| 3  | URL Shortener API                      | Short link hashing, redirection, click tracking              | Django + DRF           |
+| 4  | Fitness Workout Tracker                | Nested models (workouts > exercises), progress tracking      | Django + DRF           |
+| 5  | API Aggregator Microservice            | Async external fetch, response merging, optional caching     | **FastAPI + httpx**    |
+| 6  | Movie Reservation System               | Time slots, seat logic, transactional integrity              | Django + DRF           |
+| 7  | Job Board API                          | Async user roles, job search filtering, dependency injection | **FastAPI + SQLModel** |
+| 8  | Real-Time Messaging & Polling Backend  | WebSockets, Django Channels, live chat/polling modules       | Django + Channels      |
+| 9  | Restaurant Review Platform + Sentiment | Async NLP (TextBlob/VADER), review moderation, filtering     | **FastAPI + NLP**      |
+| 10 | Simple E-commerce API                  | Product catalog, cart/checkout, payments, order tracking     | Django + DRF           |
 
 Each project resides in its own folder with documentation for setup, features, and testing.
 
